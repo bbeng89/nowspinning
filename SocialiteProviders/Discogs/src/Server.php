@@ -45,23 +45,11 @@ class Server extends BaseServer
      */
     public function userDetails($data, TokenCredentials $tokenCredentials)
     {
-        // need to make a request to https://api.discogs.com/users/{username} to retrieve name, email, and avatar
-        $user           = new User();
-        $user->id       = $data['id'];
+        $user = new User();
+        $user->id = $data['id'];
         $user->nickname = $data['username'];
-        $user->name     = null;
-        $user->email    = null;
-        $user->avatar   = null;
+        $user->extra = array_diff_key($data, array_flip(['id', 'username']));
 
-        $used = ['id', 'username'];
-
-        foreach ($data as $key => $value) {
-            if (!in_array($key, $used)) {
-                $used[] = $key;
-            }
-        }
-
-        $user->extra = array_diff_key($data, array_flip($used));
         return $user;
     }
 
