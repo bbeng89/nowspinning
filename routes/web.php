@@ -15,10 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/test', function(){
-    dd(\Socialite::driver('discogs')->user());
-});
-
 Route::get('/login', function(){
     return \Socialite::driver('discogs')->redirect();
 });
