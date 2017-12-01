@@ -45,20 +45,23 @@ class Server extends BaseServer
      */
     public function userDetails($data, TokenCredentials $tokenCredentials)
     {
-        $profile = $this->getUserProfile($data['username'], $tokenCredentials);
-
+        // need to make a request to https://api.discogs.com/users/{username} to retrieve name, email, and avatar
         $user           = new User();
-        $user->id       = $profile['id'];
-        $user->nickname = $profile['username'];
-        $user->name     = $profile['name'];
-        $user->email    = isset($profile['email']) ? $profile : null;
-        $user->avatar   = $profile['avatar_url'];
+        $user->id       = $data['id'];
+        $user->nickname = $data['username'];
+        $user->name     = null;
+        $user->email    = null;
+        $user->avatar   = null;
 
-        $used = ['id', 'username', 'name', 'email', 'avatar_url'];
+        $used = ['id', 'username'];
 
-        // extras
-        $user->extra = array_diff_key($profile, $used);
+        foreach ($data as $key => $value) {
+            if (!in_array($key, $used)) {
+                $used[] = $key;
+            }
+        }
 
+        $user->extra = array_diff_key($data, array_flip($used));
         return $user;
     }
 
@@ -75,9 +78,7 @@ class Server extends BaseServer
      */
     public function userEmail($data, TokenCredentials $tokenCredentials)
     {
-        $profile = $this->getUserProfile($data['username'], $tokenCredentials);
-        return $profile['email'];
-        //return '';
+        return null;
     }
 
     /**
@@ -86,16 +87,5 @@ class Server extends BaseServer
     public function userScreenName($data, TokenCredentials $tokenCredentials)
     {
         return $data['username'];
-    }
-
-    protected function getUserProfile($username, TokenCredentials $tokenCredentials)
-    {
-        // The identity endpoint only gives us the username and id. Need to then use the
-        // username in an additional request to retrieve the rest of the user's details
-        $profileUrl = "https://api.discogs.com/users/{$username}";
-        $client = $this->createHttpClient();
-        $headers = $this->getHeaders($tokenCredentials, 'GET', $profileUrl);
-        $response = $client->get($profileUrl, $headers);
-        return json_decode((string) $response->getBody(), true);
     }
 }
