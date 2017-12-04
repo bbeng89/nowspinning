@@ -11,14 +11,13 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/home', function()
+{
+    return 'Welcome!';
+})->middleware('auth');
 
-Route::get('/login', function(){
-    return \Socialite::driver('discogs')->redirect();
-});
-
-Route::get('/home', function(){
-    dd(\Socialite::driver('discogs')->user());
+Route::get('/login', function(\Illuminate\Http\Request $request)
+{
+    $auth = \App::make('App\Services\AuthenticateUser');
+    return $auth->execute($request->get('oauth_token', null), $request->get('oauth_verifier', null), $request);
 });

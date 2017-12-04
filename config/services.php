@@ -30,7 +30,7 @@ return [
     ],
 
     'stripe' => [
-        'model' => App\User::class,
+        'model' => \App\Models\User::class,
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
@@ -47,7 +47,7 @@ return [
     'discogs' => [
         'client_id' => 'MsbeJIQAcTuTrlVjqofi',
         'client_secret' => 'EdndQvjzMrntJBDCvhduHxVcFbAzUlNG',
-        'redirect' => 'http://nowspinning.dev/home',
+        'redirect' => 'http://nowspinning.dev/login',
     ]
 
 ];

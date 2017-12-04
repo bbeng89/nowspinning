@@ -29,7 +29,7 @@ class Provider extends AbstractProvider
             'nickname' => $user->nickname,
             'name'     => $user->name,
             'email'    => $user->email,
-            'avatar'   => $user->avatar,
+            'avatar'   => $user->avatar
         ])->setToken($tokenCredentials->getIdentifier(), $tokenCredentials->getSecret());
     }
 }
