@@ -35,19 +35,10 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
-    /**
-     Consumer Key	MsbeJIQAcTuTrlVjqofi
-    Consumer Secret	EdndQvjzMrntJBDCvhduHxVcFbAzUlNG
-    Request Token URL	https://api.discogs.com/oauth/request_token
-    Authorize URL	https://www.discogs.com/oauth/authorize
-    Access Token URL	https://api.discogs.com/oauth/access_token
-     */
-
-    // todo - move these to env vars  env('DISCOGS_KEY') env('DISCOGS_SECRET'), env('DISCOGS_REDIRECT')
     'discogs' => [
-        'client_id' => 'MsbeJIQAcTuTrlVjqofi',
-        'client_secret' => 'EdndQvjzMrntJBDCvhduHxVcFbAzUlNG',
-        'redirect' => 'http://nowspinning.dev/login',
+        'client_id' => env('DISCOGS_KEY'),
+        'client_secret' => env('DISCOGS_SECRET'),
+        'redirect' => env('DISCOGS_REDIRECT'),
     ]
 
 ];
