@@ -11,9 +11,11 @@
 |
 */
 
-Route::get('/home', function()
+use App\Repositories\CollectionRepository;
+
+Route::get('/home', function(CollectionRepository $collection)
 {
-    return 'Welcome!';
+    return view('home', ['collection' => $collection->getAllItemsInUserCollection()]);
 })->middleware('auth');
 
 Route::get('/login', 'Auth\LoginController@login')->name('auth.login');
