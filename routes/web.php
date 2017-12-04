@@ -16,8 +16,5 @@ Route::get('/home', function()
     return 'Welcome!';
 })->middleware('auth');
 
-Route::get('/login', function(\Illuminate\Http\Request $request)
-{
-    $auth = \App::make('App\Services\AuthenticateUser');
-    return $auth->execute($request->get('oauth_token', null), $request->get('oauth_verifier', null), $request);
-});
+Route::get('/login', 'Auth\LoginController@login')->name('auth.login');
+Route::get('/logout', 'Auth\LoginController@logout')->name('auth.logout');

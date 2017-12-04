@@ -21,9 +21,9 @@ class AuthenticateUser
         $this->socialite = $socialite;
     }
 
-    public function execute($token, $verifier, $request)
+    public function execute($hasToken)
     {
-        if(!$token) return $this->getAuthorization();
+        if(!$hasToken) return $this->getAuthorization();
 
         $identity = $this->getDiscogsIdentity();
 
