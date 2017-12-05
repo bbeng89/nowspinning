@@ -13,10 +13,9 @@
 
 use App\Repositories\CollectionRepository;
 
-Route::get('/home', function(CollectionRepository $collection)
-{
-    return view('home', ['collection' => $collection->getAllItemsInUserCollection()]);
-})->middleware('auth');
+Route::get('/', 'HomeController@index');
+
+Route::get('/app', 'AppController@index')->middleware('auth');
 
 Route::get('/login', 'Auth\LoginController@login')->name('auth.login');
 Route::get('/logout', 'Auth\LoginController@logout')->name('auth.logout');

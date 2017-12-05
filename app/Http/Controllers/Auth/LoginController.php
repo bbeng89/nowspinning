@@ -22,7 +22,7 @@ class LoginController extends Controller
     public function __construct(AuthenticateUser $auth)
     {
         $this->middleware('guest')->except('logout');
-        
+
         $this->auth = $auth;
     }
 
@@ -34,6 +34,6 @@ class LoginController extends Controller
     public function logout()
     {
         Auth::logout();
-        return redirect('/login');
+        return redirect('/');
     }
 }

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthenticateUser
 {
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/app';
 
     /**
      * @var Socialite
