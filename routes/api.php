@@ -15,4 +15,4 @@ use Illuminate\Http\Request;
 
 Route::get('user', 'UserController@index')->name('user.index');
 
-Route::get('collection/all', 'CollectionController@all')->name('collection.all');
+Route::get('collection/all/{username?}', 'CollectionController@all')->name('collection.all');

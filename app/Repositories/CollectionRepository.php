@@ -1,29 +1,31 @@
 <?php namespace App\Repositories;
 
-use Illuminate\Support\Facades\Auth;
+use App\Models\Release;
 
 class CollectionRepository extends BaseDiscogsApiRepository
 {
     const ALL_FOLDER = 0;
     const UNCATEGORIZED_FOLDER = 1;
 
-    public function getAllItemsInUserCollection($username = null)
+    public function getAllReleasesInUserCollection($username = null)
     {
-        return $this->getItemsInFolder($username, self::ALL_FOLDER);
+        return $this->getReleasesInFolder(self::ALL_FOLDER, $username);
     }
 
-    public function getItemsInUncategorizedFolder($username = null)
+    public function getReleasesInUncategorizedFolder($username = null)
     {
-        return $this->getItemsInFolder($username, self::UNCATEGORIZED_FOLDER);
+        return $this->getReleasesInFolder(self::UNCATEGORIZED_FOLDER, $username);
     }
 
-    public function getItemsInFolder($username, $folderId)
+    public function getReleasesInFolder($folderId, $username = null)
     {
-        if(is_null($username))
-        {
-            $username = Auth::user()->username;
-        }
+        $username = $username ?? $this->user->username;
+        $resource = "/users/{$username}/collection/folders/{$folderId}/releases";
 
-        return $this->getAuthenticatedResource("/users/{$username}/collection/folders/{$folderId}/releases");
+        return $this->get($resource, null, function($response) {
+            return array_map(function($release){
+                return Release::createFromApiResponse($release);
+            }, $response->releases);
+        });
     }
 }

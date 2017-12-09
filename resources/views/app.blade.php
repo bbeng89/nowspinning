@@ -10,3 +10,13 @@
 
     </div><!-- /.container -->
 @endsection
+
+@section('scripts')
+    <script>
+        $(document).ready(function(){
+            axios.get('/api/collection/all').then(response => {
+                console.log(response.data);
+            })
+        })
+    </script>
+@endsection
