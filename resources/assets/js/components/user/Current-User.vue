@@ -6,7 +6,7 @@
                 <img :src="avatar" class="img-responsive img-circle">
             </div>
         </div>
-        <p><router-link :to="{ name: 'shelves', params: { username: username }}">My Shelves</router-link></p>
+        <p><router-link class="btn btn-default" :to="{ name: 'shelves', params: { username: username }}">My Shelves</router-link></p>
     </div>
 </template>
 
@@ -40,3 +40,9 @@
         }
     }
 </script>
+
+<style>
+    #current-user .btn-default {
+        margin-top:20px;
+    }
+</style>
