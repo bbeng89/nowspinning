@@ -1,15 +1,12 @@
 <?php namespace App\Repositories;
 
+use App\Services\DiscogsApiHttpService;
 use GuzzleHttp\Client;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Subscriber\Oauth\Oauth1;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Cache\Repository as Cache;
 
 abstract class BaseDiscogsApiRepository
 {
-    const BASE_URI = 'https://api.discogs.com/';
-
     const CACHE_MINUTES = 5;
 
     /**
@@ -18,38 +15,31 @@ abstract class BaseDiscogsApiRepository
     protected $cache;
 
     /**
+     * @var DiscogsApiHttpService
+     */
+    protected $http;
+
+    /**
      * @var \Illuminate\Contracts\Auth\Authenticatable|null
      */
     protected $user;
 
-    public function __construct(Cache $cache)
+    public function __construct(DiscogsApiHttpService $http, Cache $cache)
     {
         $this->cache = $cache;
+        $this->http = $http;
         $this->user = Auth::guard('api')->user();
     }
 
-    protected function getHttpClient($auth = true)
+    /**
+     * @return Client
+     */
+    protected function getHttpClient()
     {
-        $stack = HandlerStack::create();
-        if($auth)
-        {
-            $middleware = new Oauth1([
-                'consumer_key' => config('services.discogs.client_id'),
-                'consumer_secret' => config('services.discogs.client_secret'),
-                'token' => $this->user->oauth_token,
-                'token_secret' => $this->user->oauth_token_secret
-            ]);
-            $stack->push($middleware);
-        }
-
-        return new Client([
-            'base_uri' => self::BASE_URI,
-            'handler' => $stack,
-            'auth' => 'oauth'
-        ]);
+        return $this->http->getClient($this->user->oauth_token, $this->user->oauth_token_secret);
     }
 
-    protected function get($url, $options, Callable $handler)
+    protected function get($url, $options = null, Callable $handler = null)
     {
         // This will first try to pull the result out of cache. It uses the $url as the key.
         // If it's not cached, or cache has expired, then it fetches from the discogs API and
@@ -61,7 +51,11 @@ abstract class BaseDiscogsApiRepository
             $client = $this->getHttpClient();
             $resp = $client->get($url, $options);
             $response = json_decode($resp->getBody()->getContents());
-            return $handler($response);
+            if(!is_null($handler))
+            {
+                return $handler($response);
+            }
+            return $response;
         });
     }
 }

@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import routes from './routes'
-import VueResource from 'vue-resource'
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -10,12 +9,6 @@ import VueResource from 'vue-resource'
  */
 
 require('./bootstrap');
-
-window.Vue = require('vue');
-
-
-Vue.use(VueResource)
-Vue.use(VueRouter)
 
 var router = new VueRouter({
     mode: 'history',

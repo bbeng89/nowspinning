@@ -15,14 +15,14 @@ class AuthenticateUser
     protected $socialite;
 
     /**
-     * @var UserProfileRepositoryBase
+     * @var DiscogsApiHttpService
      */
-    protected $users;
+    protected $http;
 
-    public function __construct(Socialite $socialite, UserProfileRepository $users)
+    public function __construct(Socialite $socialite, DiscogsApiHttpService $http)
     {
         $this->socialite = $socialite;
-        $this->users = $users;
+        $this->http = $http;
     }
 
     public function execute($hasToken)
@@ -34,16 +34,19 @@ class AuthenticateUser
         $user = User::updateOrCreate(['discogs_id' => $identity->getId()], [
             'oauth_token' => $identity->token,
             'oauth_token_secret' => $identity->tokenSecret,
-            'username' => $identity->getNickname(),
-            'avatar' => $identity->getAvatar()
+            'username' => $identity->getNickname()
         ]);
 
         Auth::login($user, true);
 
         // set the fields that have to be pulled from the user profile
-        $profile = $this->users->getProfile($identity->getNickname());
+        $client = $this->http->getClient($user->oauth_token, $user->oauth_token_secret);
+        $resp = $client->get("/users/{$user->username}");
+        $profile = json_decode($resp->getBody()->getContents());
+
         $user->name = $profile->name;
         $user->email = $profile->email;
+        $user->avatar = $profile->avatar_url;
         $user->save();
 
         return redirect($this->redirectTo);

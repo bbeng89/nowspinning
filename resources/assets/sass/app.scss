@@ -1,9 +1,24 @@
 
 // Fonts
 @import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
+@import url("https://fonts.googleapis.com/css?family=Monoton");
 
 // Variables
 @import "variables";
 
 // Bootstrap
 @import "~bootstrap-sass/assets/stylesheets/bootstrap";
+
+// Font-Awesome
+@import "~font-awesome/scss/font-awesome";
+
+.logo-text {
+  font-family: 'Monoton', cursive;
+  text-transform: uppercase;
+}
+
+// remove the ugly blue glow around buttons when they're clicked
+.btn:focus,.btn:active {
+  outline: none !important;
+  box-shadow: none;
+}

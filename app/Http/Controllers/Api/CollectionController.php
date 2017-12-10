@@ -17,7 +17,6 @@ class CollectionController extends Controller
 
     public function all($username = null)
     {
-        $collection = $this->collection->getAllReleasesInUserCollection($username);
-        return response()->json($collection);
+        return $this->collection->getAllReleasesInUserCollection($username);
     }
 }
