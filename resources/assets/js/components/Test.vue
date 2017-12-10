@@ -1,0 +1,5 @@
+<template>
+    <div id="test">
+        This is a test!
+    </div>
+</template>
