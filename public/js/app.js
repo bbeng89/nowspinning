@@ -174,7 +174,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/shelf/Shelf.vue":
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/shelf/Release-List-Item.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -185,15 +185,164 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['thumbnail', 'artistDisplay', 'title']
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/shelf/Shelf.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Release_List_Item_vue__ = __webpack_require__("./resources/assets/js/components/shelf/Release-List-Item.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Release_List_Item_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Release_List_Item_vue__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    components: { 'release-list-item': __WEBPACK_IMPORTED_MODULE_0__Release_List_Item_vue___default.a },
     data: function data() {
         return {
-            username: ''
+            username: '',
+            shelfName: '',
+            releases: []
         };
     },
     mounted: function mounted() {
         this.username = this.$route.params.username;
+        this.shelfName = this.$route.params.shelf;
+        this.fetchReleases();
+    },
+
+    methods: {
+        fetchReleases: function fetchReleases() {
+            var _this = this;
+
+            return this.$http.get('/api/collection/' + this.username + '/' + this.shelfName).then(function (response) {
+                _this.releases = response.body;
+            });
+        }
+    },
+    computed: {
+        shelfNameDisplay: function shelfNameDisplay() {
+            if (this.shelfName == 'vinyl') return 'Vinyl';else if (this.shelfName == 'cassette') return 'Cassette';else if (this.shelfName == 'cd') return 'Compact Disc';
+            return this.shelfName;
+        },
+        count: function count() {
+            return this.releases.length;
+        }
+    }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/shelf/User-Shelves.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            username: '',
+            vinylCount: 0,
+            cassetteCount: 0,
+            cdCount: 0
+        };
+    },
+    mounted: function mounted() {
+        this.username = this.$route.params.username;
+        this.fetchCounts();
+    },
+
+    methods: {
+        fetchCounts: function fetchCounts() {
+            var _this = this;
+
+            this.$http.get('/api/collection/' + this.username + '/shelves/counts').then(function (response) {
+                _this.vinylCount = response.body.vinyl;
+                _this.cassetteCount = response.body.cassette;
+                _this.cdCount = response.body.cd;
+            });
+        }
     }
 });
 
@@ -30573,10 +30722,10 @@ var render = function() {
             "router-link",
             {
               attrs: {
-                to: { name: "shelf", params: { username: _vm.username } }
+                to: { name: "shelves", params: { username: _vm.username } }
               }
             },
-            [_vm._v("My Shelf")]
+            [_vm._v("My Shelves")]
           )
         ],
         1
@@ -30596,6 +30745,47 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-175b1a90\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/shelf/Release-List-Item.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "panel release-list-item" }, [
+    _c("div", { staticClass: "panel-body" }, [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-sm-4" }, [
+          _c("img", {
+            staticClass: "img-responsive",
+            attrs: { src: _vm.thumbnail }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-sm-8" }, [
+          _c("strong", [_vm._v(_vm._s(_vm.title))]),
+          _vm._v(" "),
+          _c("br"),
+          _vm._v(
+            "\n                " + _vm._s(_vm.artistDisplay) + "\n            "
+          )
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-175b1a90", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4f6a0b1e\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/shelf/Shelf.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -30603,16 +30793,33 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0, false, false)
+  return _c(
+    "div",
+    { staticClass: "shelf" },
+    [
+      _c("div", { staticClass: "text-center" }, [
+        _c("h1", [_vm._v(_vm._s(_vm.shelfNameDisplay))]),
+        _vm._v(" "),
+        _c("h2", { staticClass: "text-muted" }, [
+          _c("em", [_vm._v(_vm._s(_vm.count) + " Items")])
+        ])
+      ]),
+      _vm._v(" "),
+      _vm._l(_vm.releases, function(release) {
+        return _c("release-list-item", {
+          key: release.id,
+          attrs: {
+            thumbnail: release.thumbnail,
+            "artist-display": release.artistDisplay,
+            title: release.title
+          }
+        })
+      })
+    ],
+    2
+  )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "shelf" }, [_c("h3", [_vm._v("Shelf")])])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -30688,7 +30895,29 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { attrs: { id: "wrapper" } }, [
-    _vm._m(0, false, false),
+    _c("nav", { staticClass: "navbar navbar-inverse navbar-fixed-top" }, [
+      _c("div", { staticClass: "container-fluid" }, [
+        _c(
+          "div",
+          { staticClass: "navbar-header" },
+          [
+            _vm._m(0, false, false),
+            _vm._v(" "),
+            _c(
+              "router-link",
+              {
+                staticClass: "navbar-brand logo-text",
+                attrs: { to: { name: "home" } }
+              },
+              [_vm._v("NowSpinning")]
+            )
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _vm._m(1, false, false)
+      ])
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "container-fluid" }, [
       _c("div", { staticClass: "row" }, [
@@ -30712,61 +30941,49 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c(
-      "nav",
-      { staticClass: "navbar navbar-inverse navbar-fixed-top" },
+      "button",
+      {
+        staticClass: "navbar-toggle collapsed",
+        attrs: {
+          type: "button",
+          "data-toggle": "collapse",
+          "data-target": "#navbar",
+          "aria-expanded": "false",
+          "aria-controls": "navbar"
+        }
+      },
       [
-        _c("div", { staticClass: "container-fluid" }, [
-          _c("div", { staticClass: "navbar-header" }, [
-            _c(
-              "button",
-              {
-                staticClass: "navbar-toggle collapsed",
-                attrs: {
-                  type: "button",
-                  "data-toggle": "collapse",
-                  "data-target": "#navbar",
-                  "aria-expanded": "false",
-                  "aria-controls": "navbar"
-                }
-              },
-              [
-                _c("span", { staticClass: "sr-only" }, [_vm._v("NowSpinning")]),
-                _vm._v(" "),
-                _c("span", { staticClass: "icon-bar" }),
-                _vm._v(" "),
-                _c("span", { staticClass: "icon-bar" }),
-                _vm._v(" "),
-                _c("span", { staticClass: "icon-bar" })
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "a",
-              { staticClass: "navbar-brand logo-text", attrs: { href: "#" } },
-              [_vm._v("NowSpinning")]
-            )
+        _c("span", { staticClass: "sr-only" }, [_vm._v("NowSpinning")]),
+        _vm._v(" "),
+        _c("span", { staticClass: "icon-bar" }),
+        _vm._v(" "),
+        _c("span", { staticClass: "icon-bar" }),
+        _vm._v(" "),
+        _c("span", { staticClass: "icon-bar" })
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "collapse navbar-collapse navbar-right",
+        attrs: { id: "navbar" }
+      },
+      [
+        _c("ul", { staticClass: "nav navbar-nav" }, [
+          _c("li", [
+            _c("p", { staticClass: "navbar-text" }, [
+              _vm._v("Welcome, username")
+            ])
           ]),
           _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass: "collapse navbar-collapse navbar-right",
-              attrs: { id: "navbar" }
-            },
-            [
-              _c("ul", { staticClass: "nav navbar-nav" }, [
-                _c("li", [
-                  _c("p", { staticClass: "navbar-text" }, [
-                    _vm._v("Welcome, username")
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("li", [
-                  _c("a", { attrs: { href: "/logout" } }, [_vm._v("Logout")])
-                ])
-              ])
-            ]
-          )
+          _c("li", [
+            _c("a", { attrs: { href: "/logout" } }, [_vm._v("Logout")])
+          ])
         ])
       ]
     )
@@ -30808,6 +31025,161 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-70d6d32c", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-e0e91dfc\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/shelf/User-Shelves.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "text-center", attrs: { id: "user-shelves" } },
+    [
+      _c("h1", [_vm._v("Shelves")]),
+      _vm._v(" "),
+      _c("hr"),
+      _vm._v(" "),
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-lg-4" }, [
+          _c("div", { staticClass: "panel panel-default" }, [
+            _vm._m(0, false, false),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "panel-body" },
+              [
+                _c("p", [_vm._v(_vm._s(_vm.vinylCount) + " Releases")]),
+                _vm._v(" "),
+                _c(
+                  "router-link",
+                  {
+                    staticClass: "btn btn-default",
+                    attrs: {
+                      to: {
+                        name: "shelf",
+                        params: { username: _vm.username, shelf: "vinyl" }
+                      }
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                        View Shelf\n                    "
+                    )
+                  ]
+                )
+              ],
+              1
+            )
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-lg-4" }, [
+          _c("div", { staticClass: "panel panel-default" }, [
+            _vm._m(1, false, false),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "panel-body" },
+              [
+                _c("p", [_vm._v(_vm._s(_vm.cassetteCount) + " Releases")]),
+                _vm._v(" "),
+                _c(
+                  "router-link",
+                  {
+                    staticClass: "btn btn-default",
+                    attrs: {
+                      to: {
+                        name: "shelf",
+                        params: { username: _vm.username, shelf: "cassette" }
+                      }
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                        View Shelf\n                    "
+                    )
+                  ]
+                )
+              ],
+              1
+            )
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-lg-4" }, [
+          _c("div", { staticClass: "panel panel-default" }, [
+            _vm._m(2, false, false),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "panel-body" },
+              [
+                _c("p", [_vm._v(_vm._s(_vm.cdCount) + " Releases")]),
+                _vm._v(" "),
+                _c(
+                  "router-link",
+                  {
+                    staticClass: "btn btn-default",
+                    attrs: {
+                      to: {
+                        name: "shelf",
+                        params: { username: _vm.username, shelf: "cd" }
+                      }
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                        View Shelf\n                    "
+                    )
+                  ]
+                )
+              ],
+              1
+            )
+          ])
+        ])
+      ])
+    ]
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "panel-heading" }, [
+      _c("span", { staticClass: "panel-title" }, [_vm._v("Vinyl")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "panel-heading" }, [
+      _c("span", { staticClass: "panel-title" }, [_vm._v("Cassette")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "panel-heading" }, [
+      _c("span", { staticClass: "panel-title" }, [_vm._v("Compact Disc")])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-e0e91dfc", module.exports)
   }
 }
 
@@ -46046,6 +46418,55 @@ module.exports = Component.exports
 
 /***/ }),
 
+/***/ "./resources/assets/js/components/shelf/Release-List-Item.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/shelf/Release-List-Item.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-175b1a90\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/shelf/Release-List-Item.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/shelf/Release-List-Item.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-175b1a90", Component.options)
+  } else {
+    hotAPI.reload("data-v-175b1a90", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
 /***/ "./resources/assets/js/components/shelf/Shelf.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -46084,6 +46505,55 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-4f6a0b1e", Component.options)
   } else {
     hotAPI.reload("data-v-4f6a0b1e", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/shelf/User-Shelves.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/shelf/User-Shelves.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-e0e91dfc\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/shelf/User-Shelves.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/shelf/User-Shelves.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-e0e91dfc", Component.options)
+  } else {
+    hotAPI.reload("data-v-e0e91dfc", Component.options)
 ' + '  }
   module.hot.dispose(function (data) {
     disposed = true
@@ -46152,16 +46622,17 @@ module.exports = Component.exports
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__App_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__App_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_news_News_Feed_vue__ = __webpack_require__("./resources/assets/js/components/news/News-Feed.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_news_News_Feed_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_news_News_Feed_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_shelf_Shelf_vue__ = __webpack_require__("./resources/assets/js/components/shelf/Shelf.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_shelf_Shelf_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_shelf_Shelf_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_shelf_User_Shelves_vue__ = __webpack_require__("./resources/assets/js/components/shelf/User-Shelves.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_shelf_User_Shelves_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_shelf_User_Shelves_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_shelf_Shelf_vue__ = __webpack_require__("./resources/assets/js/components/shelf/Shelf.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_shelf_Shelf_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_shelf_Shelf_vue__);
+
 
 
 
 
 /* harmony default export */ __webpack_exports__["a"] = ([{
-    path: '/app',
-    component: __WEBPACK_IMPORTED_MODULE_0__App_vue___default.a,
-    children: [{ path: '/', component: __WEBPACK_IMPORTED_MODULE_1__components_news_News_Feed_vue___default.a, name: 'news-feed' }, { path: ':username/shelf', component: __WEBPACK_IMPORTED_MODULE_2__components_shelf_Shelf_vue___default.a, name: 'shelf' }]
+    path: '/app', component: __WEBPACK_IMPORTED_MODULE_0__App_vue___default.a, name: 'home', children: [{ path: '/', component: __WEBPACK_IMPORTED_MODULE_1__components_news_News_Feed_vue___default.a, name: 'news-feed' }, { path: ':username/shelves', component: __WEBPACK_IMPORTED_MODULE_2__components_shelf_User_Shelves_vue___default.a, name: 'shelves' }, { path: ':username/shelves/:shelf', component: __WEBPACK_IMPORTED_MODULE_3__components_shelf_Shelf_vue___default.a, name: 'shelf' }]
 }]);
 
 /***/ }),

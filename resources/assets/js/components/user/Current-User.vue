@@ -6,7 +6,7 @@
                 <img :src="avatar" class="img-responsive img-circle">
             </div>
         </div>
-        <p><router-link :to="{ name: 'shelf', params: { username: username }}">My Shelf</router-link></p>
+        <p><router-link :to="{ name: 'shelves', params: { username: username }}">My Shelves</router-link></p>
     </div>
 </template>
 

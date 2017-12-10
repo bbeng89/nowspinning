@@ -21,6 +21,10 @@ class Release
     /**
      * @var string
      */
+    public $artistDisplay;
+    /**
+     * @var string
+     */
     public $title;
     /**
      * @var array
@@ -66,6 +70,10 @@ class Release
         $release->formats = array_map(function($formatObj) {
             return $formatObj->name;
         }, $obj->basic_information->formats);
+
+        $release->artistDisplay = implode(", ", array_map(function($artist) {
+            return $artist->name;
+        }, $release->artists));
 
         return $release;
     }

@@ -15,7 +15,9 @@ use App\Repositories\CollectionRepository;
 
 Route::get('/', 'HomeController@index');
 
-Route::get('/app', 'AppController@index')->middleware('auth');
+Route::get('/app/{catchall?}', 'AppController@index')
+    ->middleware('auth')
+    ->where('catchall', '(.*)');
 
 Route::get('/login', 'Auth\LoginController@login')->name('auth.login');
 Route::get('/logout', 'Auth\LoginController@logout')->name('auth.logout');

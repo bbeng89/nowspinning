@@ -15,8 +15,18 @@ class CollectionController extends Controller
         $this->collection = $collection;
     }
 
-    public function all($username = null)
+    public function shelf($username, $shelf)
     {
-        return $this->collection->getAllReleasesInUserCollection($username);
+        if(is_null($shelf)) return $this->collection->getAllReleasesInUserCollection($username);
+        return $this->collection->getReleasesInShelf($shelf, $username);
+    }
+
+    public function shelfCounts($username)
+    {
+        return [
+            'vinyl' => count($this->collection->getReleasesInShelf('vinyl', $username)),
+            'cassette' => count($this->collection->getReleasesInShelf('cassette', $username)),
+            'cd' => count($this->collection->getReleasesInShelf('cd', $username))
+        ];
     }
 }

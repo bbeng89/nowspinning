@@ -15,4 +15,5 @@ use Illuminate\Http\Request;
 
 Route::get('user', 'UserController@index')->name('user.index');
 
-Route::get('collection/all/{username?}', 'CollectionController@all')->name('collection.all');
+Route::get('collection/{username}/{shelf?}', 'CollectionController@shelf')->name('collection.shelf');
+Route::get('collection/{username}/shelves/counts', 'CollectionController@shelfCounts')->name('collection.shelf.count');

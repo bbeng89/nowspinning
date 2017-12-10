@@ -9,7 +9,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand logo-text" href="#">NowSpinning</a>
+                    <router-link :to="{ name: 'home' }" class="navbar-brand logo-text">NowSpinning</router-link>
                 </div>
                 <div id="navbar" class="collapse navbar-collapse navbar-right">
                     <ul class="nav navbar-nav">
