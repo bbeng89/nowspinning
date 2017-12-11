@@ -1,4 +1,4 @@
-<?php namespace App\Repositories;
+<?php namespace App\Repositories\Discogs;
 
 use App\Services\DiscogsApiHttpService;
 use GuzzleHttp\Client;

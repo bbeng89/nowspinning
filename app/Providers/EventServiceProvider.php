@@ -17,6 +17,9 @@ class EventServiceProvider extends ServiceProvider
             // add your listeners (aka providers) here
             'SocialiteProviders\Discogs\DiscogsExtendSocialite@handle',
         ],
+        \App\Events\UserCreated::class => [
+            \App\Listeners\CreateDefaultUserShelves::class
+        ]
     ];
 
     /**

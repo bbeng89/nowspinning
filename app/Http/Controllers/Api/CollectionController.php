@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Repositories\CollectionRepository;
+use App\Repositories\Discogs\CollectionRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 

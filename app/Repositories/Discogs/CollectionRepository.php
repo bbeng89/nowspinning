@@ -1,6 +1,7 @@
-<?php namespace App\Repositories;
+<?php namespace App\Repositories\Discogs;
 
-use App\Models\Release;
+use App\Models\Discogs\Release;
+use App\Repositories\Discogs\BaseDiscogsApiRepository;
 
 class CollectionRepository extends BaseDiscogsApiRepository
 {

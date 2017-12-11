@@ -1,7 +1,7 @@
 <?php namespace App\Services;
 
 use App\Models\User;
-use App\Repositories\UserProfileRepository;
+use App\Repositories\Discogs\UserProfileRepository;
 use Laravel\Socialite\Contracts\Factory as Socialite;
 use Illuminate\Support\Facades\Auth;
 

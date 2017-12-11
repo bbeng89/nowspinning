@@ -11,7 +11,7 @@
 |
 */
 
-use App\Repositories\CollectionRepository;
+use App\Repositories\Discogs\CollectionRepository;
 
 Route::get('/', 'HomeController@index');
 

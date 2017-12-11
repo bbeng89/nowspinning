@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Discogs;
 
+use App\Models\Discogs\Artist;
 use Carbon\Carbon;
 
 class Release

@@ -1,5 +1,6 @@
-<?php namespace App\Repositories;
+<?php namespace App\Repositories\Discogs;
 
+use App\Repositories\Discogs\BaseDiscogsApiRepository;
 use Illuminate\Support\Facades\Auth;
 
 class UserProfileRepository extends BaseDiscogsApiRepository

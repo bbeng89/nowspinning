@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\UserCreated;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
@@ -9,6 +10,10 @@ use Laravel\Passport\HasApiTokens;
 class User extends Authenticatable
 {
     use Notifiable, HasApiTokens;
+
+    protected $dispatchesEvents = [
+        'created' => UserCreated::class
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -27,4 +32,14 @@ class User extends Authenticatable
     protected $hidden = [
         'access_token', 'remember_token',
     ];
+
+    public function shelves()
+    {
+        return $this->hasMany(Shelf::class);
+    }
+
+    public function releases()
+    {
+        return $this->hasMany(UserRelease::class);
+    }
 }
