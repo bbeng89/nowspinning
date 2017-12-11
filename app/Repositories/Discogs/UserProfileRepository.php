@@ -7,11 +7,10 @@ class UserProfileRepository extends BaseDiscogsApiRepository
 {
     const CACHE_MINUTES = 5;
 
-    public function getProfile($username = null)
+    public function getProfile($username)
     {
-        $username = $username ?? $this->user->username;
         // if the authenticated user is getting their own profile, extra fields are returned so it needs to be cached separately
-        $cacheKey = $username == $this->user->username
+        $cacheKey = !empty($this->oauth_token) && !empty($this->oauth_token_secret)
             ? "{$username}.self"
             : "{$username}.profile";
 

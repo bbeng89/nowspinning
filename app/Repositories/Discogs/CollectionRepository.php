@@ -7,21 +7,20 @@ class CollectionRepository extends BaseDiscogsApiRepository
 {
     const ALL_FOLDER = 0;
     const UNCATEGORIZED_FOLDER = 1;
-    const CACHE_MINUTES = 60;
+    const CACHE_MINUTES = 10;
 
-    public function getAllReleasesInUserCollection($username = null)
+    public function getAllReleasesInUserCollection($username)
     {
         return $this->getReleasesInFolder(self::ALL_FOLDER, $username);
     }
 
-    public function getReleasesInUncategorizedFolder($username = null)
+    public function getReleasesInUncategorizedFolder($username)
     {
         return $this->getReleasesInFolder(self::UNCATEGORIZED_FOLDER, $username);
     }
 
-    public function getReleasesInShelf($shelf, $username = null)
+    public function getReleasesInShelf($shelf, $username)
     {
-        $username = $username ?? $this->user->username;
         $cacheKey = "{$username}.collection.{$shelf}";
 
         return $this->cache->remember($cacheKey, self::CACHE_MINUTES, function () use($username, $shelf)
@@ -36,9 +35,8 @@ class CollectionRepository extends BaseDiscogsApiRepository
         });
     }
 
-    public function getReleasesInFolder($folderId, $username = null)
+    public function getReleasesInFolder($folderId, $username)
     {
-        $username = $username ?? $this->user->username;
         $cacheKey = "{$username}.collection";
         $url = "/users/{$username}/collection/folders/{$folderId}/releases";
 

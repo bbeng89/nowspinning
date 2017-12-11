@@ -22,11 +22,20 @@ abstract class BaseDiscogsApiRepository
      */
     protected $user;
 
+    protected $oauth_token;
+
+    protected $oauth_token_secret;
+
     public function __construct(DiscogsApiHttpService $http, Cache $cache)
     {
         $this->cache = $cache;
         $this->http = $http;
-        $this->user = Auth::guard('api')->user();
+    }
+
+    public function authorize($oauth_token, $oauth_token_secret)
+    {
+        $this->oauth_token = $oauth_token;
+        $this->oauth_token_secret = $oauth_token_secret;
     }
 
     /**
@@ -34,7 +43,7 @@ abstract class BaseDiscogsApiRepository
      */
     protected function getHttpClient()
     {
-        return $this->http->getClient($this->user->oauth_token, $this->user->oauth_token_secret);
+        return $this->http->getClient($this->oauth_token, $this->oauth_token_secret);
     }
 
     protected function get($url, $options = null)

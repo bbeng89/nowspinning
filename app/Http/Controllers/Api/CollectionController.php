@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Repositories\Discogs\CollectionRepository;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class CollectionController extends Controller
 {
@@ -13,6 +13,10 @@ class CollectionController extends Controller
     public function __construct(CollectionRepository $collection)
     {
         $this->collection = $collection;
+        if(($user = Auth::user()) != null)
+        {
+            $this->collection->authorize($user->oauth_token, $user->oauth_token_secret);
+        }
     }
 
     public function shelf($username, $shelf)
