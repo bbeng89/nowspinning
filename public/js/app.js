@@ -194,9 +194,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['thumbnail', 'artistDisplay', 'title']
+    props: ['thumbnail', 'artists', 'title'],
+    computed: {
+        artistDisplay: function artistDisplay() {
+            return this.artists.map(function (a) {
+                return a.name;
+            }).join(', ');
+        }
+    }
 });
 
 /***/ }),
@@ -30866,14 +30876,40 @@ var render = function() {
           _vm._v(" "),
           _c("br"),
           _vm._v(
-            "\n                " + _vm._s(_vm.artistDisplay) + "\n            "
-          )
+            "\n                " +
+              _vm._s(_vm.artistDisplay) +
+              "\n                "
+          ),
+          _c("hr"),
+          _vm._v(" "),
+          _vm._m(0, false, false),
+          _vm._v(" "),
+          _vm._m(1, false, false)
         ])
       ])
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("button", { staticClass: "btn btn-default" }, [
+      _c("i", { staticClass: "fa fa-plus-circle" }),
+      _vm._v(" On Deck")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("button", { staticClass: "btn btn-primary" }, [
+      _c("i", { staticClass: "fa fa-thumbs-o-up" }),
+      _vm._v(" Spin Now")
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -30909,7 +30945,7 @@ var render = function() {
           key: release.id,
           attrs: {
             thumbnail: release.thumbnail,
-            "artist-display": release.artistDisplay,
+            artists: release.artists,
             title: release.title
           }
         })

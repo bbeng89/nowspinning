@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->integer('discogs_id')->unsigned();
             $table->string('oauth_token');
             $table->string('oauth_token_secret');
-            $table->string('username');
+            $table->string('username')->unique();
             $table->string('name')->nullable();
             $table->string('email')->unique()->nullable();
             $table->string('avatar')->nullable();

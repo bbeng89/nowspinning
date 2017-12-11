@@ -47,6 +47,7 @@ class SyncDiscogsCommand extends Command
     public function handle()
     {
         //todo - this all obviously needs to be refactored, but it gets the job done for now
+        //todo - make it so you can pass a username to just update a single user instead of all
 
         $users = User::all();
 

@@ -59,6 +59,14 @@ class UserRelease extends Model
         $userRelease->cover_image = $release->coverImage;
         $userRelease->discogs_url = $release->resourceUrl;
         $userRelease->save();
+
+        $shelves = Shelf::whereIn('name', $release->formats)->pluck('id');
+
+        if(!empty($shelves))
+        {
+            $userRelease->shelves()->syncWithoutDetaching($shelves);
+        }
+
         return $userRelease;
     }
 }
