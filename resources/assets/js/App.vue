@@ -9,7 +9,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <router-link :to="{ name: 'home' }" class="navbar-brand logo-text">NowSpinning</router-link>
+                    <router-link :to="{ name: 'news-feed' }" class="navbar-brand logo-text">NowSpinning</router-link>
                 </div>
                 <div id="navbar" class="collapse navbar-collapse navbar-right">
                     <ul class="nav navbar-nav">
@@ -24,6 +24,7 @@
                 <div class="col-md-3">
                     <current-user></current-user>
                     <hr/>
+                    <now-spinning v-if="$store.state.nowSpinning"></now-spinning>
                 </div>
                 <div class="col-md-6">
                     <router-view></router-view>
@@ -38,11 +39,14 @@
 <script>
     import CurrentUser from './components/user/Current-User.vue';
     import FriendFeed from './components/friends/Friend-Feed.vue';
+    import NowSpinning from "./components/user/Now-Spinning";
 
     export default {
         components: {
+            NowSpinning,
             'current-user': CurrentUser,
-            'friend-feed': FriendFeed
+            'friend-feed': FriendFeed,
+            'now-spinning': NowSpinning
         }
     }
 </script>

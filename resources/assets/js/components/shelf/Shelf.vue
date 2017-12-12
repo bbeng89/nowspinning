@@ -7,9 +7,7 @@
 
         <release-list-item v-for="release in releases"
                            :key="release.id"
-                           :thumbnail="release.thumbnail"
-                           :artists="release.artists"
-                           :title="release.title">
+                           :release="release">
         </release-list-item>
 
     </div>

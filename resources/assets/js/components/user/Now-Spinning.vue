@@ -1,5 +1,8 @@
 <template>
-    <div class="panel release-list-item">
+    <div class="panel">
+        <div class="panel-heading">
+            <span class="panel-title">Now Spinning</span>
+        </div>
         <div class="panel-body">
             <div class="row">
                 <div class="col-sm-4">
@@ -8,28 +11,23 @@
                 <div class="col-sm-8">
                     <strong>{{ release.title }}</strong> <br/>
                     {{ artistDisplay }}
-                    <hr/>
-                    <button class="btn btn-default" type="button"><i class="fa fa-plus-circle"></i> On Deck</button>
-                    <button class="btn btn-primary" type="button" @click="spin(release)"><i class="fa fa-thumbs-o-up"></i> Spin Now</button>
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script>
-    import { mapMutations } from 'vuex'
+    import { mapState } from 'vuex'
 
     export default {
         props: ['release'],
         computed: {
             artistDisplay() {
                 return this.release.artists.map(a => a.name).join(', ')
-            }
-        },
-        methods: {
-            ...mapMutations([
-                'spin'
-            ])
+            },
+            ...mapState({
+                release: 'nowSpinning'
+            })
         }
     }
 </script>
