@@ -37,11 +37,11 @@
     </div>
 </template>
 <script>
-    import CurrentUser from './components/user/Current-User.vue';
-    import FriendFeed from './components/friends/Friend-Feed.vue';
-    import NowSpinning from "./components/user/Now-Spinning";
-    import api from './api';
-    import store from './store';
+    import CurrentUser from './user/Current-User.vue';
+    import FriendFeed from './friends/Friend-Feed.vue';
+    import NowSpinning from "./user/Now-Spinning";
+    import api from '../api';
+    import store from '../store';
 
     export default {
         components: {

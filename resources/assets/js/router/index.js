@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from "vue-router"
-import App from '../App.vue'
+import App from '../components/App.vue'
 import NewsFeed from '../components/news/News-Feed.vue';
 import UserShelves from '../components/shelf/User-Shelves.vue';
 import Shelf from '../components/shelf/Shelf.vue';
