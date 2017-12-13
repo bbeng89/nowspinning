@@ -19,7 +19,7 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        return $this->user;
+        return User::with('nowSpinning')->findOrFail($this->user->id);
     }
 
     public function spin(SpinRequest $request)

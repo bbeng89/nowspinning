@@ -53,18 +53,9 @@
         beforeRouteEnter(to, from, next){
             api.getUser(response => {
                 store.commit('user', response.body)
-                return response.body
-            }).then(user => {
-                if(user.now_spinning_id != null) {
-                    api.getRelease(user.now_spinning_id, response => {
-                        store.commit('spin', response.body)
-                        next()
-                    })
-                }
-                else{
-                    next()
-                }
-            })
+                store.commit('spin', response.body.now_spinning)
+                next()
+            });
         }
     }
 </script>

@@ -134,16 +134,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     beforeRouteEnter: function beforeRouteEnter(to, from, next) {
         __WEBPACK_IMPORTED_MODULE_3__api__["a" /* default */].getUser(function (response) {
             __WEBPACK_IMPORTED_MODULE_4__store__["a" /* default */].commit('user', response.body);
-            return response.body;
-        }).then(function (user) {
-            if (user.now_spinning_id != null) {
-                __WEBPACK_IMPORTED_MODULE_3__api__["a" /* default */].getRelease(user.now_spinning_id, function (response) {
-                    __WEBPACK_IMPORTED_MODULE_4__store__["a" /* default */].commit('spin', response.body);
-                    next();
-                });
-            } else {
-                next();
-            }
+            __WEBPACK_IMPORTED_MODULE_4__store__["a" /* default */].commit('spin', response.body.now_spinning);
+            next();
         });
     }
 });
