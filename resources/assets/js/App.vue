@@ -40,6 +40,8 @@
     import CurrentUser from './components/user/Current-User.vue';
     import FriendFeed from './components/friends/Friend-Feed.vue';
     import NowSpinning from "./components/user/Now-Spinning";
+    import api from './api';
+    import store from './store';
 
     export default {
         components: {
@@ -48,27 +50,21 @@
             FriendFeed,
             NowSpinning
         },
-        created(){
-            // todo: i don't really like initializing here because the other components rely on these store values and this is async
-            this.initializeUser().then(response => {
-                if(response.body.now_spinning_id != null) {
-                    this.initializeNowSpinning(response.body.now_spinning_id)
+        beforeRouteEnter(to, from, next){
+            api.getUser(response => {
+                store.commit('user', response.body)
+                return response.body
+            }).then(user => {
+                if(user.now_spinning_id != null) {
+                    api.getRelease(user.now_spinning_id, response => {
+                        store.commit('spin', response.body)
+                        next()
+                    })
                 }
-            });
-        },
-        methods: {
-            initializeUser() {
-                return this.$http.get('/api/user').then(response => {
-                    this.$store.commit('user', response.body)
-                    return response
-                })
-            },
-            initializeNowSpinning(releaseId) {
-                return this.$http.get('/api/collection/release/' + releaseId).then(response => {
-                    this.$store.commit('spin', response.body)
-                    return response
-                })
-            }
+                else{
+                    next()
+                }
+            })
         }
     }
 </script>

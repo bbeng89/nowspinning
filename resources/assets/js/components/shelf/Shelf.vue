@@ -15,6 +15,7 @@
 
 <script>
     import ReleaseListItem from './Release-List-Item.vue';
+    import api from '../../api'
 
     export default {
         components: { 'release-list-item': ReleaseListItem },
@@ -28,14 +29,9 @@
         mounted() {
             this.username = this.$route.params.username;
             this.shelfName = this.$route.params.shelf;
-            this.fetchReleases();
-        },
-        methods: {
-            fetchReleases() {
-                return this.$http.get('/api/collection/'+this.username+'/'+this.shelfName).then(response => {
-                    this.releases = response.body;
-                });
-            }
+            api.getReleases(this.username, this.shelfName, response => {
+                this.releases = response.body;
+            })
         },
         computed: {
             shelfNameDisplay() {

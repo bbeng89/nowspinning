@@ -47,6 +47,7 @@
 </template>
 
 <script>
+    import api from '../../api'
     export default {
         data() {
             return {
@@ -58,17 +59,11 @@
         },
         mounted() {
             this.username = this.$route.params.username;
-            this.fetchCounts();
-        },
-        methods: {
-            fetchCounts() {
-                this.$http.get('/api/collection/'+this.username+'/shelves/counts')
-                    .then(response => {
-                        this.vinylCount = response.body.vinyl;
-                        this.cassetteCount = response.body.cassette;
-                        this.cdCount = response.body.cd;
-                    });
-            }
+            api.getCounts(this.username, response => {
+                this.vinylCount = response.body.vinyl
+                this.cassetteCount = response.body.cassette
+                this.cdCount = response.body.cd
+            })
         }
     }
 </script>

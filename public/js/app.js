@@ -76,6 +76,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_friends_Friend_Feed_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_friends_Friend_Feed_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_user_Now_Spinning__ = __webpack_require__("./resources/assets/js/components/user/Now-Spinning.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_user_Now_Spinning___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_user_Now_Spinning__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__api__ = __webpack_require__("./resources/assets/js/api/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__store__ = __webpack_require__("./resources/assets/js/store/index.js");
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //
@@ -121,40 +123,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: _defineProperty({
         NowSpinning: __WEBPACK_IMPORTED_MODULE_2__components_user_Now_Spinning___default.a,
         CurrentUser: __WEBPACK_IMPORTED_MODULE_0__components_user_Current_User_vue___default.a,
         FriendFeed: __WEBPACK_IMPORTED_MODULE_1__components_friends_Friend_Feed_vue___default.a
     }, 'NowSpinning', __WEBPACK_IMPORTED_MODULE_2__components_user_Now_Spinning___default.a),
-    created: function created() {
-        var _this = this;
-
-        // todo: i don't really like initializing here because the other components rely on these store values and this is async
-        this.initializeUser().then(function (response) {
-            if (response.body.now_spinning_id != null) {
-                _this.initializeNowSpinning(response.body.now_spinning_id);
+    beforeRouteEnter: function beforeRouteEnter(to, from, next) {
+        __WEBPACK_IMPORTED_MODULE_3__api__["a" /* default */].getUser(function (response) {
+            __WEBPACK_IMPORTED_MODULE_4__store__["a" /* default */].commit('user', response.body);
+            return response.body;
+        }).then(function (user) {
+            if (user.now_spinning_id != null) {
+                __WEBPACK_IMPORTED_MODULE_3__api__["a" /* default */].getRelease(user.now_spinning_id, function (response) {
+                    __WEBPACK_IMPORTED_MODULE_4__store__["a" /* default */].commit('spin', response.body);
+                    next();
+                });
+            } else {
+                next();
             }
         });
-    },
-
-    methods: {
-        initializeUser: function initializeUser() {
-            var _this2 = this;
-
-            return this.$http.get('/api/user').then(function (response) {
-                _this2.$store.commit('user', response.body);
-                return response;
-            });
-        },
-        initializeNowSpinning: function initializeNowSpinning(releaseId) {
-            var _this3 = this;
-
-            return this.$http.get('/api/collection/release/' + releaseId).then(function (response) {
-                _this3.$store.commit('spin', response.body);
-                return response;
-            });
-        }
     }
 });
 
@@ -260,6 +250,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Release_List_Item_vue__ = __webpack_require__("./resources/assets/js/components/shelf/Release-List-Item.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Release_List_Item_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Release_List_Item_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__api__ = __webpack_require__("./resources/assets/js/api/index.js");
 //
 //
 //
@@ -275,6 +266,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -288,20 +280,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
     mounted: function mounted() {
+        var _this = this;
+
         this.username = this.$route.params.username;
         this.shelfName = this.$route.params.shelf;
-        this.fetchReleases();
+        __WEBPACK_IMPORTED_MODULE_1__api__["a" /* default */].getReleases(this.username, this.shelfName, function (response) {
+            _this.releases = response.body;
+        });
     },
 
-    methods: {
-        fetchReleases: function fetchReleases() {
-            var _this = this;
-
-            return this.$http.get('/api/collection/' + this.username + '/' + this.shelfName).then(function (response) {
-                _this.releases = response.body;
-            });
-        }
-    },
     computed: {
         shelfNameDisplay: function shelfNameDisplay() {
             if (this.shelfName == 'vinyl') return 'Vinyl';else if (this.shelfName == 'cassette') return 'Cassette';else if (this.shelfName == 'cd') return 'Compact Disc';
@@ -320,6 +307,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api__ = __webpack_require__("./resources/assets/js/api/index.js");
 //
 //
 //
@@ -368,6 +356,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -379,20 +368,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
     mounted: function mounted() {
+        var _this = this;
+
         this.username = this.$route.params.username;
-        this.fetchCounts();
-    },
-
-    methods: {
-        fetchCounts: function fetchCounts() {
-            var _this = this;
-
-            this.$http.get('/api/collection/' + this.username + '/shelves/counts').then(function (response) {
-                _this.vinylCount = response.body.vinyl;
-                _this.cassetteCount = response.body.cassette;
-                _this.cdCount = response.body.cd;
-            });
-        }
+        __WEBPACK_IMPORTED_MODULE_0__api__["a" /* default */].getCounts(this.username, function (response) {
+            _this.vinylCount = response.body.vinyl;
+            _this.cassetteCount = response.body.cassette;
+            _this.cdCount = response.body.cd;
+        });
     }
 });
 
@@ -47710,6 +47693,31 @@ if (false) {(function () {
 
 module.exports = Component.exports
 
+
+/***/ }),
+
+/***/ "./resources/assets/js/api/index.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__("./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    getUser: function getUser(success, error) {
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/user').then(success, error);
+    },
+    getCounts: function getCounts(username, success, error) {
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/collection/' + username + '/shelves/counts').then(success, error);
+    },
+    getReleases: function getReleases(username, shelfName, success, error) {
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/collection/' + username + '/' + shelfName).then(success, error);
+    },
+    getRelease: function getRelease(releaseId, success, error) {
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/collection/release/' + releaseId).then(success, error);
+    }
+});
 
 /***/ }),
 
