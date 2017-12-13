@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\UserRelease;
 use App\Repositories\CollectionRepository;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -23,5 +24,10 @@ class CollectionController extends Controller
     public function shelfCounts($username)
     {
         return $this->collection->getShelfCounts($username);
+    }
+
+    public function release($id)
+    {
+        return UserRelease::findOrFail($id);
     }
 }

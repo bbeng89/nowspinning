@@ -44,9 +44,31 @@
     export default {
         components: {
             NowSpinning,
-            'current-user': CurrentUser,
-            'friend-feed': FriendFeed,
-            'now-spinning': NowSpinning
+            CurrentUser,
+            FriendFeed,
+            NowSpinning
+        },
+        created(){
+            // todo: i don't really like initializing here because the other components rely on these store values and this is async
+            this.initializeUser().then(response => {
+                if(response.body.now_spinning_id != null) {
+                    this.initializeNowSpinning(response.body.now_spinning_id)
+                }
+            });
+        },
+        methods: {
+            initializeUser() {
+                return this.$http.get('/api/user').then(response => {
+                    this.$store.commit('user', response.body)
+                    return response
+                })
+            },
+            initializeNowSpinning(releaseId) {
+                return this.$http.get('/api/collection/release/' + releaseId).then(response => {
+                    this.$store.commit('spin', response.body)
+                    return response
+                })
+            }
         }
     }
 </script>

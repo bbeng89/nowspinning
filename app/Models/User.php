@@ -42,4 +42,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserRelease::class);
     }
+
+    public function nowSpinning()
+    {
+        return $this->hasOne(UserRelease::class, 'id', 'now_spinning_id');
+    }
+
+    public function spin($userReleaseId)
+    {
+        $this->now_spinning_id = $userReleaseId;
+        $this->save();
+        return $this;
+    }
 }

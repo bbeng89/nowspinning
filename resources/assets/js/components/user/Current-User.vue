@@ -2,41 +2,22 @@
     <div id="current-user" class="text-center">
         <div class="row">
             <div class="col-sm-6 col-sm-offset-3">
-                <h3>{{ username }}</h3>
-                <img :src="avatar" class="img-responsive img-circle">
+                <h3>{{ user.username }}</h3>
+                <img :src="user.avatar" class="img-responsive img-circle">
             </div>
         </div>
-        <p><router-link class="btn btn-default" :to="{ name: 'shelves', params: { username: username }}">My Shelves</router-link></p>
+        <p><router-link class="btn btn-default" :to="{ name: 'shelves', params: { username: user.username }}">My Shelves</router-link></p>
     </div>
 </template>
 
 <script>
+    import { mapState } from 'vuex'
+
     export default {
-        data() {
-            return {
-                id: '',
-                discogs_id: '',
-                username: '',
-                name: '',
-                email: '',
-                avatar: '',
-            }
-        },
-        mounted() {
-            this.fetchUser();
-        },
-        methods: {
-            fetchUser() {
-                return this.$http.get('/api/user').then(response => {
-                    var user = response.body;
-                    this.id = user.id;
-                    this.discogs_id = user.discogs_id;
-                    this.username = user.username;
-                    this.name = user.name;
-                    this.email = user.email;
-                    this.avatar = user.avatar;
-                });
-            }
+        computed: {
+            ...mapState({
+                user: 'user'
+            })
         }
     }
 </script>

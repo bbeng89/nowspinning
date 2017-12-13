@@ -76,6 +76,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_friends_Friend_Feed_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_friends_Friend_Feed_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_user_Now_Spinning__ = __webpack_require__("./resources/assets/js/components/user/Now-Spinning.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_user_Now_Spinning___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_user_Now_Spinning__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -120,11 +122,39 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    components: {
+    components: _defineProperty({
         NowSpinning: __WEBPACK_IMPORTED_MODULE_2__components_user_Now_Spinning___default.a,
-        'current-user': __WEBPACK_IMPORTED_MODULE_0__components_user_Current_User_vue___default.a,
-        'friend-feed': __WEBPACK_IMPORTED_MODULE_1__components_friends_Friend_Feed_vue___default.a,
-        'now-spinning': __WEBPACK_IMPORTED_MODULE_2__components_user_Now_Spinning___default.a
+        CurrentUser: __WEBPACK_IMPORTED_MODULE_0__components_user_Current_User_vue___default.a,
+        FriendFeed: __WEBPACK_IMPORTED_MODULE_1__components_friends_Friend_Feed_vue___default.a
+    }, 'NowSpinning', __WEBPACK_IMPORTED_MODULE_2__components_user_Now_Spinning___default.a),
+    created: function created() {
+        var _this = this;
+
+        // todo: i don't really like initializing here because the other components rely on these store values and this is async
+        this.initializeUser().then(function (response) {
+            if (response.body.now_spinning_id != null) {
+                _this.initializeNowSpinning(response.body.now_spinning_id);
+            }
+        });
+    },
+
+    methods: {
+        initializeUser: function initializeUser() {
+            var _this2 = this;
+
+            return this.$http.get('/api/user').then(function (response) {
+                _this2.$store.commit('user', response.body);
+                return response;
+            });
+        },
+        initializeNowSpinning: function initializeNowSpinning(releaseId) {
+            var _this3 = this;
+
+            return this.$http.get('/api/collection/release/' + releaseId).then(function (response) {
+                _this3.$store.commit('spin', response.body);
+                return response;
+            });
+        }
     }
 });
 
@@ -218,7 +248,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             }).join(', ');
         }
     },
-    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapMutations */])(['spin']))
+    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['spin']))
 });
 
 /***/ }),
@@ -373,6 +403,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 //
 //
 //
@@ -385,37 +418,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    data: function data() {
-        return {
-            id: '',
-            discogs_id: '',
-            username: '',
-            name: '',
-            email: '',
-            avatar: ''
-        };
-    },
-    mounted: function mounted() {
-        this.fetchUser();
-    },
-
-    methods: {
-        fetchUser: function fetchUser() {
-            var _this = this;
-
-            return this.$http.get('/api/user').then(function (response) {
-                var user = response.body;
-                _this.id = user.id;
-                _this.discogs_id = user.discogs_id;
-                _this.username = user.username;
-                _this.name = user.name;
-                _this.email = user.email;
-                _this.avatar = user.avatar;
-            });
-        }
-    }
+    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapState */])({
+        user: 'user'
+    }))
 });
 
 /***/ }),
@@ -450,7 +459,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['release'],
     computed: _extends({
         artistDisplay: function artistDisplay() {
             return this.release.artists.map(function (a) {
@@ -458,6 +466,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             }).join(', ');
         }
     }, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapState */])({
+        user: 'user',
         release: 'nowSpinning'
     }))
 });
@@ -30868,11 +30877,11 @@ var render = function() {
     [
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-sm-6 col-sm-offset-3" }, [
-          _c("h3", [_vm._v(_vm._s(_vm.username))]),
+          _c("h3", [_vm._v(_vm._s(_vm.user.username))]),
           _vm._v(" "),
           _c("img", {
             staticClass: "img-responsive img-circle",
-            attrs: { src: _vm.avatar }
+            attrs: { src: _vm.user.avatar }
           })
         ])
       ]),
@@ -30885,7 +30894,7 @@ var render = function() {
             {
               staticClass: "btn btn-default",
               attrs: {
-                to: { name: "shelves", params: { username: _vm.username } }
+                to: { name: "shelves", params: { username: _vm.user.username } }
               }
             },
             [_vm._v("My Shelves")]
@@ -46659,9 +46668,9 @@ module.exports = Vue$3;
 /* unused harmony export Store */
 /* unused harmony export install */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return mapState; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return mapMutations; });
+/* unused harmony export mapMutations */
 /* unused harmony export mapGetters */
-/* unused harmony export mapActions */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return mapActions; });
 /* unused harmony export createNamespacedHelpers */
 /**
  * vuex v3.0.1
@@ -48160,11 +48169,28 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
 
 /* harmony default export */ __webpack_exports__["a"] = (new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
     state: {
+        user: null,
         nowSpinning: null
     },
     mutations: {
+        user: function user(state, _user) {
+            state.user = _user;
+        },
         spin: function spin(state, release) {
             state.nowSpinning = release;
+        }
+    },
+    actions: {
+        spin: function spin(_ref, release) {
+            var commit = _ref.commit;
+
+            __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.post('/api/user/spin', { id: release.id }).then(function (response) {
+                return commit('spin', release);
+            }, // success
+            function (response) {
+                return console.log('Error posting to /api/user/spin');
+            } // error
+            );
         }
     }
 }));

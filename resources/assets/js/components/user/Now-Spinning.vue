@@ -20,12 +20,12 @@
     import { mapState } from 'vuex'
 
     export default {
-        props: ['release'],
         computed: {
             artistDisplay() {
                 return this.release.artists.map(a => a.name).join(', ')
             },
             ...mapState({
+                user: 'user',
                 release: 'nowSpinning'
             })
         }
