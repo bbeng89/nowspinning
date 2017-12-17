@@ -22,6 +22,10 @@ export default {
         return Vue.http.post('/api/user/shelf/add-release', { releaseId: release.id, shelfHandle: shelfHandle })
             .then(success, error || defaultErrorHandler);
     },
+    removeFromShelf(release, shelfHandle, success, error) {
+        return Vue.http.post('/api/user/shelf/remove-release', { releaseId: release.id, shelfHandle: shelfHandle })
+            .then(success, error || defaultErrorHandler);
+    },
     spin(release, success, error) {
         return Vue.http.post('/api/user/spin', { id: release.id }).then(success, error || defaultErrorHandler);
     }

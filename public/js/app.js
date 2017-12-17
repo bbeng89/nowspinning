@@ -233,6 +233,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -241,13 +245,17 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["c" /* mapState */])({
         releases: 'onDeck'
     })),
-    methods: {
+    methods: _extends({
         artistDisplay: function artistDisplay(release) {
             return release.artists.map(function (a) {
                 return a.name;
             }).join(', ');
+        },
+        spinRelease: function spinRelease(release) {
+            this.offDeck(release);
+            this.spin(release);
         }
-    }
+    }, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapActions */])(['offDeck', 'spin']))
 });
 
 /***/ }),
@@ -30953,7 +30961,48 @@ var render = function() {
                 _vm._v(
                   "\n                    " +
                     _vm._s(_vm.artistDisplay(release)) +
-                    "\n                "
+                    " "
+                ),
+                _c("hr"),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "btn-group",
+                    attrs: { role: "group", "aria-label": "..." }
+                  },
+                  [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-xs btn-danger",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            _vm.offDeck(release)
+                          }
+                        }
+                      },
+                      [_c("i", { staticClass: "fa fa-times-circle" })]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-xs btn-primary",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            _vm.spinRelease(release)
+                          }
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "fa fa-thumbs-up" }),
+                        _vm._v(" Spin")
+                      ]
+                    )
+                  ]
                 )
               ])
             ])
@@ -47840,6 +47889,9 @@ var defaultErrorHandler = function defaultErrorHandler(response) {
     addToShelf: function addToShelf(release, shelfHandle, success, error) {
         return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.post('/api/user/shelf/add-release', { releaseId: release.id, shelfHandle: shelfHandle }).then(success, error || defaultErrorHandler);
     },
+    removeFromShelf: function removeFromShelf(release, shelfHandle, success, error) {
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.post('/api/user/shelf/remove-release', { releaseId: release.id, shelfHandle: shelfHandle }).then(success, error || defaultErrorHandler);
+    },
     spin: function spin(release, success, error) {
         return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.post('/api/user/spin', { id: release.id }).then(success, error || defaultErrorHandler);
     }
@@ -48433,6 +48485,17 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
             __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].addToShelf(release, 'on-deck', function (response) {
                 var onDeck = state.onDeck;
                 onDeck.push(release);
+                commit('onDeck', onDeck);
+            });
+        },
+        offDeck: function offDeck(_ref3, release) {
+            var commit = _ref3.commit,
+                state = _ref3.state;
+
+            __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].removeFromShelf(release, 'on-deck', function (response) {
+                var onDeck = state.onDeck.filter(function (r) {
+                    return r.id != release.id;
+                });
                 commit('onDeck', onDeck);
             });
         }

@@ -30,4 +30,9 @@ class Shelf extends Model
     {
         $this->userReleases()->attach($release->id);
     }
+
+    public function removeRelease(UserRelease $release)
+    {
+        $this->userReleases()->detach($release->id);
+    }
 }

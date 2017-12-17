@@ -12,7 +12,11 @@
                     </div>
                     <div class="col-sm-8">
                         <strong>{{ release.title }}</strong> <br/>
-                        {{ artistDisplay(release) }}
+                        {{ artistDisplay(release) }} <hr/>
+                        <div class="btn-group" role="group" aria-label="...">
+                            <button type="button" @click="offDeck(release)" class="btn btn-xs btn-danger"><i class="fa fa-times-circle"></i></button>
+                            <button type="button" @click="spinRelease(release)" class="btn btn-xs btn-primary"><i class="fa fa-thumbs-up"></i> Spin</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -21,7 +25,7 @@
 </template>
 <script>
     import api from '../../api'
-    import { mapState } from 'vuex'
+    import { mapState, mapActions } from 'vuex'
 
     export default {
         computed: {
@@ -33,6 +37,14 @@
             artistDisplay(release) {
                 return release.artists.map(a => a.name).join(', ')
             },
+            spinRelease(release) {
+                this.offDeck(release)
+                this.spin(release)
+            },
+            ...mapActions([
+                'offDeck',
+                'spin'
+            ])
         }
     }
 </script>

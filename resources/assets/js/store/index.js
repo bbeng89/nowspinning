@@ -31,6 +31,12 @@ export default new Vuex.Store({
                 onDeck.push(release)
                 commit('onDeck', onDeck)
             })
+        },
+        offDeck({ commit, state }, release) {
+            api.removeFromShelf(release, 'on-deck', response => {
+                let onDeck = state.onDeck.filter(r => r.id != release.id)
+                commit('onDeck', onDeck)
+            })
         }
     }
 })

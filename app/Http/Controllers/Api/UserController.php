@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\User\AddToShelfRequest;
+use App\Http\Requests\User\RemoveFromShelfRequest;
 use App\Http\Requests\User\SpinRequest;
 use App\Models\User;
 use App\Repositories\CollectionRepository;
@@ -38,6 +39,14 @@ class UserController extends Controller
         $release = $this->collection->findRelease($request->releaseId);
         $shelf = $this->user->getShelf($request->shelfHandle);
         $shelf->addRelease($release);
+        return response('Success!', 200);
+    }
+
+    public function removeFromShelf(RemoveFromShelfRequest $request)
+    {
+        $release = $this->collection->findRelease($request->releaseId);
+        $shelf = $this->user->getShelf($request->shelfHandle);
+        $shelf->removeRelease($release);
         return response('Success!', 200);
     }
 }
