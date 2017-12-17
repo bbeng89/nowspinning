@@ -2,12 +2,14 @@
     <div class="shelf">
         <div class="text-center">
             <h1>{{ shelfNameDisplay }}</h1>
-            <h2 class="text-muted"><em>{{ count }} Items</em></h2>
+            <h2 v-if="loading"><i class="fa fa-spinner fa-spin"></i></h2>
+            <h2 v-else class="text-muted"><em>{{ count }} Items</em></h2>
         </div>
 
         <release-list-item v-for="release in releases"
                            :key="release.id"
-                           :release="release">
+                           :release="release"
+                           :enable-actions="true">
         </release-list-item>
 
     </div>
@@ -23,7 +25,8 @@
             return {
                 username: '',
                 shelfName: '',
-                releases: []
+                releases: [],
+                loading: true
             }
         },
         mounted() {
@@ -31,6 +34,7 @@
             this.shelfName = this.$route.params.shelf;
             api.getReleases(this.username, this.shelfName, response => {
                 this.releases = response.body;
+                this.loading = false;
             })
         },
         computed: {

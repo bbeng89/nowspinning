@@ -8,9 +8,11 @@
                 <div class="col-sm-8">
                     <strong>{{ release.title }}</strong> <br/>
                     {{ artistDisplay }}
-                    <hr/>
-                    <button class="btn btn-default" type="button"><i class="fa fa-plus-circle"></i> On Deck</button>
-                    <button class="btn btn-primary" type="button" @click="spin(release)"><i class="fa fa-thumbs-o-up"></i> Spin Now</button>
+                    <div v-if="enableActions">
+                        <hr/>
+                        <button class="btn btn-default" type="button"><i class="fa fa-plus-circle"></i> On Deck</button>
+                        <button class="btn btn-primary" type="button" @click="spin(release)"><i class="fa fa-thumbs-o-up"></i> Spin Now</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -20,7 +22,7 @@
     import { mapActions } from 'vuex'
 
     export default {
-        props: ['release'],
+        props: ['release', 'enableActions'],
         computed: {
             artistDisplay() {
                 return this.release.artists.map(a => a.name).join(', ')

@@ -9,7 +9,8 @@
                         <span class="panel-title">Vinyl</span>
                     </div>
                     <div class="panel-body">
-                        <p>{{ vinylCount }} Releases</p>
+                        <p v-if="loading"><i class="fa fa-spinner fa-spin"></i></p>
+                        <p v-else>{{ vinylCount }} Releases</p>
                         <router-link class="btn btn-default" :to="{ name: 'shelf', params: {username: username, shelf: 'vinyl'}}">
                             View Shelf
                         </router-link>
@@ -22,7 +23,8 @@
                         <span class="panel-title">Cassette</span>
                     </div>
                     <div class="panel-body">
-                        <p>{{ cassetteCount }} Releases</p>
+                        <p v-if="loading"><i class="fa fa-spinner fa-spin"></i></p>
+                        <p v-else>{{ cassetteCount }} Releases</p>
                         <router-link class="btn btn-default" :to="{ name: 'shelf', params: {username: username, shelf: 'cassette'}}">
                             View Shelf
                         </router-link>
@@ -35,7 +37,8 @@
                         <span class="panel-title">Compact Disc</span>
                     </div>
                     <div class="panel-body">
-                        <p>{{ cdCount }} Releases</p>
+                        <p v-if="loading"><i class="fa fa-spinner fa-spin"></i></p>
+                        <p v-else>{{ cdCount }} Releases</p>
                         <router-link class="btn btn-default" :to="{ name: 'shelf', params: {username: username, shelf: 'cd'}}">
                             View Shelf
                         </router-link>
@@ -54,7 +57,8 @@
                 username: '',
                 vinylCount: 0,
                 cassetteCount: 0,
-                cdCount: 0
+                cdCount: 0,
+                loading: true
             }
         },
         mounted() {
@@ -63,6 +67,7 @@
                 this.vinylCount = response.body.vinyl
                 this.cassetteCount = response.body.cassette
                 this.cdCount = response.body.cd
+                this.loading = false
             })
         }
     }

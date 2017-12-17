@@ -218,11 +218,13 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['release'],
+    props: ['release', 'enableActions'],
     computed: {
         artistDisplay: function artistDisplay() {
             return this.release.artists.map(function (a) {
@@ -258,6 +260,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -268,7 +272,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             username: '',
             shelfName: '',
-            releases: []
+            releases: [],
+            loading: true
         };
     },
     mounted: function mounted() {
@@ -278,6 +283,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.shelfName = this.$route.params.shelf;
         __WEBPACK_IMPORTED_MODULE_1__api__["a" /* default */].getReleases(this.username, this.shelfName, function (response) {
             _this.releases = response.body;
+            _this.loading = false;
         });
     },
 
@@ -348,6 +354,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -356,7 +365,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             username: '',
             vinylCount: 0,
             cassetteCount: 0,
-            cdCount: 0
+            cdCount: 0,
+            loading: true
         };
     },
     mounted: function mounted() {
@@ -367,6 +377,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             _this.vinylCount = response.body.vinyl;
             _this.cassetteCount = response.body.cassette;
             _this.cdCount = response.body.cd;
+            _this.loading = false;
         });
     }
 });
@@ -30918,23 +30929,30 @@ var render = function() {
               _vm._s(_vm.artistDisplay) +
               "\n                "
           ),
-          _c("hr"),
-          _vm._v(" "),
-          _vm._m(0, false, false),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-primary",
-              attrs: { type: "button" },
-              on: {
-                click: function($event) {
-                  _vm.spin(_vm.release)
-                }
-              }
-            },
-            [_c("i", { staticClass: "fa fa-thumbs-o-up" }), _vm._v(" Spin Now")]
-          )
+          _vm.enableActions
+            ? _c("div", [
+                _c("hr"),
+                _vm._v(" "),
+                _vm._m(0, false, false),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        _vm.spin(_vm.release)
+                      }
+                    }
+                  },
+                  [
+                    _c("i", { staticClass: "fa fa-thumbs-o-up" }),
+                    _vm._v(" Spin Now")
+                  ]
+                )
+              ])
+            : _vm._e()
         ])
       ])
     ])
@@ -30977,15 +30995,17 @@ var render = function() {
       _c("div", { staticClass: "text-center" }, [
         _c("h1", [_vm._v(_vm._s(_vm.shelfNameDisplay))]),
         _vm._v(" "),
-        _c("h2", { staticClass: "text-muted" }, [
-          _c("em", [_vm._v(_vm._s(_vm.count) + " Items")])
-        ])
+        _vm.loading
+          ? _c("h2", [_c("i", { staticClass: "fa fa-spinner fa-spin" })])
+          : _c("h2", { staticClass: "text-muted" }, [
+              _c("em", [_vm._v(_vm._s(_vm.count) + " Items")])
+            ])
       ]),
       _vm._v(" "),
       _vm._l(_vm.releases, function(release) {
         return _c("release-list-item", {
           key: release.id,
-          attrs: { release: release }
+          attrs: { release: release, "enable-actions": true }
         })
       })
     ],
@@ -31216,40 +31236,35 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "panel" }, [
-    _vm._m(0, false, false),
+  return _c("div", [
+    _c("h4", { staticClass: "text-center" }, [_vm._v("Now Spinning")]),
     _vm._v(" "),
-    _c("div", { staticClass: "panel-body" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-sm-4" }, [
-          _c("img", {
-            staticClass: "img-responsive",
-            attrs: { src: _vm.release.thumbnail }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-sm-8" }, [
-          _c("strong", [_vm._v(_vm._s(_vm.release.title))]),
+    _c("div", { staticClass: "panel" }, [
+      _c("div", { staticClass: "panel-body" }, [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-sm-4" }, [
+            _c("img", {
+              staticClass: "img-responsive",
+              attrs: { src: _vm.release.thumbnail }
+            })
+          ]),
           _vm._v(" "),
-          _c("br"),
-          _vm._v(
-            "\n                " + _vm._s(_vm.artistDisplay) + "\n            "
-          )
+          _c("div", { staticClass: "col-sm-8" }, [
+            _c("strong", [_vm._v(_vm._s(_vm.release.title))]),
+            _vm._v(" "),
+            _c("br"),
+            _vm._v(
+              "\n                    " +
+                _vm._s(_vm.artistDisplay) +
+                "\n                "
+            )
+          ])
         ])
       ])
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "panel-heading" }, [
-      _c("span", { staticClass: "panel-title" }, [_vm._v("Now Spinning")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -31285,7 +31300,9 @@ var render = function() {
               "div",
               { staticClass: "panel-body" },
               [
-                _c("p", [_vm._v(_vm._s(_vm.vinylCount) + " Releases")]),
+                _vm.loading
+                  ? _c("p", [_c("i", { staticClass: "fa fa-spinner fa-spin" })])
+                  : _c("p", [_vm._v(_vm._s(_vm.vinylCount) + " Releases")]),
                 _vm._v(" "),
                 _c(
                   "router-link",
@@ -31318,7 +31335,9 @@ var render = function() {
               "div",
               { staticClass: "panel-body" },
               [
-                _c("p", [_vm._v(_vm._s(_vm.cassetteCount) + " Releases")]),
+                _vm.loading
+                  ? _c("p", [_c("i", { staticClass: "fa fa-spinner fa-spin" })])
+                  : _c("p", [_vm._v(_vm._s(_vm.cassetteCount) + " Releases")]),
                 _vm._v(" "),
                 _c(
                   "router-link",
@@ -31351,7 +31370,9 @@ var render = function() {
               "div",
               { staticClass: "panel-body" },
               [
-                _c("p", [_vm._v(_vm._s(_vm.cdCount) + " Releases")]),
+                _vm.loading
+                  ? _c("p", [_c("i", { staticClass: "fa fa-spinner fa-spin" })])
+                  : _c("p", [_vm._v(_vm._s(_vm.cdCount) + " Releases")]),
                 _vm._v(" "),
                 _c(
                   "router-link",
