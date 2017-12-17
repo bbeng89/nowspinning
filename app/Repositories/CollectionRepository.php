@@ -5,6 +5,11 @@ use App\Models\UserRelease;
 
 class CollectionRepository
 {
+    public function findRelease($id)
+    {
+        return UserRelease::findOrFail($id);
+    }
+
     public function getReleasesInShelf($username, $shelf_handle)
     {
         $user = User::where('username', $username)->firstOrFail();

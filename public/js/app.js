@@ -76,8 +76,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__friends_Friend_Feed_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__friends_Friend_Feed_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__user_Now_Spinning__ = __webpack_require__("./resources/assets/js/components/user/Now-Spinning.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__user_Now_Spinning___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__user_Now_Spinning__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__api__ = __webpack_require__("./resources/assets/js/api/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__store__ = __webpack_require__("./resources/assets/js/store/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shelf_On_Deck_vue__ = __webpack_require__("./resources/assets/js/components/shelf/On-Deck.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shelf_On_Deck_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__shelf_On_Deck_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__api__ = __webpack_require__("./resources/assets/js/api/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__store__ = __webpack_require__("./resources/assets/js/store/index.js");
+var _components;
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //
@@ -118,6 +122,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+
 
 
 
@@ -126,16 +133,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    components: _defineProperty({
+    components: (_components = {
         NowSpinning: __WEBPACK_IMPORTED_MODULE_2__user_Now_Spinning___default.a,
         CurrentUser: __WEBPACK_IMPORTED_MODULE_0__user_Current_User_vue___default.a,
         FriendFeed: __WEBPACK_IMPORTED_MODULE_1__friends_Friend_Feed_vue___default.a
-    }, 'NowSpinning', __WEBPACK_IMPORTED_MODULE_2__user_Now_Spinning___default.a),
+    }, _defineProperty(_components, 'NowSpinning', __WEBPACK_IMPORTED_MODULE_2__user_Now_Spinning___default.a), _defineProperty(_components, 'OnDeck', __WEBPACK_IMPORTED_MODULE_3__shelf_On_Deck_vue___default.a), _components),
     beforeRouteEnter: function beforeRouteEnter(to, from, next) {
-        __WEBPACK_IMPORTED_MODULE_3__api__["a" /* default */].getUser(function (response) {
-            __WEBPACK_IMPORTED_MODULE_4__store__["a" /* default */].commit('user', response.body);
-            __WEBPACK_IMPORTED_MODULE_4__store__["a" /* default */].commit('spin', response.body.now_spinning);
-            next();
+        __WEBPACK_IMPORTED_MODULE_4__api__["a" /* default */].getUser(function (response) {
+            var user = response.body;
+            __WEBPACK_IMPORTED_MODULE_5__store__["a" /* default */].commit('user', user);
+            __WEBPACK_IMPORTED_MODULE_5__store__["a" /* default */].commit('spin', user.now_spinning);
+            __WEBPACK_IMPORTED_MODULE_4__api__["a" /* default */].getReleases(user.username, 'on-deck', function (response) {
+                __WEBPACK_IMPORTED_MODULE_5__store__["a" /* default */].commit('onDeck', response.body);
+                next();
+            });
         });
     }
 });
@@ -192,6 +203,55 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/shelf/On-Deck.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api__ = __webpack_require__("./resources/assets/js/api/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["c" /* mapState */])({
+        releases: 'onDeck'
+    })),
+    methods: {
+        artistDisplay: function artistDisplay(release) {
+            return release.artists.map(function (a) {
+                return a.name;
+            }).join(', ');
+        }
+    }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/shelf/Release-List-Item.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -232,7 +292,16 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             }).join(', ');
         }
     },
-    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['spin']))
+    methods: _extends({
+        putReleaseOnDeck: function putReleaseOnDeck(release) {
+            this.onDeck(release);
+            $(this.$refs.onDeckIcon).addClass('animated').addClass('flash');
+        },
+        spinRelease: function spinRelease(release) {
+            this.spin(release);
+            $(this.$refs.spinIcon).addClass('animated').addClass('flash');
+        }
+    }, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapState */])(['user']), Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['spin', 'onDeck']))
 });
 
 /***/ }),
@@ -30850,6 +30919,74 @@ module.exports = function normalizeComponent (
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-043c212a\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/shelf/On-Deck.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("h4", { staticClass: "text-center" }, [_vm._v("On Deck")]),
+      _vm._v(" "),
+      _vm.releases.length == 0
+        ? _c("p", { staticClass: "text-center" }, [_vm._m(0, false, false)])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm._l(_vm.releases, function(release) {
+        return _c("div", { staticClass: "panel" }, [
+          _c("div", { staticClass: "panel-body" }, [
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-sm-4" }, [
+                _c("img", {
+                  staticClass: "img-responsive",
+                  attrs: { src: release.thumbnail }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-sm-8" }, [
+                _c("strong", [_vm._v(_vm._s(release.title))]),
+                _vm._v(" "),
+                _c("br"),
+                _vm._v(
+                  "\n                    " +
+                    _vm._s(_vm.artistDisplay(release)) +
+                    "\n                "
+                )
+              ])
+            ])
+          ])
+        ])
+      })
+    ],
+    2
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("em", [
+      _vm._v("You don't have anything on deck!"),
+      _c("br"),
+      _vm._v(" Browse your shelves and find something to spin.")
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-043c212a", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-1261b91c\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/user/Current-User.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -30933,7 +31070,25 @@ var render = function() {
             ? _c("div", [
                 _c("hr"),
                 _vm._v(" "),
-                _vm._m(0, false, false),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-default",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        _vm.putReleaseOnDeck(_vm.release)
+                      }
+                    }
+                  },
+                  [
+                    _c("i", {
+                      ref: "onDeckIcon",
+                      staticClass: "fa fa-plus-circle"
+                    }),
+                    _vm._v(" On Deck")
+                  ]
+                ),
                 _vm._v(" "),
                 _c(
                   "button",
@@ -30942,12 +31097,15 @@ var render = function() {
                     attrs: { type: "button" },
                     on: {
                       click: function($event) {
-                        _vm.spin(_vm.release)
+                        _vm.spinRelease(_vm.release)
                       }
                     }
                   },
                   [
-                    _c("i", { staticClass: "fa fa-thumbs-o-up" }),
+                    _c("i", {
+                      ref: "spinIcon",
+                      staticClass: "fa fa-thumbs-o-up"
+                    }),
                     _vm._v(" Spin Now")
                   ]
                 )
@@ -30958,18 +31116,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      { staticClass: "btn btn-default", attrs: { type: "button" } },
-      [_c("i", { staticClass: "fa fa-plus-circle" }), _vm._v(" On Deck")]
-    )
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -31152,7 +31299,11 @@ var render = function() {
             _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
-            _vm.$store.state.nowSpinning ? _c("now-spinning") : _vm._e()
+            _vm.$store.state.nowSpinning ? _c("now-spinning") : _vm._e(),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _c("on-deck")
           ],
           1
         ),
@@ -47668,18 +47819,29 @@ module.exports = function(module) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 
 
+var defaultErrorHandler = function defaultErrorHandler(response) {
+    console.log("API error");
+    console.log(response);
+    // do something else - display an error message?
+};
 /* harmony default export */ __webpack_exports__["a"] = ({
     getUser: function getUser(success, error) {
-        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/user').then(success, error);
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/user').then(success, error || defaultErrorHandler);
     },
     getCounts: function getCounts(username, success, error) {
-        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/collection/' + username + '/shelves/counts').then(success, error);
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/collection/' + username + '/shelves/counts').then(success, error || defaultErrorHandler);
     },
     getReleases: function getReleases(username, shelfName, success, error) {
-        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/collection/' + username + '/' + shelfName).then(success, error);
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/collection/' + username + '/' + shelfName).then(success, error || defaultErrorHandler);
     },
     getRelease: function getRelease(releaseId, success, error) {
-        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/collection/release/' + releaseId).then(success, error);
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/collection/release/' + releaseId).then(success, error || defaultErrorHandler);
+    },
+    addToShelf: function addToShelf(release, shelfHandle, success, error) {
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.post('/api/user/shelf/add-release', { releaseId: release.id, shelfHandle: shelfHandle }).then(success, error || defaultErrorHandler);
+    },
+    spin: function spin(release, success, error) {
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.post('/api/user/spin', { id: release.id }).then(success, error || defaultErrorHandler);
     }
 });
 
@@ -47883,6 +48045,55 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-6142c81a", Component.options)
   } else {
     hotAPI.reload("data-v-6142c81a", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/shelf/On-Deck.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/shelf/On-Deck.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-043c212a\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/shelf/On-Deck.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/shelf/On-Deck.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-043c212a", Component.options)
+  } else {
+    hotAPI.reload("data-v-043c212a", Component.options)
 ' + '  }
   module.hot.dispose(function (data) {
     disposed = true
@@ -48183,6 +48394,8 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__("./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__api__ = __webpack_require__("./resources/assets/js/api/index.js");
+
 
 
 
@@ -48191,7 +48404,8 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
 /* harmony default export */ __webpack_exports__["a"] = (new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
     state: {
         user: null,
-        nowSpinning: null
+        nowSpinning: null,
+        onDeck: []
     },
     mutations: {
         user: function user(state, _user) {
@@ -48199,19 +48413,28 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
         },
         spin: function spin(state, release) {
             state.nowSpinning = release;
+        },
+        onDeck: function onDeck(state, releases) {
+            state.onDeck = releases;
         }
     },
     actions: {
         spin: function spin(_ref, release) {
             var commit = _ref.commit;
 
-            __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.post('/api/user/spin', { id: release.id }).then(function (response) {
+            __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].spin(release, function (response) {
                 return commit('spin', release);
-            }, // success
-            function (response) {
-                return console.log('Error posting to /api/user/spin');
-            } // error
-            );
+            });
+        },
+        onDeck: function onDeck(_ref2, release) {
+            var commit = _ref2.commit,
+                state = _ref2.state;
+
+            __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].addToShelf(release, 'on-deck', function (response) {
+                var onDeck = state.onDeck;
+                onDeck.push(release);
+                commit('onDeck', onDeck);
+            });
         }
     }
 }));

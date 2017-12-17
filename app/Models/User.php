@@ -48,6 +48,11 @@ class User extends Authenticatable
         return $this->hasOne(UserRelease::class, 'id', 'now_spinning_id');
     }
 
+    public function getShelf($handle)
+    {
+        return $this->shelves()->where('handle', $handle)->firstOrFail();
+    }
+
     public function spin($userReleaseId)
     {
         $this->now_spinning_id = $userReleaseId;

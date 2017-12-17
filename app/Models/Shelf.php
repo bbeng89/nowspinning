@@ -25,4 +25,9 @@ class Shelf extends Model
     {
         return $this->belongsToMany(UserRelease::class, 'user_release_shelf');
     }
+
+    public function addRelease(UserRelease $release)
+    {
+        $this->userReleases()->attach($release->id);
+    }
 }

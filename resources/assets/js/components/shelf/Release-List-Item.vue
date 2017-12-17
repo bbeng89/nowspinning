@@ -10,8 +10,8 @@
                     {{ artistDisplay }}
                     <div v-if="enableActions">
                         <hr/>
-                        <button class="btn btn-default" type="button"><i class="fa fa-plus-circle"></i> On Deck</button>
-                        <button class="btn btn-primary" type="button" @click="spin(release)"><i class="fa fa-thumbs-o-up"></i> Spin Now</button>
+                        <button class="btn btn-default" type="button" @click="putReleaseOnDeck(release)"><i class="fa fa-plus-circle" ref="onDeckIcon"></i> On Deck</button>
+                        <button class="btn btn-primary" type="button" @click="spinRelease(release)"><i class="fa fa-thumbs-o-up" ref="spinIcon"></i> Spin Now</button>
                     </div>
                 </div>
             </div>
@@ -19,7 +19,7 @@
     </div>
 </template>
 <script>
-    import { mapActions } from 'vuex'
+    import { mapState, mapActions } from 'vuex'
 
     export default {
         props: ['release', 'enableActions'],
@@ -29,8 +29,20 @@
             }
         },
         methods: {
+            putReleaseOnDeck(release) {
+                this.onDeck(release);
+                $(this.$refs.onDeckIcon).addClass('animated').addClass('flash');
+            },
+            spinRelease(release) {
+                this.spin(release);
+                $(this.$refs.spinIcon).addClass('animated').addClass('flash');
+            },
+            ...mapState([
+                'user'
+            ]),
             ...mapActions([
-                'spin'
+                'spin',
+                'onDeck'
             ])
         }
     }

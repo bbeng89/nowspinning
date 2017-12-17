@@ -25,6 +25,8 @@
                     <current-user></current-user>
                     <hr/>
                     <now-spinning v-if="$store.state.nowSpinning"></now-spinning>
+                    <hr/>
+                    <on-deck></on-deck>
                 </div>
                 <div class="col-md-6">
                     <router-view></router-view>
@@ -40,6 +42,7 @@
     import CurrentUser from './user/Current-User.vue';
     import FriendFeed from './friends/Friend-Feed.vue';
     import NowSpinning from "./user/Now-Spinning";
+    import OnDeck from './shelf/On-Deck.vue';
     import api from '../api';
     import store from '../store';
 
@@ -48,13 +51,18 @@
             NowSpinning,
             CurrentUser,
             FriendFeed,
-            NowSpinning
+            NowSpinning,
+            OnDeck
         },
         beforeRouteEnter(to, from, next){
             api.getUser(response => {
-                store.commit('user', response.body)
-                store.commit('spin', response.body.now_spinning)
-                next()
+                let user = response.body
+                store.commit('user', user)
+                store.commit('spin', user.now_spinning)
+                api.getReleases(user.username, 'on-deck', (response) => {
+                    store.commit('onDeck', response.body)
+                    next()
+                })
             });
         }
     }
