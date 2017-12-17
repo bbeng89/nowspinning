@@ -9,14 +9,14 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <img class="img-responsive" :src="release.thumbnail">
-                    </div>
-                    <div class="col-sm-8">
-                        <strong>{{ release.title }}</strong> <br/>
-                        {{ release.artists_display }} <hr/>
-                        <div class="btn-group" role="group" aria-label="...">
+                        <div class="btn-group on-deck-actions" role="group" aria-label="...">
                             <button type="button" @click="offDeck(release)" class="btn btn-xs btn-danger"><i class="fa fa-times-circle"></i></button>
                             <button type="button" @click="spinRelease(release)" class="btn btn-xs btn-primary"><i class="fa fa-thumbs-up"></i> Spin</button>
                         </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <strong>{{ release.title }}</strong> <br/>
+                        {{ release.artists_display }}
                     </div>
                 </div>
             </div>
@@ -45,3 +45,9 @@
         }
     }
 </script>
+
+<style>
+    .on-deck-actions{
+        margin-top: 10px
+    }
+</style>
