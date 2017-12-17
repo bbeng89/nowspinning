@@ -30,7 +30,8 @@ class UserController extends Controller
 
     public function spin(SpinRequest $request)
     {
-        $this->user->spin($request->id);
+        $release = $this->collection->findRelease($request->id);
+        $this->user->spin($release);
         return response("Success!", 200);
     }
 

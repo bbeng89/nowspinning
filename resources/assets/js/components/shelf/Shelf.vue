@@ -21,8 +21,8 @@
                             <option value="artists_display,desc">Artist Z-A</option>
                             <option value="date_added,desc">Newest</option>
                             <option value="date_added,asc">Oldest</option>
-                            <option value="listens,desc">Most Listened</option>
-                            <option value="listens,asc">Least Listened</option>
+                            <option value="listen_count,desc">Most Listened</option>
+                            <option value="listen_count,asc">Least Listened</option>
                         </select>
                     </div>
                 </div>

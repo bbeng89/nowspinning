@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $thumbnail
  * @property string $cover_image
  * @property string $discogs_url
+ * @property int $listen_count
  * @package App\Models
  */
 class UserRelease extends Model
@@ -24,7 +25,7 @@ class UserRelease extends Model
     protected $table = 'user_releases';
 
     protected $fillable = ['user_id', 'discogs_id', 'discogs_folder_id', 'artists', 'title', 'release_year', 'date_added',
-        'thumbnail', 'cover_image', 'discogs_url'];
+        'thumbnail', 'cover_image', 'discogs_url', 'listen_count'];
 
     protected $casts = ['artists' => 'array'];
 

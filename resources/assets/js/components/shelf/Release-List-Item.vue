@@ -7,9 +7,9 @@
                 </div>
                 <div class="col-sm-8">
                     <strong>{{ release.title }}</strong> <br/>
-                    {{ release.artists_display }}
+                    {{ release.artists_display }} <hr/>
+                    <p>Listens: {{ release.listen_count }}</p>
                     <div v-if="enableActions">
-                        <hr/>
                         <button class="btn btn-default" type="button" @click="putReleaseOnDeck(release)"><i class="fa fa-plus-circle" ref="onDeckIcon"></i> On Deck</button>
                         <button class="btn btn-primary" type="button" @click="spinRelease(release)"><i class="fa fa-thumbs-o-up" ref="spinIcon"></i> Spin Now</button>
                     </div>

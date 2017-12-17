@@ -9,7 +9,7 @@
                     </div>
                     <div class="col-sm-8">
                         <strong>{{ release.title }}</strong> <br/>
-                        {{ artistDisplay }}
+                        {{ release.artists_display }}
                     </div>
                 </div>
             </div>
@@ -21,9 +21,6 @@
 
     export default {
         computed: {
-            artistDisplay() {
-                return this.release.artists.map(a => a.name).join(', ')
-            },
             ...mapState({
                 user: 'user',
                 release: 'nowSpinning'

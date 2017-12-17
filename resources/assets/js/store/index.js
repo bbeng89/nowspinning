@@ -22,8 +22,11 @@ export default new Vuex.Store({
         }
     },
     actions: {
-        spin ({ commit }, release) {
-            api.spin(release, response => commit('spin', release))
+        spin ({ commit, state }, release) {
+            api.spin(release, response => {
+                release.listen_count++
+                commit('spin', release)
+            })
         },
         onDeck({ commit, state }, release) {
             api.addToShelf(release, 'on-deck', response => {

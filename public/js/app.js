@@ -562,13 +562,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    computed: _extends({
-        artistDisplay: function artistDisplay() {
-            return this.release.artists.map(function (a) {
-                return a.name;
-            }).join(', ');
-        }
-    }, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapState */])({
+    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapState */])({
         user: 'user',
         release: 'nowSpinning'
     }))
@@ -31166,14 +31160,14 @@ var render = function() {
           _vm._v(" "),
           _c("br"),
           _vm._v(
-            "\n                " +
-              _vm._s(_vm.release.artists_display) +
-              "\n                "
+            "\n                " + _vm._s(_vm.release.artists_display) + " "
           ),
+          _c("hr"),
+          _vm._v(" "),
+          _c("p", [_vm._v("Listens: " + _vm._s(_vm.release.listen_count))]),
+          _vm._v(" "),
           _vm.enableActions
             ? _c("div", [
-                _c("hr"),
-                _vm._v(" "),
                 _c(
                   "button",
                   {
@@ -31337,11 +31331,11 @@ var render = function() {
                     _vm._v("Oldest")
                   ]),
                   _vm._v(" "),
-                  _c("option", { attrs: { value: "listens,desc" } }, [
+                  _c("option", { attrs: { value: "listen_count,desc" } }, [
                     _vm._v("Most Listened")
                   ]),
                   _vm._v(" "),
-                  _c("option", { attrs: { value: "listens,asc" } }, [
+                  _c("option", { attrs: { value: "listen_count,asc" } }, [
                     _vm._v("Least Listened")
                   ])
                 ]
@@ -31614,7 +31608,7 @@ var render = function() {
             _c("br"),
             _vm._v(
               "\n                    " +
-                _vm._s(_vm.artistDisplay) +
+                _vm._s(_vm.release.artists_display) +
                 "\n                "
             )
           ])
@@ -48662,10 +48656,12 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
     },
     actions: {
         spin: function spin(_ref, release) {
-            var commit = _ref.commit;
+            var commit = _ref.commit,
+                state = _ref.state;
 
             __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].spin(release, function (response) {
-                return commit('spin', release);
+                release.listen_count++;
+                commit('spin', release);
             });
         },
         onDeck: function onDeck(_ref2, release) {

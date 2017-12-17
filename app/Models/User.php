@@ -53,10 +53,14 @@ class User extends Authenticatable
         return $this->shelves()->where('handle', $handle)->firstOrFail();
     }
 
-    public function spin($userReleaseId)
+    public function spin($release)
     {
-        $this->now_spinning_id = $userReleaseId;
+        $this->now_spinning_id = $release->id;
         $this->save();
+
+        $release->listen_count++;
+        $release->save();
+
         return $this;
     }
 }
