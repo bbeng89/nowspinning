@@ -1,17 +1,41 @@
 <template>
     <div class="shelf">
-        <div class="text-center">
-            <h1>{{ shelfNameDisplay }}</h1>
-            <h2 v-if="loading"><i class="fa fa-spinner fa-spin"></i></h2>
-            <h2 v-else class="text-muted"><em>{{ count }} Items</em></h2>
+        <div class="panel panel-default">
+            <div class="panel-heading text-center">
+                <h1 class="panel-title clearfix">
+                    <span class="pull-left">{{ shelfNameDisplay }}</span>
+                    <span class="pull-right" v-if="loading"><i class="fa fa-spinner fa-spin"></i></span>
+                    <span class="pull-right" v-else><em>{{ count }} Items</em></span>
+                </h1>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <input v-model="search" type="text" class="form-control" placeholder="What are you looking for?">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-control" v-model="sort">
+                            <option value="artists_display,asc">Artist A-Z</option>
+                            <option value="artists_display,desc">Artist Z-A</option>
+                            <option value="date_added,desc">Newest</option>
+                            <option value="date_added,asc">Oldest</option>
+                            <option value="listens,desc">Most Listened</option>
+                            <option value="listens,asc">Least Listened</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <release-list-item v-for="release in releases"
+        <h2 class="text-center" v-if="loading"><i class="fa fa-spinner fa-spin"></i></h2>
+
+        <release-list-item v-for="release in releasesSorted"
                            :key="release.id"
                            :release="release"
                            :enable-actions="true">
         </release-list-item>
-
     </div>
 </template>
 
@@ -26,7 +50,9 @@
                 username: '',
                 shelfName: '',
                 releases: [],
-                loading: true
+                loading: true,
+                sort: 'date_added,desc',
+                search: ''
             }
         },
         mounted() {
@@ -46,7 +72,25 @@
             },
             count() {
                 return this.releases.length;
+            },
+            releasesSorted() {
+                let [sort,dir] = this.sort.split(',')
+                let filtered = _.orderBy(this.releases, r => r[sort], [dir]);
+                if(this.search !== '' && this.search !== null && this.search.length > 2)
+                {
+                    filtered = _.filter(filtered, release => {
+                        return release.artists_display.toLowerCase().includes(this.search.toLowerCase()) ||
+                            release.title.toLowerCase().includes(this.search.toLowerCase());
+                    })
+                }
+                return filtered;
             }
         }
     }
 </script>
+
+<style>
+    .shelf {
+        margin-top:25px;
+    }
+</style>

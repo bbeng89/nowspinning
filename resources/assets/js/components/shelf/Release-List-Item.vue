@@ -7,7 +7,7 @@
                 </div>
                 <div class="col-sm-8">
                     <strong>{{ release.title }}</strong> <br/>
-                    {{ artistDisplay }}
+                    {{ release.artists_display }}
                     <div v-if="enableActions">
                         <hr/>
                         <button class="btn btn-default" type="button" @click="putReleaseOnDeck(release)"><i class="fa fa-plus-circle" ref="onDeckIcon"></i> On Deck</button>
@@ -23,11 +23,6 @@
 
     export default {
         props: ['release', 'enableActions'],
-        computed: {
-            artistDisplay() {
-                return this.release.artists.map(a => a.name).join(', ')
-            }
-        },
         methods: {
             putReleaseOnDeck(release) {
                 this.onDeck(release);

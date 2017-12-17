@@ -13,7 +13,7 @@
                 </div>
                 <div id="navbar" class="collapse navbar-collapse navbar-right">
                     <ul class="nav navbar-nav">
-                        <li><p class="navbar-text">Welcome, username</p></li>
+                        <li><p class="navbar-text">Welcome, {{ user.username }}</p></li>
                         <li><a href="/logout">Logout</a></li>
                     </ul>
                 </div><!--/.nav-collapse -->
@@ -45,6 +45,7 @@
     import OnDeck from './shelf/On-Deck.vue';
     import api from '../api';
     import store from '../store';
+    import { mapState } from 'vuex';
 
     export default {
         components: {
@@ -64,6 +65,11 @@
                     next()
                 })
             });
+        },
+        computed: {
+            ...mapState([
+                'user'
+            ])
         }
     }
 </script>

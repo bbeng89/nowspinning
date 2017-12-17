@@ -28,6 +28,15 @@ class UserRelease extends Model
 
     protected $casts = ['artists' => 'array'];
 
+    protected $appends = ['artists_display'];
+
+    public function getArtistsDisplayAttribute()
+    {
+        return implode(', ', array_map(function($artist) {
+            return $artist['name'];
+        }, $this->artists));
+    }
+
     public function shelves()
     {
         return $this->belongsToMany(Shelf::class, 'user_release_shelf');

@@ -12,7 +12,7 @@
                     </div>
                     <div class="col-sm-8">
                         <strong>{{ release.title }}</strong> <br/>
-                        {{ artistDisplay(release) }} <hr/>
+                        {{ release.artists_display }} <hr/>
                         <div class="btn-group" role="group" aria-label="...">
                             <button type="button" @click="offDeck(release)" class="btn btn-xs btn-danger"><i class="fa fa-times-circle"></i></button>
                             <button type="button" @click="spinRelease(release)" class="btn btn-xs btn-primary"><i class="fa fa-thumbs-up"></i> Spin</button>
@@ -34,9 +34,6 @@
             })
         },
         methods: {
-            artistDisplay(release) {
-                return release.artists.map(a => a.name).join(', ')
-            },
             spinRelease(release) {
                 this.offDeck(release)
                 this.spin(release)
