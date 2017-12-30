@@ -61,8 +61,8 @@
                 let user = response.body
                 store.commit('user', user)
                 store.commit('spin', user.now_spinning)
-                api.getReleases(user.username, 'on-deck', (response) => {
-                    store.commit('onDeck', response.body)
+                api.getReleases(user.username, 'on-deck', 50, (response) => {
+                    store.commit('onDeck', response.body.data)
                     next()
                 })
             });

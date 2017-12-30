@@ -29,13 +29,14 @@
             </div>
         </div>
 
+        <div v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="20">
+            <release-list-item v-for="release in releases"
+                               :key="release.id"
+                               :release="release"
+                               :enable-actions="true">
+            </release-list-item>
+        </div>
         <h2 class="text-center" v-if="loading"><i class="fa fa-spinner fa-spin"></i></h2>
-
-        <release-list-item v-for="release in releasesSorted"
-                           :key="release.id"
-                           :release="release"
-                           :enable-actions="true">
-        </release-list-item>
     </div>
 </template>
 
@@ -52,16 +53,40 @@
                 releases: [],
                 loading: true,
                 sort: 'date_added,desc',
-                search: ''
+                search: '',
+                nextPage: 1,
+                count : 0
             }
         },
         mounted() {
             this.username = this.$route.params.username;
             this.shelfName = this.$route.params.shelf;
-            api.getReleases(this.username, this.shelfName, response => {
-                this.releases = response.body;
-                this.loading = false;
-            })
+            this.fetchReleases();
+        },
+        methods: {
+            loadMore() {
+                if(this.nextPage === null) return;
+                this.fetchReleases();
+            },
+            fetchReleases() {
+                this.loading = true;
+                api.getReleases(this.username, this.shelfName, this.nextPage, response => {
+
+                    this.count = response.body.total;
+
+                    for(let release of response.body.data) {
+                        this.releases.push(release);
+                    }
+
+                    if(response.body.current_page != response.body.last_page){
+                        this.nextPage++;
+                    } else {
+                        this.nextPage = null;
+                    }
+
+                    this.loading = false;
+                })
+            }
         },
         computed: {
             shelfNameDisplay() {
@@ -69,9 +94,6 @@
                 else if(this.shelfName == 'cassette') return 'Cassette';
                 else if(this.shelfName == 'cd') return 'Compact Disc';
                 return this.shelfName;
-            },
-            count() {
-                return this.releases.length;
             },
             releasesSorted() {
                 let [sort,dir] = this.sort.split(',')

@@ -1773,8 +1773,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             var user = response.body;
             __WEBPACK_IMPORTED_MODULE_5__store__["a" /* default */].commit('user', user);
             __WEBPACK_IMPORTED_MODULE_5__store__["a" /* default */].commit('spin', user.now_spinning);
-            __WEBPACK_IMPORTED_MODULE_4__api__["a" /* default */].getReleases(user.username, 'on-deck', function (response) {
-                __WEBPACK_IMPORTED_MODULE_5__store__["a" /* default */].commit('onDeck', response.body);
+            __WEBPACK_IMPORTED_MODULE_4__api__["a" /* default */].getReleases(user.username, 'on-deck', 50, function (response) {
+                __WEBPACK_IMPORTED_MODULE_5__store__["a" /* default */].commit('onDeck', response.body.data);
                 next();
             });
         });
@@ -2343,6 +2343,7 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 //
 //
 //
+//
 
 
 
@@ -2356,27 +2357,69 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
             releases: [],
             loading: true,
             sort: 'date_added,desc',
-            search: ''
+            search: '',
+            nextPage: 1,
+            count: 0
         };
     },
     mounted: function mounted() {
-        var _this = this;
-
         this.username = this.$route.params.username;
         this.shelfName = this.$route.params.shelf;
-        __WEBPACK_IMPORTED_MODULE_1__api__["a" /* default */].getReleases(this.username, this.shelfName, function (response) {
-            _this.releases = response.body;
-            _this.loading = false;
-        });
+        this.fetchReleases();
     },
 
+    methods: {
+        loadMore: function loadMore() {
+            if (this.nextPage === null) return;
+            this.fetchReleases();
+        },
+        fetchReleases: function fetchReleases() {
+            var _this = this;
+
+            this.loading = true;
+            __WEBPACK_IMPORTED_MODULE_1__api__["a" /* default */].getReleases(this.username, this.shelfName, this.nextPage, function (response) {
+
+                _this.count = response.body.total;
+
+                var _iteratorNormalCompletion = true;
+                var _didIteratorError = false;
+                var _iteratorError = undefined;
+
+                try {
+                    for (var _iterator = response.body.data[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                        var release = _step.value;
+
+                        _this.releases.push(release);
+                    }
+                } catch (err) {
+                    _didIteratorError = true;
+                    _iteratorError = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion && _iterator.return) {
+                            _iterator.return();
+                        }
+                    } finally {
+                        if (_didIteratorError) {
+                            throw _iteratorError;
+                        }
+                    }
+                }
+
+                if (response.body.current_page != response.body.last_page) {
+                    _this.nextPage++;
+                } else {
+                    _this.nextPage = null;
+                }
+
+                _this.loading = false;
+            });
+        }
+    },
     computed: {
         shelfNameDisplay: function shelfNameDisplay() {
             if (this.shelfName == 'vinyl') return 'Vinyl';else if (this.shelfName == 'cassette') return 'Cassette';else if (this.shelfName == 'cd') return 'Compact Disc';
             return this.shelfName;
-        },
-        count: function count() {
-            return this.releases.length;
         },
         releasesSorted: function releasesSorted() {
             var _this2 = this;
@@ -32922,6 +32965,247 @@ exports.clearImmediate = clearImmediate;
 
 /***/ }),
 
+/***/ "./node_modules/vue-infinite-scroll/vue-infinite-scroll.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+(function (global, factory) {
+   true ? module.exports = factory() :
+  typeof define === 'function' && define.amd ? define(factory) :
+  (global.infiniteScroll = factory());
+}(this, function () { 'use strict';
+
+  var ctx = '@@InfiniteScroll';
+
+  var throttle = function throttle(fn, delay) {
+    var now, lastExec, timer, context, args; //eslint-disable-line
+
+    var execute = function execute() {
+      fn.apply(context, args);
+      lastExec = now;
+    };
+
+    return function () {
+      context = this;
+      args = arguments;
+
+      now = Date.now();
+
+      if (timer) {
+        clearTimeout(timer);
+        timer = null;
+      }
+
+      if (lastExec) {
+        var diff = delay - (now - lastExec);
+        if (diff < 0) {
+          execute();
+        } else {
+          timer = setTimeout(function () {
+            execute();
+          }, diff);
+        }
+      } else {
+        execute();
+      }
+    };
+  };
+
+  var getScrollTop = function getScrollTop(element) {
+    if (element === window) {
+      return Math.max(window.pageYOffset || 0, document.documentElement.scrollTop);
+    }
+
+    return element.scrollTop;
+  };
+
+  var getComputedStyle = document.defaultView.getComputedStyle;
+
+  var getScrollEventTarget = function getScrollEventTarget(element) {
+    var currentNode = element;
+    // bugfix, see http://w3help.org/zh-cn/causes/SD9013 and http://stackoverflow.com/questions/17016740/onscroll-function-is-not-working-for-chrome
+    while (currentNode && currentNode.tagName !== 'HTML' && currentNode.tagName !== 'BODY' && currentNode.nodeType === 1) {
+      var overflowY = getComputedStyle(currentNode).overflowY;
+      if (overflowY === 'scroll' || overflowY === 'auto') {
+        return currentNode;
+      }
+      currentNode = currentNode.parentNode;
+    }
+    return window;
+  };
+
+  var getVisibleHeight = function getVisibleHeight(element) {
+    if (element === window) {
+      return document.documentElement.clientHeight;
+    }
+
+    return element.clientHeight;
+  };
+
+  var getElementTop = function getElementTop(element) {
+    if (element === window) {
+      return getScrollTop(window);
+    }
+    return element.getBoundingClientRect().top + getScrollTop(window);
+  };
+
+  var isAttached = function isAttached(element) {
+    var currentNode = element.parentNode;
+    while (currentNode) {
+      if (currentNode.tagName === 'HTML') {
+        return true;
+      }
+      if (currentNode.nodeType === 11) {
+        return false;
+      }
+      currentNode = currentNode.parentNode;
+    }
+    return false;
+  };
+
+  var doBind = function doBind() {
+    if (this.binded) return; // eslint-disable-line
+    this.binded = true;
+
+    var directive = this;
+    var element = directive.el;
+
+    var throttleDelayExpr = element.getAttribute('infinite-scroll-throttle-delay');
+    var throttleDelay = 200;
+    if (throttleDelayExpr) {
+      throttleDelay = Number(directive.vm[throttleDelayExpr] || throttleDelayExpr);
+      if (isNaN(throttleDelay) || throttleDelay < 0) {
+        throttleDelay = 200;
+      }
+    }
+    directive.throttleDelay = throttleDelay;
+
+    directive.scrollEventTarget = getScrollEventTarget(element);
+    directive.scrollListener = throttle(doCheck.bind(directive), directive.throttleDelay);
+    directive.scrollEventTarget.addEventListener('scroll', directive.scrollListener);
+
+    this.vm.$on('hook:beforeDestroy', function () {
+      directive.scrollEventTarget.removeEventListener('scroll', directive.scrollListener);
+    });
+
+    var disabledExpr = element.getAttribute('infinite-scroll-disabled');
+    var disabled = false;
+
+    if (disabledExpr) {
+      this.vm.$watch(disabledExpr, function (value) {
+        directive.disabled = value;
+        if (!value && directive.immediateCheck) {
+          doCheck.call(directive);
+        }
+      });
+      disabled = Boolean(directive.vm[disabledExpr]);
+    }
+    directive.disabled = disabled;
+
+    var distanceExpr = element.getAttribute('infinite-scroll-distance');
+    var distance = 0;
+    if (distanceExpr) {
+      distance = Number(directive.vm[distanceExpr] || distanceExpr);
+      if (isNaN(distance)) {
+        distance = 0;
+      }
+    }
+    directive.distance = distance;
+
+    var immediateCheckExpr = element.getAttribute('infinite-scroll-immediate-check');
+    var immediateCheck = true;
+    if (immediateCheckExpr) {
+      immediateCheck = Boolean(directive.vm[immediateCheckExpr]);
+    }
+    directive.immediateCheck = immediateCheck;
+
+    if (immediateCheck) {
+      doCheck.call(directive);
+    }
+
+    var eventName = element.getAttribute('infinite-scroll-listen-for-event');
+    if (eventName) {
+      directive.vm.$on(eventName, function () {
+        doCheck.call(directive);
+      });
+    }
+  };
+
+  var doCheck = function doCheck(force) {
+    var scrollEventTarget = this.scrollEventTarget;
+    var element = this.el;
+    var distance = this.distance;
+
+    if (force !== true && this.disabled) return; //eslint-disable-line
+    var viewportScrollTop = getScrollTop(scrollEventTarget);
+    var viewportBottom = viewportScrollTop + getVisibleHeight(scrollEventTarget);
+
+    var shouldTrigger = false;
+
+    if (scrollEventTarget === element) {
+      shouldTrigger = scrollEventTarget.scrollHeight - viewportBottom <= distance;
+    } else {
+      var elementBottom = getElementTop(element) - getElementTop(scrollEventTarget) + element.offsetHeight + viewportScrollTop;
+
+      shouldTrigger = viewportBottom + distance >= elementBottom;
+    }
+
+    if (shouldTrigger && this.expression) {
+      this.expression();
+    }
+  };
+
+  var InfiniteScroll = {
+    bind: function bind(el, binding, vnode) {
+      el[ctx] = {
+        el: el,
+        vm: vnode.context,
+        expression: binding.value
+      };
+      var args = arguments;
+      el[ctx].vm.$on('hook:mounted', function () {
+        el[ctx].vm.$nextTick(function () {
+          if (isAttached(el)) {
+            doBind.call(el[ctx], args);
+          }
+
+          el[ctx].bindTryCount = 0;
+
+          var tryBind = function tryBind() {
+            if (el[ctx].bindTryCount > 10) return; //eslint-disable-line
+            el[ctx].bindTryCount++;
+            if (isAttached(el)) {
+              doBind.call(el[ctx], args);
+            } else {
+              setTimeout(tryBind, 50);
+            }
+          };
+
+          tryBind();
+        });
+      });
+    },
+    unbind: function unbind(el) {
+      if (el && el[ctx] && el[ctx].scrollEventTarget) el[ctx].scrollEventTarget.removeEventListener('scroll', el[ctx].scrollListener);
+    }
+  };
+
+  var install = function install(Vue) {
+    Vue.directive('InfiniteScroll', InfiniteScroll);
+  };
+
+  if (window.Vue) {
+    window.infiniteScroll = InfiniteScroll;
+    Vue.use(install); // eslint-disable-line
+  }
+
+  InfiniteScroll.install = install;
+
+  return InfiniteScroll;
+
+}));
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/component-normalizer.js":
 /***/ (function(module, exports) {
 
@@ -33458,133 +33742,145 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "shelf" },
-    [
-      _c("div", { staticClass: "panel panel-default" }, [
-        _c("div", { staticClass: "panel-heading text-center" }, [
-          _c("h1", { staticClass: "panel-title clearfix" }, [
-            _c("span", { staticClass: "pull-left" }, [
-              _vm._v(_vm._s(_vm.shelfNameDisplay))
-            ]),
-            _vm._v(" "),
-            _vm.loading
-              ? _c("span", { staticClass: "pull-right" }, [
-                  _c("i", { staticClass: "fa fa-spinner fa-spin" })
-                ])
-              : _c("span", { staticClass: "pull-right" }, [
-                  _c("em", [_vm._v(_vm._s(_vm.count) + " Items")])
-                ])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "panel-body" }, [
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-md-9" }, [
-              _c("div", { staticClass: "form-group" }, [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.search,
-                      expression: "search"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: {
-                    type: "text",
-                    placeholder: "What are you looking for?"
-                  },
-                  domProps: { value: _vm.search },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.search = $event.target.value
-                    }
-                  }
-                })
+  return _c("div", { staticClass: "shelf" }, [
+    _c("div", { staticClass: "panel panel-default" }, [
+      _c("div", { staticClass: "panel-heading text-center" }, [
+        _c("h1", { staticClass: "panel-title clearfix" }, [
+          _c("span", { staticClass: "pull-left" }, [
+            _vm._v(_vm._s(_vm.shelfNameDisplay))
+          ]),
+          _vm._v(" "),
+          _vm.loading
+            ? _c("span", { staticClass: "pull-right" }, [
+                _c("i", { staticClass: "fa fa-spinner fa-spin" })
               ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-md-3" }, [
-              _c(
-                "select",
-                {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.sort,
-                      expression: "sort"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  on: {
-                    change: function($event) {
-                      var $$selectedVal = Array.prototype.filter
-                        .call($event.target.options, function(o) {
-                          return o.selected
-                        })
-                        .map(function(o) {
-                          var val = "_value" in o ? o._value : o.value
-                          return val
-                        })
-                      _vm.sort = $event.target.multiple
-                        ? $$selectedVal
-                        : $$selectedVal[0]
-                    }
-                  }
-                },
-                [
-                  _c("option", { attrs: { value: "artists_display,asc" } }, [
-                    _vm._v("Artist A-Z")
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "artists_display,desc" } }, [
-                    _vm._v("Artist Z-A")
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "date_added,desc" } }, [
-                    _vm._v("Newest")
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "date_added,asc" } }, [
-                    _vm._v("Oldest")
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "listen_count,desc" } }, [
-                    _vm._v("Most Listened")
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "listen_count,asc" } }, [
-                    _vm._v("Least Listened")
-                  ])
-                ]
-              )
-            ])
-          ])
+            : _c("span", { staticClass: "pull-right" }, [
+                _c("em", [_vm._v(_vm._s(_vm.count) + " Items")])
+              ])
         ])
       ]),
       _vm._v(" "),
-      _vm.loading
-        ? _c("h2", { staticClass: "text-center" }, [
-            _c("i", { staticClass: "fa fa-spinner fa-spin" })
+      _c("div", { staticClass: "panel-body" }, [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-md-9" }, [
+            _c("div", { staticClass: "form-group" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.search,
+                    expression: "search"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  type: "text",
+                  placeholder: "What are you looking for?"
+                },
+                domProps: { value: _vm.search },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.search = $event.target.value
+                  }
+                }
+              })
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-3" }, [
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.sort,
+                    expression: "sort"
+                  }
+                ],
+                staticClass: "form-control",
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.sort = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  }
+                }
+              },
+              [
+                _c("option", { attrs: { value: "artists_display,asc" } }, [
+                  _vm._v("Artist A-Z")
+                ]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "artists_display,desc" } }, [
+                  _vm._v("Artist Z-A")
+                ]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "date_added,desc" } }, [
+                  _vm._v("Newest")
+                ]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "date_added,asc" } }, [
+                  _vm._v("Oldest")
+                ]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "listen_count,desc" } }, [
+                  _vm._v("Most Listened")
+                ]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "listen_count,asc" } }, [
+                  _vm._v("Least Listened")
+                ])
+              ]
+            )
           ])
-        : _vm._e(),
-      _vm._v(" "),
-      _vm._l(_vm.releasesSorted, function(release) {
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "infinite-scroll",
+            rawName: "v-infinite-scroll",
+            value: _vm.loadMore,
+            expression: "loadMore"
+          }
+        ],
+        attrs: {
+          "infinite-scroll-disabled": "loading",
+          "infinite-scroll-distance": "20"
+        }
+      },
+      _vm._l(_vm.releases, function(release) {
         return _c("release-list-item", {
           key: release.id,
           attrs: { release: release, "enable-actions": true }
         })
       })
-    ],
-    2
-  )
+    ),
+    _vm._v(" "),
+    _vm.loading
+      ? _c("h2", { staticClass: "text-center" }, [
+          _c("i", { staticClass: "fa fa-spinner fa-spin" })
+        ])
+      : _vm._e()
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -50751,8 +51047,8 @@ var defaultErrorHandler = function defaultErrorHandler(response) {
     getCounts: function getCounts(username, success, error) {
         return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/collection/' + username + '/shelves/counts').then(success, error || defaultErrorHandler);
     },
-    getReleases: function getReleases(username, shelfName, success, error) {
-        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/collection/' + username + '/' + shelfName).then(success, error || defaultErrorHandler);
+    getReleases: function getReleases(username, shelfName, page, success, error) {
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/collection/' + username + '/' + shelfName, { params: { page: page } }).then(success, error || defaultErrorHandler);
     },
     getRelease: function getRelease(releaseId, success, error) {
         return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/collection/release/' + releaseId).then(success, error || defaultErrorHandler);
@@ -50801,26 +51097,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__("./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_resource__ = __webpack_require__("./node_modules/vue-resource/dist/vue-resource.es2015.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_infinite_scroll__ = __webpack_require__("./node_modules/vue-infinite-scroll/vue-infinite-scroll.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_infinite_scroll___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_vue_infinite_scroll__);
 
 
 
+
+window.$ = window.jQuery = __webpack_require__("./node_modules/jquery/dist/jquery.js");
 window._ = __webpack_require__("./node_modules/lodash/lodash.js");
-
-/**
- * We'll load jQuery and the Bootstrap jQuery plugin which provides support
- * for JavaScript based Bootstrap features such as modals and tabs. This
- * code may be modified to fit the specific needs of your application.
- */
-
-try {
-    window.$ = window.jQuery = __webpack_require__("./node_modules/jquery/dist/jquery.js");
-    __webpack_require__("./node_modules/bootstrap-sass/assets/javascripts/bootstrap.js");
-} catch (e) {}
-
 window.Vue = __webpack_require__("./node_modules/vue/dist/vue.common.js");
 window.axios = __webpack_require__("./node_modules/axios/index.js");
 
+__webpack_require__("./node_modules/bootstrap-sass/assets/javascripts/bootstrap.js");
+
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_resource__["a" /* default */]);
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_vue_infinite_scroll___default.a);
 
 var token = document.head.querySelector('meta[name="csrf-token"]');
 

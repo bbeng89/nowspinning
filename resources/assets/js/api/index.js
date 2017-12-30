@@ -12,8 +12,9 @@ export default {
     getCounts(username, success, error) {
         return Vue.http.get('/api/collection/'+username+'/shelves/counts').then(success, error || defaultErrorHandler);
     },
-    getReleases(username, shelfName, success, error) {
-        return Vue.http.get('/api/collection/'+username+'/'+shelfName).then(success, error || defaultErrorHandler);
+    getReleases(username, shelfName, page, success, error) {
+        return Vue.http.get('/api/collection/'+username+'/'+shelfName, { params: { page: page } })
+            .then(success, error || defaultErrorHandler);
     },
     getRelease(releaseId, success, error) {
         return Vue.http.get('/api/collection/release/' + releaseId).then(success, error || defaultErrorHandler);

@@ -1,23 +1,16 @@
 import Vue from 'vue'
 import VueResource from 'vue-resource'
+import InfiniteScroll from 'vue-infinite-scroll'
 
+window.$ = window.jQuery = require('jquery');
 window._ = require('lodash');
-
-/**
- * We'll load jQuery and the Bootstrap jQuery plugin which provides support
- * for JavaScript based Bootstrap features such as modals and tabs. This
- * code may be modified to fit the specific needs of your application.
- */
-
-try {
-    window.$ = window.jQuery = require('jquery');
-    require('bootstrap-sass');
-} catch (e) {}
-
 window.Vue = require('vue');
 window.axios = require('axios');
 
-Vue.use(VueResource)
+require('bootstrap-sass');
+
+Vue.use(VueResource);
+Vue.use(InfiniteScroll);
 
 let token = document.head.querySelector('meta[name="csrf-token"]');
 
