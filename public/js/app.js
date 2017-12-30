@@ -1773,7 +1773,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             var user = response.body;
             __WEBPACK_IMPORTED_MODULE_5__store__["a" /* default */].commit('user', user);
             __WEBPACK_IMPORTED_MODULE_5__store__["a" /* default */].commit('spin', user.now_spinning);
-            __WEBPACK_IMPORTED_MODULE_4__api__["a" /* default */].getReleases(user.username, 'on-deck', 50, function (response) {
+            __WEBPACK_IMPORTED_MODULE_4__api__["a" /* default */].getReleases(user.username, 'on-deck', 1, null, 'date_added,asc', function (response) {
                 __WEBPACK_IMPORTED_MODULE_5__store__["a" /* default */].commit('onDeck', response.body.data);
                 next();
             });
@@ -2300,8 +2300,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Release_List_Item_vue__ = __webpack_require__("./resources/assets/js/components/shelf/Release-List-Item.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Release_List_Item_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Release_List_Item_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__api__ = __webpack_require__("./resources/assets/js/api/index.js");
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
+//
+//
 //
 //
 //
@@ -2358,7 +2358,8 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
             loading: true,
             sort: 'date_added,desc',
             search: '',
-            nextPage: 1,
+            currentPage: 1,
+            lastPage: null,
             count: 0
         };
     },
@@ -2368,18 +2369,26 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
         this.fetchReleases();
     },
 
+    watch: {
+        sort: function sort() {
+            this.releases = [];
+            this.fetchReleases();
+        }
+    },
     methods: {
         loadMore: function loadMore() {
-            if (this.nextPage === null) return;
+            if (this.currentPage == this.lastPage) return;
             this.fetchReleases();
         },
         fetchReleases: function fetchReleases() {
             var _this = this;
 
             this.loading = true;
-            __WEBPACK_IMPORTED_MODULE_1__api__["a" /* default */].getReleases(this.username, this.shelfName, this.nextPage, function (response) {
+            __WEBPACK_IMPORTED_MODULE_1__api__["a" /* default */].getReleases(this.username, this.shelfName, this.nextPage, this.search, this.sort, function (response) {
 
                 _this.count = response.body.total;
+                _this.currentPage = response.body.current_page;
+                _this.lastPage = response.body.last_page;
 
                 var _iteratorNormalCompletion = true;
                 var _didIteratorError = false;
@@ -2406,38 +2415,18 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
                     }
                 }
 
-                if (response.body.current_page != response.body.last_page) {
-                    _this.nextPage++;
-                } else {
-                    _this.nextPage = null;
-                }
-
                 _this.loading = false;
             });
+        },
+        runSearch: function runSearch() {
+            this.releases = [];
+            this.fetchReleases();
         }
     },
     computed: {
         shelfNameDisplay: function shelfNameDisplay() {
             if (this.shelfName == 'vinyl') return 'Vinyl';else if (this.shelfName == 'cassette') return 'Cassette';else if (this.shelfName == 'cd') return 'Compact Disc';
             return this.shelfName;
-        },
-        releasesSorted: function releasesSorted() {
-            var _this2 = this;
-
-            var _sort$split = this.sort.split(','),
-                _sort$split2 = _slicedToArray(_sort$split, 2),
-                sort = _sort$split2[0],
-                dir = _sort$split2[1];
-
-            var filtered = _.orderBy(this.releases, function (r) {
-                return r[sort];
-            }, [dir]);
-            if (this.search !== '' && this.search !== null && this.search.length > 2) {
-                filtered = _.filter(filtered, function (release) {
-                    return release.artists_display.toLowerCase().includes(_this2.search.toLowerCase()) || release.title.toLowerCase().includes(_this2.search.toLowerCase());
-                });
-            }
-            return filtered;
         }
     }
 });
@@ -33763,32 +33752,45 @@ var render = function() {
       _c("div", { staticClass: "panel-body" }, [
         _c("div", { staticClass: "row" }, [
           _c("div", { staticClass: "col-md-9" }, [
-            _c("div", { staticClass: "form-group" }, [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.search,
-                    expression: "search"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: {
-                  type: "text",
-                  placeholder: "What are you looking for?"
-                },
-                domProps: { value: _vm.search },
+            _c(
+              "form",
+              {
                 on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.search = $event.target.value
+                  submit: function($event) {
+                    $event.preventDefault()
+                    _vm.runSearch($event)
                   }
                 }
-              })
-            ])
+              },
+              [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.search,
+                        expression: "search"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      placeholder: "What are you looking for?"
+                    },
+                    domProps: { value: _vm.search },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.search = $event.target.value
+                      }
+                    }
+                  })
+                ])
+              ]
+            )
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-md-3" }, [
@@ -51047,8 +51049,8 @@ var defaultErrorHandler = function defaultErrorHandler(response) {
     getCounts: function getCounts(username, success, error) {
         return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/collection/' + username + '/shelves/counts').then(success, error || defaultErrorHandler);
     },
-    getReleases: function getReleases(username, shelfName, page, success, error) {
-        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/collection/' + username + '/' + shelfName, { params: { page: page } }).then(success, error || defaultErrorHandler);
+    getReleases: function getReleases(username, shelfName, page, search, sort, success, error) {
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/collection/' + username + '/' + shelfName, { params: { page: page, search: search, sort: sort } }).then(success, error || defaultErrorHandler);
     },
     getRelease: function getRelease(releaseId, success, error) {
         return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/collection/release/' + releaseId).then(success, error || defaultErrorHandler);
@@ -51110,7 +51112,10 @@ window.axios = __webpack_require__("./node_modules/axios/index.js");
 
 __webpack_require__("./node_modules/bootstrap-sass/assets/javascripts/bootstrap.js");
 
+// https://github.com/pagekit/vue-resource
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_resource__["a" /* default */]);
+
+// https://github.com/ElemeFE/vue-infinite-scroll
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_vue_infinite_scroll___default.a);
 
 var token = document.head.querySelector('meta[name="csrf-token"]');

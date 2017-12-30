@@ -12,8 +12,8 @@ export default {
     getCounts(username, success, error) {
         return Vue.http.get('/api/collection/'+username+'/shelves/counts').then(success, error || defaultErrorHandler);
     },
-    getReleases(username, shelfName, page, success, error) {
-        return Vue.http.get('/api/collection/'+username+'/'+shelfName, { params: { page: page } })
+    getReleases(username, shelfName, page, search, sort, success, error) {
+        return Vue.http.get('/api/collection/'+username+'/'+shelfName, { params: { page: page, search: search, sort: sort } })
             .then(success, error || defaultErrorHandler);
     },
     getRelease(releaseId, success, error) {

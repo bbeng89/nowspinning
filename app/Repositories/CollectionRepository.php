@@ -12,11 +12,27 @@ class CollectionRepository
         return UserRelease::findOrFail($id);
     }
 
-    public function getReleasesInShelf($username, $shelf_handle)
+    public function getReleasesInShelf($username, $shelf_handle, $search = null, $sort = null)
     {
         $user = User::where('username', $username)->firstOrFail();
         $shelf = $user->shelves()->where('handle', $shelf_handle)->firstOrFail();
-        return $shelf->userReleases()->paginate(self::DEFAULT_PAGE_SIZE);
+        $releases = $shelf->userReleases();
+
+        if(!empty($search))
+        {
+            $releases->where(function($query) use($search) {
+                $query->where('artists_display', 'LIKE', "%{$search}%")
+                    ->orWhere('title', 'LIKE', "%{$search}%");
+            });
+        }
+
+        if(!empty($sort))
+        {
+            list($field, $dir) = explode(",", $sort);
+            $releases->orderBy($field, $dir);
+        }
+
+        return $releases->paginate(self::DEFAULT_PAGE_SIZE);
     }
 
     public function getShelfCounts($username)

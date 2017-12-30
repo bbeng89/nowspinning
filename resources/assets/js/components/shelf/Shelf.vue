@@ -11,9 +11,11 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-9">
-                        <div class="form-group">
-                            <input v-model="search" type="text" class="form-control" placeholder="What are you looking for?">
-                        </div>
+                        <form @submit.prevent="runSearch">
+                            <div class="form-group">
+                                <input v-model="search" type="text" class="form-control" placeholder="What are you looking for?">
+                            </div>
+                        </form>
                     </div>
                     <div class="col-md-3">
                         <select class="form-control" v-model="sort">
@@ -54,7 +56,8 @@
                 loading: true,
                 sort: 'date_added,desc',
                 search: '',
-                nextPage: 1,
+                currentPage: 1,
+                lastPage: null,
                 count : 0
             }
         },
@@ -63,29 +66,35 @@
             this.shelfName = this.$route.params.shelf;
             this.fetchReleases();
         },
+        watch: {
+            sort() {
+                this.releases = [];
+                this.fetchReleases();
+            }
+        },
         methods: {
             loadMore() {
-                if(this.nextPage === null) return;
+                if(this.currentPage == this.lastPage) return;
                 this.fetchReleases();
             },
             fetchReleases() {
                 this.loading = true;
-                api.getReleases(this.username, this.shelfName, this.nextPage, response => {
+                api.getReleases(this.username, this.shelfName, this.nextPage, this.search, this.sort, response => {
 
                     this.count = response.body.total;
+                    this.currentPage = response.body.current_page;
+                    this.lastPage = response.body.last_page;
 
                     for(let release of response.body.data) {
                         this.releases.push(release);
                     }
 
-                    if(response.body.current_page != response.body.last_page){
-                        this.nextPage++;
-                    } else {
-                        this.nextPage = null;
-                    }
-
                     this.loading = false;
                 })
+            },
+            runSearch() {
+                this.releases = [];
+                this.fetchReleases();
             }
         },
         computed: {
@@ -94,18 +103,6 @@
                 else if(this.shelfName == 'cassette') return 'Cassette';
                 else if(this.shelfName == 'cd') return 'Compact Disc';
                 return this.shelfName;
-            },
-            releasesSorted() {
-                let [sort,dir] = this.sort.split(',')
-                let filtered = _.orderBy(this.releases, r => r[sort], [dir]);
-                if(this.search !== '' && this.search !== null && this.search.length > 2)
-                {
-                    filtered = _.filter(filtered, release => {
-                        return release.artists_display.toLowerCase().includes(this.search.toLowerCase()) ||
-                            release.title.toLowerCase().includes(this.search.toLowerCase());
-                    })
-                }
-                return filtered;
             }
         }
     }

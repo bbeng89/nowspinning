@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $discogs_id
  * @property int $discogs_folder_id
  * @property object $artists
+ * @property string $artists_display
  * @property string $title
  * @property int $release_year
  * @property Carbon $date_added date added to discogs
@@ -29,14 +30,7 @@ class UserRelease extends Model
 
     protected $casts = ['artists' => 'array'];
 
-    protected $appends = ['artists_display'];
-
-    public function getArtistsDisplayAttribute()
-    {
-        return implode(', ', array_map(function($artist) {
-            return $artist['name'];
-        }, $this->artists));
-    }
+    protected $appends = [];
 
     public function shelves()
     {
@@ -68,6 +62,10 @@ class UserRelease extends Model
         $userRelease->thumbnail = $release->thumbnail;
         $userRelease->cover_image = $release->coverImage;
         $userRelease->discogs_url = $release->resourceUrl;
+        $userRelease->artists_display = implode(', ', array_map(function($artist) {
+            return $artist->name;
+        }, $release->artists));
+
         $userRelease->save();
 
         $shelves = Shelf::whereIn('name', $release->formats)->pluck('id');

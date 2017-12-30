@@ -9,7 +9,10 @@ window.axios = require('axios');
 
 require('bootstrap-sass');
 
+// https://github.com/pagekit/vue-resource
 Vue.use(VueResource);
+
+// https://github.com/ElemeFE/vue-infinite-scroll
 Vue.use(InfiniteScroll);
 
 let token = document.head.querySelector('meta[name="csrf-token"]');

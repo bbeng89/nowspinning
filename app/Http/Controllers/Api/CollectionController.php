@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\UserRelease;
 use App\Repositories\CollectionRepository;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CollectionController extends Controller
@@ -16,9 +17,11 @@ class CollectionController extends Controller
         $this->collection = $collection;
     }
 
-    public function shelf($username, $shelf)
+    public function shelf(Request $request, $username, $shelf)
     {
-        return $this->collection->getReleasesInShelf($username, $shelf);
+        $search = $request->get('search', null);
+        $sort = $request->get('sort', null);
+        return $this->collection->getReleasesInShelf($username, $shelf, $search, $sort);
     }
 
     public function shelfCounts($username)
