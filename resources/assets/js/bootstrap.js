@@ -15,6 +15,8 @@ try {
 } catch (e) {}
 
 window.Vue = require('vue');
+window.axios = require('axios');
+
 Vue.use(VueResource)
 
 let token = document.head.querySelector('meta[name="csrf-token"]');

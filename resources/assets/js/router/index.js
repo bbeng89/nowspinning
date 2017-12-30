@@ -1,9 +1,11 @@
-import Vue from 'vue'
-import VueRouter from "vue-router"
-import App from '../components/App.vue'
+import Vue from 'vue';
+import VueRouter from "vue-router";
+import App from '../components/App.vue';
+import Admin from '../components/Admin.vue';
 import NewsFeed from '../components/news/News-Feed.vue';
 import UserShelves from '../components/shelf/User-Shelves.vue';
 import Shelf from '../components/shelf/Shelf.vue';
+import OauthSettings from '../components/admin/oauth/Oauth-Settings';
 
 Vue.use(VueRouter)
 
@@ -15,6 +17,11 @@ export default new VueRouter({
                 { path: '/', component: NewsFeed, name: 'news-feed' },
                 { path: ':username/shelves', component: UserShelves, name: 'shelves' },
                 { path: ':username/shelves/:shelf', component: Shelf, name: 'shelf' }
+            ]
+        },
+        {
+            path: '/admin', component: Admin, children: [
+                { path: 'oauth', component: OauthSettings, name: 'oauth-settings' }
             ]
         }
     ]

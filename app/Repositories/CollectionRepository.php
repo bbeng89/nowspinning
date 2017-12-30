@@ -5,6 +5,8 @@ use App\Models\UserRelease;
 
 class CollectionRepository
 {
+    const DEFAULT_PAGE_SIZE = 50;
+
     public function findRelease($id)
     {
         return UserRelease::findOrFail($id);
@@ -14,7 +16,7 @@ class CollectionRepository
     {
         $user = User::where('username', $username)->firstOrFail();
         $shelf = $user->shelves()->where('handle', $shelf_handle)->firstOrFail();
-        return $shelf->userReleases;
+        return $shelf->userReleases()->paginate(self::DEFAULT_PAGE_SIZE);
     }
 
     public function getShelfCounts($username)

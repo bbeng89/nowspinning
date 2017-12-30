@@ -20,51 +20,25 @@
                 </div><!--/.nav-collapse -->
             </div>
         </nav>
-        <div class="container-fluid">
+        <div class="container-fluid" id="admin-content">
             <div class="row">
-                <div class="col-md-3">
-                    <current-user></current-user>
-                    <hr/>
-                    <now-spinning v-if="$store.state.nowSpinning"></now-spinning>
-                    <hr/>
-                    <on-deck></on-deck>
-                </div>
-                <div class="col-md-6">
+                <div class="col-sm-6 col-sm-offset-3">
                     <router-view></router-view>
-                </div>
-                <div class="col-md-3">
-                    <friend-feed></friend-feed>
                 </div>
             </div>
         </div><!-- /.container -->
     </div>
 </template>
 <script>
-    import CurrentUser from './user/Current-User.vue';
-    import FriendFeed from './friends/Friend-Feed.vue';
-    import NowSpinning from "./user/Now-Spinning";
-    import OnDeck from './shelf/On-Deck.vue';
+    import { mapState } from 'vuex';
     import api from '../api';
     import store from '../store';
-    import { mapState } from 'vuex';
 
     export default {
-        components: {
-            NowSpinning,
-            CurrentUser,
-            FriendFeed,
-            NowSpinning,
-            OnDeck
-        },
         beforeRouteEnter(to, from, next){
             api.getUser(response => {
-                let user = response.body
-                store.commit('user', user)
-                store.commit('spin', user.now_spinning)
-                api.getReleases(user.username, 'on-deck', (response) => {
-                    store.commit('onDeck', response.body)
-                    next()
-                })
+                store.commit('user', response.body);
+                next();
             });
         },
         computed: {
@@ -74,3 +48,9 @@
         }
     }
 </script>
+
+<style>
+    #admin-content {
+        margin-top: 20px;
+    }
+</style>
