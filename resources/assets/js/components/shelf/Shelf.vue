@@ -11,7 +11,7 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-9">
-                        <form @submit.prevent="runSearch">
+                        <form @submit.prevent="fetchReleases(true)">
                             <div class="form-group">
                                 <input v-model="search" type="text" class="form-control" placeholder="What are you looking for?">
                             </div>
@@ -68,19 +68,21 @@
         },
         watch: {
             sort() {
-                this.releases = [];
-                this.fetchReleases();
+                this.fetchReleases(true);
             }
         },
         methods: {
             loadMore() {
                 if(this.currentPage == this.lastPage) return;
+                this.currentPage++;
                 this.fetchReleases();
             },
-            fetchReleases() {
+            fetchReleases(clear = false) {
                 this.loading = true;
-                api.getReleases(this.username, this.shelfName, this.nextPage, this.search, this.sort, response => {
-
+                api.getReleases(this.username, this.shelfName, this.currentPage, this.search, this.sort, response => {
+                    if(clear){
+                        this.releases = [];
+                    }
                     this.count = response.body.total;
                     this.currentPage = response.body.current_page;
                     this.lastPage = response.body.last_page;
@@ -91,10 +93,6 @@
 
                     this.loading = false;
                 })
-            },
-            runSearch() {
-                this.releases = [];
-                this.fetchReleases();
             }
         },
         computed: {

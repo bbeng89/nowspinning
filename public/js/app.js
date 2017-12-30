@@ -2371,21 +2371,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     watch: {
         sort: function sort() {
-            this.releases = [];
-            this.fetchReleases();
+            this.fetchReleases(true);
         }
     },
     methods: {
         loadMore: function loadMore() {
             if (this.currentPage == this.lastPage) return;
+            this.currentPage++;
             this.fetchReleases();
         },
         fetchReleases: function fetchReleases() {
             var _this = this;
 
-            this.loading = true;
-            __WEBPACK_IMPORTED_MODULE_1__api__["a" /* default */].getReleases(this.username, this.shelfName, this.nextPage, this.search, this.sort, function (response) {
+            var clear = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
+            this.loading = true;
+            __WEBPACK_IMPORTED_MODULE_1__api__["a" /* default */].getReleases(this.username, this.shelfName, this.currentPage, this.search, this.sort, function (response) {
+                if (clear) {
+                    _this.releases = [];
+                }
                 _this.count = response.body.total;
                 _this.currentPage = response.body.current_page;
                 _this.lastPage = response.body.last_page;
@@ -2417,10 +2421,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 _this.loading = false;
             });
-        },
-        runSearch: function runSearch() {
-            this.releases = [];
-            this.fetchReleases();
         }
     },
     computed: {
@@ -33758,7 +33758,7 @@ var render = function() {
                 on: {
                   submit: function($event) {
                     $event.preventDefault()
-                    _vm.runSearch($event)
+                    _vm.fetchReleases(true)
                   }
                 }
               },
