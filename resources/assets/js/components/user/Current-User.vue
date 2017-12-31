@@ -5,7 +5,10 @@
                 <img :src="user.avatar" class="img-responsive img-circle user-avatar">
             </div>
         </div>
-        <p><router-link class="btn btn-default" :to="{ name: 'shelves', params: { username: user.username }}">My Shelves</router-link></p>
+        <p>
+            <router-link class="btn btn-default" :to="{ name: 'shelves', params: { username: user.username }}">My Shelves</router-link>
+            <router-link class="btn btn-default" :to="{ name: 'edit-profile' }">Edit Profile</router-link>
+        </p>
     </div>
 </template>
 

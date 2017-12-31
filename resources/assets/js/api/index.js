@@ -29,5 +29,11 @@ export default {
     },
     spin(release, success, error) {
         return Vue.http.post('/api/user/spin', { id: release.id }).then(success, error || defaultErrorHandler);
+    },
+    getProfile(userid, success, error) {
+        return Vue.http.get('/api/user/profile/' + userid).then(success, error || defaultErrorHandler);
+    },
+    updateProfile(args, success, error) {
+        return Vue.http.post('/api/user/profile/update', args).then(success, error || defaultErrorHandler);
     }
 }

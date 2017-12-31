@@ -14,9 +14,11 @@ use Illuminate\Http\Request;
 */
 
 Route::get('user', 'UserController@index')->name('user.index');
+Route::get('user/profile/{userid}', 'UserController@getProfile')->name('user.profile');
 Route::post('user/spin', 'UserController@spin')->name('user.spin');
 Route::post('user/shelf/add-release', 'UserController@addToShelf')->name('user.addtoshelf');
 Route::post('user/shelf/remove-release', 'UserController@removeFromShelf')->name('user.removefromshelf');
+Route::post('user/profile/update', 'UserController@updateProfile')->name('user.updateprofile');
 
 Route::get('collection/release/{id}', 'CollectionController@release')->name('collection.release');
 Route::get('collection/{username}/{shelf?}', 'CollectionController@shelf')->name('collection.shelf');

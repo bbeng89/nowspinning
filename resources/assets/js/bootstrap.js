@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueResource from 'vue-resource'
 import InfiniteScroll from 'vue-infinite-scroll'
+import VeeValidate from 'vee-validate';
 
 window.$ = window.jQuery = require('jquery');
 window._ = require('lodash');
@@ -14,6 +15,9 @@ Vue.use(VueResource);
 
 // https://github.com/ElemeFE/vue-infinite-scroll
 Vue.use(InfiniteScroll);
+
+// https://github.com/baianat/vee-validate
+Vue.use(VeeValidate);
 
 let token = document.head.querySelector('meta[name="csrf-token"]');
 

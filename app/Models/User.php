@@ -7,6 +7,21 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
 
+/**
+ * Class User
+ * @package App\Models
+ * @property int $discogs_id
+ * @property string $oauth_token
+ * @property string $oauth_token_secret
+ * @property string $username
+ * @property string $name,
+ * @property string $email
+ * @property string $avatar
+ * @property Shelf[] $shelves
+ * @property UserRelease[] $releases
+ * @property UserRelease $nowspinning
+ * @property UserProfile $profile
+ */
 class User extends Authenticatable
 {
     use Notifiable, HasApiTokens;
@@ -46,6 +61,11 @@ class User extends Authenticatable
     public function nowSpinning()
     {
         return $this->hasOne(UserRelease::class, 'id', 'now_spinning_id');
+    }
+
+    public function profile()
+    {
+        return $this->hasOne(UserProfile::class);
     }
 
     public function getShelf($handle)
