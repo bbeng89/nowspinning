@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\SyncUserDiscogsCollection;
 use App\Models\User;
 use App\Models\UserRelease;
 use App\Repositories\Discogs\CollectionRepository;
@@ -53,17 +54,11 @@ class SyncDiscogsCommand extends Command
 
         foreach($users as $user)
         {
-            $this->collection->authorize($user->oauth_token, $user->oauth_token_secret);
-
-            $this->info("Retrieving {$user->username}'s collection from discogs API.");
-            $apiObjs = $this->collection->getAllReleasesInUserCollection($user->username);
-
-            $this->info("Creating eloquent objects");
-            foreach($apiObjs as $release)
-            {
-                UserRelease::createOrUpdateFromApi($release, $user->id);
-            }
-            $this->info("Done");
+            $this->info("Updating {$user->username}'s collection from discogs.");
+            SyncUserDiscogsCollection::dispatch($user);
+            $this->info("{$user->username} done.");
         }
+
+        $this->info("Sync complete");
     }
 }
