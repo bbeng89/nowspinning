@@ -1637,7 +1637,7 @@ module.exports = {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__api__ = __webpack_require__("./resources/assets/js/api/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__api_users__ = __webpack_require__("./resources/assets/js/api/users.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__store__ = __webpack_require__("./resources/assets/js/store/index.js");
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -1678,8 +1678,13 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    metaInfo: {
+        titleTemplate: function titleTemplate(titleChunk) {
+            return titleChunk ? titleChunk + ' :: NowSpinning Admin' : 'NowSpinning Admin';
+        }
+    },
     beforeRouteEnter: function beforeRouteEnter(to, from, next) {
-        __WEBPACK_IMPORTED_MODULE_1__api__["a" /* default */].getUser(function (response) {
+        __WEBPACK_IMPORTED_MODULE_1__api_users__["a" /* default */].getUser(function (response) {
             __WEBPACK_IMPORTED_MODULE_2__store__["a" /* default */].commit('user', response.body);
             next();
         });
@@ -1703,9 +1708,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__user_Now_Spinning___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__user_Now_Spinning__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shelf_On_Deck_vue__ = __webpack_require__("./resources/assets/js/components/shelf/On-Deck.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shelf_On_Deck_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__shelf_On_Deck_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__api__ = __webpack_require__("./resources/assets/js/api/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__store__ = __webpack_require__("./resources/assets/js/store/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_vuex__ = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__api_users__ = __webpack_require__("./resources/assets/js/api/users.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__api_collection__ = __webpack_require__("./resources/assets/js/api/collection.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__store__ = __webpack_require__("./resources/assets/js/store/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_vuex__ = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _components;
@@ -1762,25 +1768,31 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: (_components = {
         NowSpinning: __WEBPACK_IMPORTED_MODULE_2__user_Now_Spinning___default.a,
         CurrentUser: __WEBPACK_IMPORTED_MODULE_0__user_Current_User_vue___default.a,
         FriendFeed: __WEBPACK_IMPORTED_MODULE_1__friends_Friend_Feed_vue___default.a
     }, _defineProperty(_components, 'NowSpinning', __WEBPACK_IMPORTED_MODULE_2__user_Now_Spinning___default.a), _defineProperty(_components, 'OnDeck', __WEBPACK_IMPORTED_MODULE_3__shelf_On_Deck_vue___default.a), _components),
+    metaInfo: {
+        titleTemplate: function titleTemplate(titleChunk) {
+            return titleChunk ? titleChunk + ' :: NowSpinning' : 'NowSpinning';
+        }
+    },
     beforeRouteEnter: function beforeRouteEnter(to, from, next) {
-        __WEBPACK_IMPORTED_MODULE_4__api__["a" /* default */].getUser(function (response) {
+        __WEBPACK_IMPORTED_MODULE_4__api_users__["a" /* default */].getUser(function (response) {
             var user = response.body;
-            __WEBPACK_IMPORTED_MODULE_5__store__["a" /* default */].commit('user', user);
-            __WEBPACK_IMPORTED_MODULE_5__store__["a" /* default */].commit('spin', user.now_spinning);
-            __WEBPACK_IMPORTED_MODULE_4__api__["a" /* default */].getReleases(user.username, 'on-deck', 1, null, 'date_added,asc', function (response) {
-                __WEBPACK_IMPORTED_MODULE_5__store__["a" /* default */].commit('onDeck', response.body.data);
+            __WEBPACK_IMPORTED_MODULE_6__store__["a" /* default */].commit('user', user);
+            __WEBPACK_IMPORTED_MODULE_6__store__["a" /* default */].commit('spin', user.now_spinning);
+            __WEBPACK_IMPORTED_MODULE_5__api_collection__["a" /* default */].getReleases(user.username, 'on-deck', 1, null, 'date_added,asc', function (response) {
+                __WEBPACK_IMPORTED_MODULE_6__store__["a" /* default */].commit('onDeck', response.body.data);
                 next();
             });
         });
     },
 
-    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_6_vuex__["c" /* mapState */])(['user']))
+    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_7_vuex__["c" /* mapState */])(['user']))
 });
 
 /***/ }),
@@ -2171,6 +2183,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    metaInfo: {
+        title: 'Feed'
+    },
     data: function data() {
         return {
             feed: 'friends'
@@ -2191,8 +2206,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api__ = __webpack_require__("./resources/assets/js/api/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 //
@@ -2230,9 +2244,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 
 
-
 /* harmony default export */ __webpack_exports__["default"] = ({
-    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["c" /* mapState */])({
+    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapState */])({
         releases: 'onDeck'
     })),
     methods: _extends({
@@ -2240,7 +2253,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             this.offDeck(release);
             this.spin(release);
         }
-    }, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapActions */])(['offDeck', 'spin']))
+    }, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['offDeck', 'spin']))
 });
 
 /***/ }),
@@ -2299,7 +2312,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Release_List_Item_vue__ = __webpack_require__("./resources/assets/js/components/shelf/Release-List-Item.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Release_List_Item_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Release_List_Item_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__api__ = __webpack_require__("./resources/assets/js/api/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__api_collection__ = __webpack_require__("./resources/assets/js/api/collection.js");
 //
 //
 //
@@ -2350,6 +2363,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: { 'release-list-item': __WEBPACK_IMPORTED_MODULE_0__Release_List_Item_vue___default.a },
+    metaInfo: function metaInfo() {
+        return {
+            title: this.shelfNameDisplay + ' Shelf'
+        };
+    },
     data: function data() {
         return {
             username: '',
@@ -2386,7 +2404,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var clear = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
             this.loading = true;
-            __WEBPACK_IMPORTED_MODULE_1__api__["a" /* default */].getReleases(this.username, this.shelfName, this.currentPage, this.search, this.sort, function (response) {
+            __WEBPACK_IMPORTED_MODULE_1__api_collection__["a" /* default */].getReleases(this.username, this.shelfName, this.currentPage, this.search, this.sort, function (response) {
                 if (clear) {
                     _this.releases = [];
                 }
@@ -2425,6 +2443,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     computed: {
         shelfNameDisplay: function shelfNameDisplay() {
+            // todo refactor this
             if (this.shelfName == 'vinyl') return 'Vinyl';else if (this.shelfName == 'cassette') return 'Cassette';else if (this.shelfName == 'cd') return 'Compact Disc';
             return this.shelfName;
         }
@@ -2438,7 +2457,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api__ = __webpack_require__("./resources/assets/js/api/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api_collection__ = __webpack_require__("./resources/assets/js/api/collection.js");
 //
 //
 //
@@ -2490,9 +2509,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    metaInfo: {
+        title: 'My Shelves'
+    },
     data: function data() {
         return {
             username: '',
@@ -2506,7 +2533,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         var _this = this;
 
         this.username = this.$route.params.username;
-        __WEBPACK_IMPORTED_MODULE_0__api__["a" /* default */].getCounts(this.username, function (response) {
+        __WEBPACK_IMPORTED_MODULE_0__api_collection__["a" /* default */].getShelfCounts(this.username, function (response) {
             _this.vinylCount = response.body.vinyl;
             _this.cassetteCount = response.body.cassette;
             _this.cdCount = response.body.cd;
@@ -2523,6 +2550,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__api_users__ = __webpack_require__("./resources/assets/js/api/users.js");
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 //
@@ -2539,10 +2567,30 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            syncing: false
+        };
+    },
+
+    methods: {
+        sync: function sync() {
+            var _this = this;
+
+            this.syncing = true;
+            __WEBPACK_IMPORTED_MODULE_1__api_users__["a" /* default */].sync(function (response) {
+                return _this.syncing = false;
+            });
+        }
+    },
     computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapState */])({
         user: 'user'
     }))
@@ -2555,7 +2603,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api__ = __webpack_require__("./resources/assets/js/api/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api_users__ = __webpack_require__("./resources/assets/js/api/users.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -2637,7 +2685,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         var _this = this;
 
         this.loading = true;
-        __WEBPACK_IMPORTED_MODULE_0__api__["a" /* default */].getProfile(this.user.id, function (response) {
+        __WEBPACK_IMPORTED_MODULE_0__api_users__["a" /* default */].getProfile(this.user.id, function (response) {
             var profile = response.body;
             _this.profile.turntable = profile.turntable;
             _this.profile.turntable_cartridge = profile.turntable_cartridge;
@@ -2657,7 +2705,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             var _this2 = this;
 
             this.saving = true;
-            __WEBPACK_IMPORTED_MODULE_0__api__["a" /* default */].updateProfile(this.profile, function (response) {
+            __WEBPACK_IMPORTED_MODULE_0__api_users__["a" /* default */].updateProfile(this.profile, function (response) {
                 return _this2.saving = false;
             });
         }
@@ -5160,6 +5208,21 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 // module
 exports.push([module.i, "\n.action-link[data-v-65ab42bc] {\n    cursor: pointer;\n}\n.m-b-none[data-v-65ab42bc] {\n    margin-bottom: 0;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-e0e91dfc\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/components/shelf/User-Shelves.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.shelf-preview {\n    position: relative !important;\n    margin-bottom: 10px;\n}\n.shelf-preview > .overlay {\n    position: absolute;\n    top: 0;\n    bottom: 0;\n    left: 0;\n    right: 0;\n    height: 100%;\n    width: 100%;\n    background-color: rgba(0, 0, 0, 0.5);\n    -webkit-transition: .5s ease;\n    transition: .5s ease;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    -webkit-box-pack: space-evenly;\n        -ms-flex-pack: space-evenly;\n            justify-content: space-evenly;\n}\n.shelf-preview > .overlay:hover {\n     background-color: rgba(0, 0, 0, 0.7);\n}\n.shelf-preview > .overlay > .overlay-content {\n    color: white;\n    text-align:center;\n    display:-webkit-box;\n    display:-ms-flexbox;\n    display:flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    padding: 10px;\n}\n", ""]);
 
 // exports
 
@@ -40594,7 +40657,7 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c(
-        "p",
+        "div",
         [
           _c(
             "router-link",
@@ -40617,7 +40680,25 @@ var render = function() {
           )
         ],
         1
-      )
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "text-center" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-default",
+            attrs: { type: "button", disabled: _vm.syncing },
+            on: { click: _vm.sync }
+          },
+          [
+            _c("i", {
+              staticClass: "fa fa-refresh",
+              class: { "fa-spin": _vm.syncing }
+            }),
+            _vm._v(" Sync Collection")
+          ]
+        )
+      ])
     ]
   )
 }
@@ -42012,140 +42093,135 @@ var render = function() {
       _c("hr"),
       _vm._v(" "),
       _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-lg-4" }, [
-          _c("div", { staticClass: "panel panel-default" }, [
-            _vm._m(0, false, false),
-            _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "col-sm-12" },
+          [
             _c(
-              "div",
-              { staticClass: "panel-body" },
+              "router-link",
+              {
+                attrs: {
+                  to: {
+                    name: "shelf",
+                    params: { username: _vm.username, shelf: "vinyl" }
+                  }
+                }
+              },
               [
-                _vm.loading
-                  ? _c("p", [_c("i", { staticClass: "fa fa-spinner fa-spin" })])
-                  : _c("p", [_vm._v(_vm._s(_vm.vinylCount) + " Releases")]),
-                _vm._v(" "),
-                _c(
-                  "router-link",
-                  {
-                    staticClass: "btn btn-default",
-                    attrs: {
-                      to: {
-                        name: "shelf",
-                        params: { username: _vm.username, shelf: "vinyl" }
-                      }
-                    }
-                  },
-                  [
-                    _vm._v(
-                      "\n                        View Shelf\n                    "
-                    )
-                  ]
-                )
-              ],
-              1
+                _c("div", { staticClass: "shelf-preview" }, [
+                  _c("img", {
+                    staticClass: "img-responsive",
+                    attrs: { src: "/img/shelves/vinyl.jpg" }
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "overlay" }, [
+                    _c("div", { staticClass: "overlay-content" }, [
+                      _c("h2", [_vm._v("Vinyl")]),
+                      _vm._v(" "),
+                      _vm.loading
+                        ? _c("p", [
+                            _c("i", { staticClass: "fa fa-spinner fa-spin" })
+                          ])
+                        : _c("p", [
+                            _vm._v(_vm._s(_vm.vinylCount) + " Releases")
+                          ])
+                    ])
+                  ])
+                ])
+              ]
             )
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-lg-4" }, [
-          _c("div", { staticClass: "panel panel-default" }, [
-            _vm._m(1, false, false),
-            _vm._v(" "),
+          ],
+          1
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "row" }, [
+        _c(
+          "div",
+          { staticClass: "col-sm-12" },
+          [
             _c(
-              "div",
-              { staticClass: "panel-body" },
+              "router-link",
+              {
+                attrs: {
+                  to: {
+                    name: "shelf",
+                    params: { username: _vm.username, shelf: "cassette" }
+                  }
+                }
+              },
               [
-                _vm.loading
-                  ? _c("p", [_c("i", { staticClass: "fa fa-spinner fa-spin" })])
-                  : _c("p", [_vm._v(_vm._s(_vm.cassetteCount) + " Releases")]),
-                _vm._v(" "),
-                _c(
-                  "router-link",
-                  {
-                    staticClass: "btn btn-default",
-                    attrs: {
-                      to: {
-                        name: "shelf",
-                        params: { username: _vm.username, shelf: "cassette" }
-                      }
-                    }
-                  },
-                  [
-                    _vm._v(
-                      "\n                        View Shelf\n                    "
-                    )
-                  ]
-                )
-              ],
-              1
+                _c("div", { staticClass: "shelf-preview" }, [
+                  _c("img", {
+                    staticClass: "img-responsive",
+                    attrs: { src: "/img/shelves/cassette.jpg" }
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "overlay" }, [
+                    _c("div", { staticClass: "overlay-content" }, [
+                      _c("h2", [_vm._v("Cassettes")]),
+                      _vm._v(" "),
+                      _vm.loading
+                        ? _c("p", [
+                            _c("i", { staticClass: "fa fa-spinner fa-spin" })
+                          ])
+                        : _c("p", [
+                            _vm._v(_vm._s(_vm.cassetteCount) + " Releases")
+                          ])
+                    ])
+                  ])
+                ])
+              ]
             )
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-lg-4" }, [
-          _c("div", { staticClass: "panel panel-default" }, [
-            _vm._m(2, false, false),
-            _vm._v(" "),
+          ],
+          1
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "row" }, [
+        _c(
+          "div",
+          { staticClass: "col-sm-12" },
+          [
             _c(
-              "div",
-              { staticClass: "panel-body" },
+              "router-link",
+              {
+                attrs: {
+                  to: {
+                    name: "shelf",
+                    params: { username: _vm.username, shelf: "cd" }
+                  }
+                }
+              },
               [
-                _vm.loading
-                  ? _c("p", [_c("i", { staticClass: "fa fa-spinner fa-spin" })])
-                  : _c("p", [_vm._v(_vm._s(_vm.cdCount) + " Releases")]),
-                _vm._v(" "),
-                _c(
-                  "router-link",
-                  {
-                    staticClass: "btn btn-default",
-                    attrs: {
-                      to: {
-                        name: "shelf",
-                        params: { username: _vm.username, shelf: "cd" }
-                      }
-                    }
-                  },
-                  [
-                    _vm._v(
-                      "\n                        View Shelf\n                    "
-                    )
-                  ]
-                )
-              ],
-              1
+                _c("div", { staticClass: "shelf-preview" }, [
+                  _c("img", {
+                    staticClass: "img-responsive",
+                    attrs: { src: "/img/shelves/cd.jpg" }
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "overlay" }, [
+                    _c("div", { staticClass: "overlay-content" }, [
+                      _c("h2", [_vm._v("CDs")]),
+                      _vm._v(" "),
+                      _vm.loading
+                        ? _c("p", [
+                            _c("i", { staticClass: "fa fa-spinner fa-spin" })
+                          ])
+                        : _c("p", [_vm._v(_vm._s(_vm.cdCount) + " Releases")])
+                    ])
+                  ])
+                ])
+              ]
             )
-          ])
-        ])
+          ],
+          1
+        )
       ])
     ]
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "panel-heading" }, [
-      _c("span", { staticClass: "panel-title" }, [_vm._v("Vinyl")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "panel-heading" }, [
-      _c("span", { staticClass: "panel-title" }, [_vm._v("Cassette")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "panel-heading" }, [
-      _c("span", { staticClass: "panel-title" }, [_vm._v("Compact Disc")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -42154,6 +42230,1108 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-e0e91dfc", module.exports)
   }
 }
+
+/***/ }),
+
+/***/ "./node_modules/vue-meta/lib/vue-meta.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+/**
+ * vue-meta v1.3.1
+ * (c) 2017 Declan de Wet & Atinux
+ * @license MIT
+ */
+(function (global, factory) {
+	 true ? module.exports = factory() :
+	typeof define === 'function' && define.amd ? define(factory) :
+	(global.VueMeta = factory());
+}(this, (function () { 'use strict';
+
+/*
+object-assign
+(c) Sindre Sorhus
+@license MIT
+*/
+
+/* eslint-disable no-unused-vars */
+var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+function toObject(val) {
+	if (val === null || val === undefined) {
+		throw new TypeError('Object.assign cannot be called with null or undefined');
+	}
+
+	return Object(val);
+}
+
+function shouldUseNative() {
+	try {
+		if (!Object.assign) {
+			return false;
+		}
+
+		// Detect buggy property enumeration order in older V8 versions.
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
+		var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
+		test1[5] = 'de';
+		if (Object.getOwnPropertyNames(test1)[0] === '5') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test2 = {};
+		for (var i = 0; i < 10; i++) {
+			test2['_' + String.fromCharCode(i)] = i;
+		}
+		var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
+			return test2[n];
+		});
+		if (order2.join('') !== '0123456789') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test3 = {};
+		'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
+			test3[letter] = letter;
+		});
+		if (Object.keys(Object.assign({}, test3)).join('') !==
+				'abcdefghijklmnopqrst') {
+			return false;
+		}
+
+		return true;
+	} catch (err) {
+		// We don't expect any of the above to throw, but better to be safe.
+		return false;
+	}
+}
+
+var objectAssign = shouldUseNative() ? Object.assign : function (target, source) {
+	var arguments$1 = arguments;
+
+	var from;
+	var to = toObject(target);
+	var symbols;
+
+	for (var s = 1; s < arguments.length; s++) {
+		from = Object(arguments$1[s]);
+
+		for (var key in from) {
+			if (hasOwnProperty.call(from, key)) {
+				to[key] = from[key];
+			}
+		}
+
+		if (getOwnPropertySymbols) {
+			symbols = getOwnPropertySymbols(from);
+			for (var i = 0; i < symbols.length; i++) {
+				if (propIsEnumerable.call(from, symbols[i])) {
+					to[symbols[i]] = from[symbols[i]];
+				}
+			}
+		}
+	}
+
+	return to;
+};
+
+var isMergeableObject = function isMergeableObject(value) {
+	return isNonNullObject(value)
+		&& !isSpecial(value)
+};
+
+function isNonNullObject(value) {
+	return !!value && typeof value === 'object'
+}
+
+function isSpecial(value) {
+	var stringValue = Object.prototype.toString.call(value);
+
+	return stringValue === '[object RegExp]'
+		|| stringValue === '[object Date]'
+		|| isReactElement(value)
+}
+
+// see https://github.com/facebook/react/blob/b5ac963fb791d1298e7f396236383bc955f916c1/src/isomorphic/classic/element/ReactElement.js#L21-L25
+var canUseSymbol = typeof Symbol === 'function' && Symbol.for;
+var REACT_ELEMENT_TYPE = canUseSymbol ? Symbol.for('react.element') : 0xeac7;
+
+function isReactElement(value) {
+	return value.$$typeof === REACT_ELEMENT_TYPE
+}
+
+function emptyTarget(val) {
+	return Array.isArray(val) ? [] : {}
+}
+
+function cloneUnlessOtherwiseSpecified(value, optionsArgument) {
+	var clone = !optionsArgument || optionsArgument.clone !== false;
+
+	return (clone && isMergeableObject(value))
+		? deepmerge(emptyTarget(value), value, optionsArgument)
+		: value
+}
+
+function defaultArrayMerge(target, source, optionsArgument) {
+	return target.concat(source).map(function(element) {
+		return cloneUnlessOtherwiseSpecified(element, optionsArgument)
+	})
+}
+
+function mergeObject(target, source, optionsArgument) {
+	var destination = {};
+	if (isMergeableObject(target)) {
+		Object.keys(target).forEach(function(key) {
+			destination[key] = cloneUnlessOtherwiseSpecified(target[key], optionsArgument);
+		});
+	}
+	Object.keys(source).forEach(function(key) {
+		if (!isMergeableObject(source[key]) || !target[key]) {
+			destination[key] = cloneUnlessOtherwiseSpecified(source[key], optionsArgument);
+		} else {
+			destination[key] = deepmerge(target[key], source[key], optionsArgument);
+		}
+	});
+	return destination
+}
+
+function deepmerge(target, source, optionsArgument) {
+	var sourceIsArray = Array.isArray(source);
+	var targetIsArray = Array.isArray(target);
+	var options = optionsArgument || { arrayMerge: defaultArrayMerge };
+	var sourceAndTargetTypesMatch = sourceIsArray === targetIsArray;
+
+	if (!sourceAndTargetTypesMatch) {
+		return cloneUnlessOtherwiseSpecified(source, optionsArgument)
+	} else if (sourceIsArray) {
+		var arrayMerge = options.arrayMerge || defaultArrayMerge;
+		return arrayMerge(target, source, optionsArgument)
+	} else {
+		return mergeObject(target, source, optionsArgument)
+	}
+}
+
+deepmerge.all = function deepmergeAll(array, optionsArgument) {
+	if (!Array.isArray(array)) {
+		throw new Error('first argument should be an array')
+	}
+
+	return array.reduce(function(prev, next) {
+		return deepmerge(prev, next, optionsArgument)
+	}, {})
+};
+
+var deepmerge_1 = deepmerge;
+
+/**
+ * lodash (Custom Build) <https://lodash.com/>
+ * Build: `lodash modularize exports="npm" -o ./`
+ * Copyright jQuery Foundation and other contributors <https://jquery.org/>
+ * Released under MIT license <https://lodash.com/license>
+ * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+ * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+ */
+
+/** `Object#toString` result references. */
+var objectTag = '[object Object]';
+
+/**
+ * Checks if `value` is a host object in IE < 9.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a host object, else `false`.
+ */
+function isHostObject(value) {
+  // Many host objects are `Object` objects that can coerce to strings
+  // despite having improperly defined `toString` methods.
+  var result = false;
+  if (value != null && typeof value.toString != 'function') {
+    try {
+      result = !!(value + '');
+    } catch (e) {}
+  }
+  return result;
+}
+
+/**
+ * Creates a unary function that invokes `func` with its argument transformed.
+ *
+ * @private
+ * @param {Function} func The function to wrap.
+ * @param {Function} transform The argument transform.
+ * @returns {Function} Returns the new function.
+ */
+function overArg(func, transform) {
+  return function(arg) {
+    return func(transform(arg));
+  };
+}
+
+/** Used for built-in method references. */
+var funcProto = Function.prototype;
+var objectProto = Object.prototype;
+
+/** Used to resolve the decompiled source of functions. */
+var funcToString = funcProto.toString;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty$1 = objectProto.hasOwnProperty;
+
+/** Used to infer the `Object` constructor. */
+var objectCtorString = funcToString.call(Object);
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var objectToString = objectProto.toString;
+
+/** Built-in value references. */
+var getPrototype = overArg(Object.getPrototypeOf, Object);
+
+/**
+ * Checks if `value` is object-like. A value is object-like if it's not `null`
+ * and has a `typeof` result of "object".
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+ * @example
+ *
+ * _.isObjectLike({});
+ * // => true
+ *
+ * _.isObjectLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isObjectLike(_.noop);
+ * // => false
+ *
+ * _.isObjectLike(null);
+ * // => false
+ */
+function isObjectLike(value) {
+  return !!value && typeof value == 'object';
+}
+
+/**
+ * Checks if `value` is a plain object, that is, an object created by the
+ * `Object` constructor or one with a `[[Prototype]]` of `null`.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.8.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a plain object, else `false`.
+ * @example
+ *
+ * function Foo() {
+ *   this.a = 1;
+ * }
+ *
+ * _.isPlainObject(new Foo);
+ * // => false
+ *
+ * _.isPlainObject([1, 2, 3]);
+ * // => false
+ *
+ * _.isPlainObject({ 'x': 0, 'y': 0 });
+ * // => true
+ *
+ * _.isPlainObject(Object.create(null));
+ * // => true
+ */
+function isPlainObject(value) {
+  if (!isObjectLike(value) ||
+      objectToString.call(value) != objectTag || isHostObject(value)) {
+    return false;
+  }
+  var proto = getPrototype(value);
+  if (proto === null) {
+    return true;
+  }
+  var Ctor = hasOwnProperty$1.call(proto, 'constructor') && proto.constructor;
+  return (typeof Ctor == 'function' &&
+    Ctor instanceof Ctor && funcToString.call(Ctor) == objectCtorString);
+}
+
+var lodash_isplainobject = isPlainObject;
+
+/**
+ * checks if passed argument is an array
+ * @param  {any}  arr - the object to check
+ * @return {Boolean} - true if `arr` is an array
+ */
+function isArray (arr) {
+  return Array.isArray
+    ? Array.isArray(arr)
+    : Object.prototype.toString.call(arr) === '[object Array]'
+}
+
+/**
+ * Returns the `opts.option` $option value of the given `opts.component`.
+ * If methods are encountered, they will be bound to the component context.
+ * If `opts.deep` is true, will recursively merge all child component
+ * `opts.option` $option values into the returned result.
+ *
+ * @param  {Object} opts - options
+ * @param  {Object} opts.component - Vue component to fetch option data from
+ * @param  {String} opts.option - what option to look for
+ * @param  {Boolean} opts.deep - look for data in child components as well?
+ * @param  {Function} opts.arrayMerge - how should arrays be merged?
+ * @param  {Object} [result={}] - result so far
+ * @return {Object} result - final aggregated result
+ */
+function getComponentOption (opts, result) {
+  if ( result === void 0 ) result = {};
+
+  var component = opts.component;
+  var option = opts.option;
+  var deep = opts.deep;
+  var arrayMerge = opts.arrayMerge;
+  var $options = component.$options;
+
+  if (component._inactive) { return result }
+
+  // only collect option data if it exists
+  if (typeof $options[option] !== 'undefined' && $options[option] !== null) {
+    var data = $options[option];
+
+    // if option is a function, replace it with it's result
+    if (typeof data === 'function') {
+      data = data.call(component);
+    }
+
+    if (typeof data === 'object') {
+      // merge with existing options
+      result = deepmerge_1(result, data, { arrayMerge: arrayMerge });
+    } else {
+      result = data;
+    }
+  }
+
+  // collect & aggregate child options if deep = true
+  if (deep && component.$children.length) {
+    component.$children.forEach(function (childComponent) {
+      result = getComponentOption({
+        component: childComponent,
+        option: option,
+        deep: deep,
+        arrayMerge: arrayMerge
+      }, result);
+    });
+  }
+
+  return result
+}
+
+var escapeHTML = function (str) { return typeof window === 'undefined'
+  // server-side escape sequence
+  ? String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+  // client-side escape sequence
+  : String(str)
+    .replace(/&/g, '\u0026')
+    .replace(/</g, '\u003c')
+    .replace(/>/g, '\u003e')
+    .replace(/"/g, '\u0022')
+    .replace(/'/g, '\u0027'); };
+
+function _getMetaInfo (options) {
+  if ( options === void 0 ) options = {};
+
+  var keyName = options.keyName;
+  var tagIDKeyName = options.tagIDKeyName;
+  /**
+   * Returns the correct meta info for the given component
+   * (child components will overwrite parent meta info)
+   *
+   * @param  {Object} component - the Vue instance to get meta info from
+   * @return {Object} - returned meta info
+   */
+  return function getMetaInfo (component) {
+    // set some sane defaults
+    var defaultInfo = {
+      title: '',
+      titleChunk: '',
+      titleTemplate: '%s',
+      htmlAttrs: {},
+      bodyAttrs: {},
+      headAttrs: {},
+      meta: [],
+      base: [],
+      link: [],
+      style: [],
+      script: [],
+      noscript: [],
+      __dangerouslyDisableSanitizers: [],
+      __dangerouslyDisableSanitizersByTagID: {}
+    };
+
+    // collect & aggregate all metaInfo $options
+    var info = getComponentOption({
+      component: component,
+      option: keyName,
+      deep: true,
+      arrayMerge: function arrayMerge (target, source) {
+        // we concat the arrays without merging objects contained in,
+        // but we check for a `vmid` property on each object in the array
+        // using an O(1) lookup associative array exploit
+        // note the use of "for in" - we are looping through arrays here, not
+        // plain objects
+        var destination = [];
+        for (var targetIndex in target) {
+          var targetItem = target[targetIndex];
+          var shared = false;
+          for (var sourceIndex in source) {
+            var sourceItem = source[sourceIndex];
+            if (targetItem[tagIDKeyName] && targetItem[tagIDKeyName] === sourceItem[tagIDKeyName]) {
+              shared = true;
+              break
+            }
+          }
+          if (!shared) {
+            destination.push(targetItem);
+          }
+        }
+
+        return destination.concat(source)
+      }
+    });
+
+    // backup the title chunk in case user wants access to it
+    if (info.title) {
+      info.titleChunk = info.title;
+    }
+
+    // replace title with populated template
+    if (info.titleTemplate) {
+      if (typeof info.titleTemplate === 'function') {
+        info.title = info.titleTemplate.call(component, info.titleChunk);
+      } else {
+        info.title = info.titleTemplate.replace(/%s/g, info.titleChunk);
+      }
+    }
+
+    // convert base tag to an array so it can be handled the same way
+    // as the other tags
+    if (info.base) {
+      info.base = Object.keys(info.base).length ? [info.base] : [];
+    }
+
+    var ref = info.__dangerouslyDisableSanitizers;
+    var refByTagID = info.__dangerouslyDisableSanitizersByTagID;
+
+    // sanitizes potentially dangerous characters
+    var escape = function (info) { return Object.keys(info).reduce(function (escaped, key) {
+      var isDisabled = ref && ref.indexOf(key) > -1;
+      var tagID = info[tagIDKeyName];
+      if (!isDisabled && tagID) {
+        isDisabled = refByTagID && refByTagID[tagID] && refByTagID[tagID].indexOf(key) > -1;
+      }
+      var val = info[key];
+      escaped[key] = val;
+      if (key === '__dangerouslyDisableSanitizers' || key === '__dangerouslyDisableSanitizersByTagID') {
+        return escaped
+      }
+      if (!isDisabled) {
+        if (typeof val === 'string') {
+          escaped[key] = escapeHTML(val);
+        } else if (lodash_isplainobject(val)) {
+          escaped[key] = escape(val);
+        } else if (isArray(val)) {
+          escaped[key] = val.map(escape);
+        } else {
+          escaped[key] = val;
+        }
+      } else {
+        escaped[key] = val;
+      }
+
+      return escaped
+    }, {}); };
+
+    // merge with defaults
+    info = deepmerge_1(defaultInfo, info);
+
+    // begin sanitization
+    info = escape(info);
+
+    return info
+  }
+}
+
+function _titleGenerator (options) {
+  if ( options === void 0 ) options = {};
+
+  var attribute = options.attribute;
+
+  /**
+   * Generates title output for the server
+   *
+   * @param  {'title'} type - the string "title"
+   * @param  {String} data - the title text
+   * @return {Object} - the title generator
+   */
+  return function titleGenerator (type, data) {
+    return {
+      text: function text () {
+        return ("<" + type + " " + attribute + "=\"true\">" + data + "</" + type + ">")
+      }
+    }
+  }
+}
+
+function _attrsGenerator (options) {
+  if ( options === void 0 ) options = {};
+
+  var attribute = options.attribute;
+
+  /**
+   * Generates tag attributes for use on the server.
+   *
+   * @param  {('bodyAttrs'|'htmlAttrs'|'headAttrs')} type - the type of attributes to generate
+   * @param  {Object} data - the attributes to generate
+   * @return {Object} - the attribute generator
+   */
+  return function attrsGenerator (type, data) {
+    return {
+      text: function text () {
+        var attributeStr = '';
+        var watchedAttrs = [];
+        for (var attr in data) {
+          if (data.hasOwnProperty(attr)) {
+            watchedAttrs.push(attr);
+            attributeStr += (typeof data[attr] !== 'undefined'
+                ? (attr + "=\"" + (data[attr]) + "\"")
+                : attr) + " ";
+          }
+        }
+        attributeStr += attribute + "=\"" + (watchedAttrs.join(',')) + "\"";
+        return attributeStr.trim()
+      }
+    }
+  }
+}
+
+function _tagGenerator (options) {
+  if ( options === void 0 ) options = {};
+
+  var attribute = options.attribute;
+
+  /**
+   * Generates meta, base, link, style, script, noscript tags for use on the server
+   *
+   * @param  {('meta'|'base'|'link'|'style'|'script'|'noscript')} the name of the tag
+   * @param  {(Array<Object>|Object)} tags - an array of tag objects or a single object in case of base
+   * @return {Object} - the tag generator
+   */
+  return function tagGenerator (type, tags) {
+    return {
+      text: function text (ref) {
+        if ( ref === void 0 ) ref = {};
+        var body = ref.body; if ( body === void 0 ) body = false;
+
+        // build a string containing all tags of this type
+        return tags.reduce(function (tagsStr, tag) {
+          if (!!tag.body !== body) { return tagsStr }
+          // build a string containing all attributes of this tag
+          var attrs = Object.keys(tag).reduce(function (attrsStr, attr) {
+            switch (attr) {
+              // these attributes are treated as children on the tag
+              case 'innerHTML':
+              case 'cssText':
+              case 'once':
+                return attrsStr
+              // these form the attribute list for this tag
+              default:
+                if ([options.tagIDKeyName, 'body'].includes(attr)) {
+                  return (attrsStr + " data-" + attr + "=\"" + (tag[attr]) + "\"")
+                }
+                return typeof tag[attr] === 'undefined'
+                  ? (attrsStr + " " + attr)
+                  : (attrsStr + " " + attr + "=\"" + (tag[attr]) + "\"")
+            }
+          }, '').trim();
+
+          // grab child content from one of these attributes, if possible
+          var content = tag.innerHTML || tag.cssText || '';
+
+          // these tag types will have content inserted
+          var closed = ['noscript', 'script', 'style'].indexOf(type) === -1;
+
+          // generate tag exactly without any other redundance attribute
+          var observeTag = tag.once
+            ? ''
+            : (attribute + "=\"true\" ");
+
+          // the final string for this specific tag
+          return closed
+            ? (tagsStr + "<" + type + " " + observeTag + attrs + "/>")
+            : (tagsStr + "<" + type + " " + observeTag + attrs + ">" + content + "</" + type + ">")
+        }, '')
+      }
+    }
+  }
+}
+
+function _generateServerInjector (options) {
+  if ( options === void 0 ) options = {};
+
+  /**
+   * Converts a meta info property to one that can be stringified on the server
+   *
+   * @param  {String} type - the type of data to convert
+   * @param  {(String|Object|Array<Object>)} data - the data value
+   * @return {Object} - the new injector
+   */
+  return function generateServerInjector (type, data) {
+    switch (type) {
+      case 'title':
+        return _titleGenerator(options)(type, data)
+      case 'htmlAttrs':
+      case 'bodyAttrs':
+      case 'headAttrs':
+        return _attrsGenerator(options)(type, data)
+      default:
+        return _tagGenerator(options)(type, data)
+    }
+  }
+}
+
+function _inject (options) {
+  if ( options === void 0 ) options = {};
+
+  /**
+   * Converts the state of the meta info object such that each item
+   * can be compiled to a tag string on the server
+   *
+   * @this {Object} - Vue instance - ideally the root component
+   * @return {Object} - server meta info with `toString` methods
+   */
+  return function inject () {
+    // get meta info with sensible defaults
+    var info = _getMetaInfo(options)(this.$root);
+
+    // generate server injectors
+    for (var key in info) {
+      if (info.hasOwnProperty(key) && key !== 'titleTemplate' && key !== 'titleChunk') {
+        info[key] = _generateServerInjector(options)(key, info[key]);
+      }
+    }
+
+    return info
+  }
+}
+
+function _updateTitle () {
+  /**
+   * updates the document title
+   *
+   * @param  {String} title - the new title of the document
+   */
+  return function updateTitle (title) {
+    if ( title === void 0 ) title = document.title;
+
+    document.title = title;
+  }
+}
+
+function _updateTagAttributes (options) {
+  if ( options === void 0 ) options = {};
+
+  var attribute = options.attribute;
+
+  /**
+   * updates the document's html tag attributes
+   *
+   * @param  {Object} attrs - the new document html attributes
+   * @param  {HTMLElement} tag - the HTMLElment tag to update with new attrs
+   */
+  return function updateTagAttributes (attrs, tag) {
+    var vueMetaAttrString = tag.getAttribute(attribute);
+    var vueMetaAttrs = vueMetaAttrString ? vueMetaAttrString.split(',') : [];
+    var toRemove = [].concat(vueMetaAttrs);
+    for (var attr in attrs) {
+      if (attrs.hasOwnProperty(attr)) {
+        var val = attrs[attr] || '';
+        tag.setAttribute(attr, val);
+        if (vueMetaAttrs.indexOf(attr) === -1) {
+          vueMetaAttrs.push(attr);
+        }
+        var saveIndex = toRemove.indexOf(attr);
+        if (saveIndex !== -1) {
+          toRemove.splice(saveIndex, 1);
+        }
+      }
+    }
+    var i = toRemove.length - 1;
+    for (; i >= 0; i--) {
+      tag.removeAttribute(toRemove[i]);
+    }
+    if (vueMetaAttrs.length === toRemove.length) {
+      tag.removeAttribute(attribute);
+    } else {
+      tag.setAttribute(attribute, vueMetaAttrs.join(','));
+    }
+  }
+}
+
+// borrow the slice method
+var toArray = Function.prototype.call.bind(Array.prototype.slice);
+
+function _updateTags (options) {
+  if ( options === void 0 ) options = {};
+
+  var attribute = options.attribute;
+
+  /**
+   * Updates meta tags inside <head> and <body> on the client. Borrowed from `react-helmet`:
+   * https://github.com/nfl/react-helmet/blob/004d448f8de5f823d10f838b02317521180f34da/src/Helmet.js#L195-L245
+   *
+   * @param  {('meta'|'base'|'link'|'style'|'script'|'noscript')} type - the name of the tag
+   * @param  {(Array<Object>|Object)} tags - an array of tag objects or a single object in case of base
+   * @return {Object} - a representation of what tags changed
+   */
+  return function updateTags (type, tags, headTag, bodyTag) {
+    var oldHeadTags = toArray(headTag.querySelectorAll((type + "[" + attribute + "]")));
+    var oldBodyTags = toArray(bodyTag.querySelectorAll((type + "[" + attribute + "][data-body=\"true\"]")));
+    var newTags = [];
+    var indexToDelete;
+
+    if (tags.length > 1) {
+      // remove duplicates that could have been found by merging tags
+      // which include a mixin with metaInfo and that mixin is used
+      // by multiple components on the same page
+      var found = [];
+      tags = tags.map(function (x) {
+        var k = JSON.stringify(x);
+        if (found.indexOf(k) < 0) {
+          found.push(k);
+          return x
+        }
+      }).filter(function (x) { return x; });
+    }
+
+    if (tags && tags.length) {
+      tags.forEach(function (tag) {
+        var newElement = document.createElement(type);
+        var oldTags = tag.body !== true ? oldHeadTags : oldBodyTags;
+
+        for (var attr in tag) {
+          if (tag.hasOwnProperty(attr)) {
+            if (attr === 'innerHTML') {
+              newElement.innerHTML = tag.innerHTML;
+            } else if (attr === 'cssText') {
+              if (newElement.styleSheet) {
+                newElement.styleSheet.cssText = tag.cssText;
+              } else {
+                newElement.appendChild(document.createTextNode(tag.cssText));
+              }
+            } else if ([options.tagIDKeyName, 'body'].includes(attr)) {
+              var _attr = "data-" + attr;
+              var value = (typeof tag[attr] === 'undefined') ? '' : tag[attr];
+              newElement.setAttribute(_attr, value);
+            } else {
+              var value$1 = (typeof tag[attr] === 'undefined') ? '' : tag[attr];
+              newElement.setAttribute(attr, value$1);
+            }
+          }
+        }
+
+        newElement.setAttribute(attribute, 'true');
+
+        // Remove a duplicate tag from domTagstoRemove, so it isn't cleared.
+        if (oldTags.some(function (existingTag, index) {
+          indexToDelete = index;
+          return newElement.isEqualNode(existingTag)
+        })) {
+          oldTags.splice(indexToDelete, 1);
+        } else {
+          newTags.push(newElement);
+        }
+      });
+    }
+    var oldTags = oldHeadTags.concat(oldBodyTags);
+    oldTags.forEach(function (tag) { return tag.parentNode.removeChild(tag); });
+    newTags.forEach(function (tag) {
+      if (tag.getAttribute('data-body') === 'true') {
+        bodyTag.appendChild(tag);
+      } else {
+        headTag.appendChild(tag);
+      }
+    });
+
+    return { oldTags: oldTags, newTags: newTags }
+  }
+}
+
+function _updateClientMetaInfo (options) {
+  if ( options === void 0 ) options = {};
+
+  var ssrAttribute = options.ssrAttribute;
+
+  /**
+   * Performs client-side updates when new meta info is received
+   *
+   * @param  {Object} newInfo - the meta info to update to
+   */
+  return function updateClientMetaInfo (newInfo) {
+    var htmlTag = document.getElementsByTagName('html')[0];
+    // if this is not a server render, then update
+    if (htmlTag.getAttribute(ssrAttribute) === null) {
+      // initialize tracked changes
+      var addedTags = {};
+      var removedTags = {};
+
+      Object.keys(newInfo).forEach(function (key) {
+        switch (key) {
+          // update the title
+          case 'title':
+            _updateTitle(options)(newInfo.title);
+            break
+          // update attributes
+          case 'htmlAttrs':
+            _updateTagAttributes(options)(newInfo[key], htmlTag);
+            break
+          case 'bodyAttrs':
+            _updateTagAttributes(options)(newInfo[key], document.getElementsByTagName('body')[0]);
+            break
+          case 'headAttrs':
+            _updateTagAttributes(options)(newInfo[key], document.getElementsByTagName('head')[0]);
+            break
+          // ignore these
+          case 'titleChunk':
+          case 'titleTemplate':
+          case 'changed':
+          case '__dangerouslyDisableSanitizers':
+            break
+          // catch-all update tags
+          default:
+            var headTag = document.getElementsByTagName('head')[0];
+            var bodyTag = document.getElementsByTagName('body')[0];
+            var ref = _updateTags(options)(key, newInfo[key], headTag, bodyTag);
+        var oldTags = ref.oldTags;
+        var newTags = ref.newTags;
+            if (newTags.length) {
+              addedTags[key] = newTags;
+              removedTags[key] = oldTags;
+            }
+        }
+      });
+
+      // emit "event" with new info
+      if (typeof newInfo.changed === 'function') {
+        newInfo.changed.call(this, newInfo, addedTags, removedTags);
+      }
+    } else {
+      // remove the server render attribute so we can update on changes
+      htmlTag.removeAttribute(ssrAttribute);
+    }
+  }
+}
+
+function _refresh (options) {
+  if ( options === void 0 ) options = {};
+
+  /**
+   * When called, will update the current meta info with new meta info.
+   * Useful when updating meta info as the result of an asynchronous
+   * action that resolves after the initial render takes place.
+   *
+   * Credit to [Sébastien Chopin](https://github.com/Atinux) for the suggestion
+   * to implement this method.
+   *
+   * @return {Object} - new meta info
+   */
+  return function refresh () {
+    var info = _getMetaInfo(options)(this.$root);
+    _updateClientMetaInfo(options).call(this, info);
+    return info
+  }
+}
+
+function _$meta (options) {
+  if ( options === void 0 ) options = {};
+
+  /**
+   * Returns an injector for server-side rendering.
+   * @this {Object} - the Vue instance (a root component)
+   * @return {Object} - injector
+   */
+  return function $meta () {
+    return {
+      inject: _inject(options).bind(this),
+      refresh: _refresh(options).bind(this)
+    }
+  }
+}
+
+// fallback to timers if rAF not present
+var stopUpdate = (typeof window !== 'undefined' ? window.cancelAnimationFrame : null) || clearTimeout;
+var startUpdate = (typeof window !== 'undefined' ? window.requestAnimationFrame : null) || (function (cb) { return setTimeout(cb, 0); });
+
+/**
+ * Performs a batched update. Uses requestAnimationFrame to prevent
+ * calling a function too many times in quick succession.
+ * You need to pass it an ID (which can initially be `null`),
+ * but be sure to overwrite that ID with the return value of batchUpdate.
+ *
+ * @param  {(null|Number)} id - the ID of this update
+ * @param  {Function} callback - the update to perform
+ * @return {Number} id - a new ID
+ */
+function batchUpdate (id, callback) {
+  stopUpdate(id);
+  return startUpdate(function () {
+    id = null;
+    callback();
+  })
+}
+
+/**
+ * These are constant variables used throughout the application.
+ */
+
+// This is the name of the component option that contains all the information that
+// gets converted to the various meta tags & attributes for the page.
+var VUE_META_KEY_NAME = 'metaInfo';
+
+// This is the attribute vue-meta augments on elements to know which it should
+// manage and which it should ignore.
+var VUE_META_ATTRIBUTE = 'data-vue-meta';
+
+// This is the attribute that goes on the `html` tag to inform `vue-meta`
+// that the server has already generated the meta tags for the initial render.
+var VUE_META_SERVER_RENDERED_ATTRIBUTE = 'data-vue-meta-server-rendered';
+
+// This is the property that tells vue-meta to overwrite (instead of append)
+// an item in a tag list. For example, if you have two `meta` tag list items
+// that both have `vmid` of "description", then vue-meta will overwrite the
+// shallowest one with the deepest one.
+var VUE_META_TAG_LIST_ID_KEY_NAME = 'vmid';
+
+// automatic install
+if (typeof window !== 'undefined' && typeof window.Vue !== 'undefined') {
+  Vue.use(VueMeta);
+}
+
+/**
+ * Plugin install function.
+ * @param {Function} Vue - the Vue constructor.
+ */
+function VueMeta (Vue, options) {
+  if ( options === void 0 ) options = {};
+
+  // set some default options
+  var defaultOptions = {
+    keyName: VUE_META_KEY_NAME,
+    attribute: VUE_META_ATTRIBUTE,
+    ssrAttribute: VUE_META_SERVER_RENDERED_ATTRIBUTE,
+    tagIDKeyName: VUE_META_TAG_LIST_ID_KEY_NAME
+  };
+  // combine options
+  options = objectAssign(defaultOptions, options);
+
+  // bind the $meta method to this component instance
+  Vue.prototype.$meta = _$meta(options);
+
+  // store an id to keep track of DOM updates
+  var batchID = null;
+
+  // watch for client side component updates
+  Vue.mixin({
+    beforeCreate: function beforeCreate () {
+      // Add a marker to know if it uses metaInfo
+      if (typeof this.$options[options.keyName] !== 'undefined') {
+        this._hasMetaInfo = true;
+      }
+      // coerce function-style metaInfo to a computed prop so we can observe
+      // it on creation
+      if (typeof this.$options[options.keyName] === 'function') {
+        if (typeof this.$options.computed === 'undefined') {
+          this.$options.computed = {};
+        }
+        this.$options.computed.$metaInfo = this.$options[options.keyName];
+      }
+    },
+    created: function created () {
+      var this$1 = this;
+
+      // if computed $metaInfo exists, watch it for updates & trigger a refresh
+      // when it changes (i.e. automatically handle async actions that affect metaInfo)
+      // credit for this suggestion goes to [Sébastien Chopin](https://github.com/Atinux)
+      if (this.$metaInfo) {
+        this.$watch('$metaInfo', function () {
+          // batch potential DOM updates to prevent extraneous re-rendering
+          batchID = batchUpdate(batchID, function () { return this$1.$meta().refresh(); });
+        });
+      }
+    },
+    activated: function activated () {
+      var this$1 = this;
+
+      if (this._hasMetaInfo) {
+        // batch potential DOM updates to prevent extraneous re-rendering
+        batchID = batchUpdate(batchID, function () { return this$1.$meta().refresh(); });
+      }
+    },
+    deactivated: function deactivated () {
+      var this$1 = this;
+
+      if (this._hasMetaInfo) {
+        // batch potential DOM updates to prevent extraneous re-rendering
+        batchID = batchUpdate(batchID, function () { return this$1.$meta().refresh(); });
+      }
+    },
+    beforeMount: function beforeMount () {
+      var this$1 = this;
+
+      // batch potential DOM updates to prevent extraneous re-rendering
+      if (this._hasMetaInfo) {
+        batchID = batchUpdate(batchID, function () { return this$1.$meta().refresh(); });
+      }
+    },
+    destroyed: function destroyed () {
+      var this$1 = this;
+
+      // do not trigger refresh on the server side
+      if (this.$isServer) { return }
+      // re-render meta data when returning from a child component to parent
+      if (this._hasMetaInfo) {
+        // Wait that element is hidden before refreshing meta tags (to support animations)
+        var interval = setInterval(function () {
+          if (this$1.$el.offsetParent !== null) { return }
+          clearInterval(interval);
+          batchID = batchUpdate(batchID, function () { return this$1.$meta().refresh(); });
+        }, 50);
+      }
+    }
+  });
+}
+
+var version = "1.3.1";
+
+VueMeta.version = version;
+
+return VueMeta;
+
+})));
+
 
 /***/ }),
 
@@ -46491,6 +47669,33 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-65ab42bc\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./PersonalAccessTokens.vue", function() {
      var newContent = require("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-65ab42bc\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./PersonalAccessTokens.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-e0e91dfc\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/components/shelf/User-Shelves.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-e0e91dfc\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/components/shelf/User-Shelves.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("74e400f8", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-e0e91dfc\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./User-Shelves.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-e0e91dfc\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./User-Shelves.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -58488,7 +59693,40 @@ module.exports = function(module) {
 
 /***/ }),
 
-/***/ "./resources/assets/js/api/index.js":
+/***/ "./resources/assets/js/api/collection.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__("./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+
+
+var defaultErrorHandler = function defaultErrorHandler(response) {
+    console.log("API error");
+    console.log(response); // do something else - display an error message?
+};
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    getShelfCounts: function getShelfCounts(username, success, error) {
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/collection/' + username + '/shelves/counts').then(success, error || defaultErrorHandler);
+    },
+    getReleases: function getReleases(username, shelfName, page, search, sort, success, error) {
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/collection/' + username + '/' + shelfName, { params: { page: page, search: search, sort: sort } }).then(success, error || defaultErrorHandler);
+    },
+    getRelease: function getRelease(releaseId, success, error) {
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/collection/release/' + releaseId).then(success, error || defaultErrorHandler);
+    },
+    addToShelf: function addToShelf(release, shelfHandle, success, error) {
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.post('/api/collection/shelf/add-release', { releaseId: release.id, shelfHandle: shelfHandle }).then(success, error || defaultErrorHandler);
+    },
+    removeFromShelf: function removeFromShelf(release, shelfHandle, success, error) {
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.post('/api/collection/shelf/remove-release', { releaseId: release.id, shelfHandle: shelfHandle }).then(success, error || defaultErrorHandler);
+    }
+});
+
+/***/ }),
+
+/***/ "./resources/assets/js/api/users.js":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -58501,24 +59739,10 @@ var defaultErrorHandler = function defaultErrorHandler(response) {
     console.log(response);
     // do something else - display an error message?
 };
+
 /* harmony default export */ __webpack_exports__["a"] = ({
     getUser: function getUser(success, error) {
         return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/user').then(success, error || defaultErrorHandler);
-    },
-    getCounts: function getCounts(username, success, error) {
-        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/collection/' + username + '/shelves/counts').then(success, error || defaultErrorHandler);
-    },
-    getReleases: function getReleases(username, shelfName, page, search, sort, success, error) {
-        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/collection/' + username + '/' + shelfName, { params: { page: page, search: search, sort: sort } }).then(success, error || defaultErrorHandler);
-    },
-    getRelease: function getRelease(releaseId, success, error) {
-        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/collection/release/' + releaseId).then(success, error || defaultErrorHandler);
-    },
-    addToShelf: function addToShelf(release, shelfHandle, success, error) {
-        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.post('/api/user/shelf/add-release', { releaseId: release.id, shelfHandle: shelfHandle }).then(success, error || defaultErrorHandler);
-    },
-    removeFromShelf: function removeFromShelf(release, shelfHandle, success, error) {
-        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.post('/api/user/shelf/remove-release', { releaseId: release.id, shelfHandle: shelfHandle }).then(success, error || defaultErrorHandler);
     },
     spin: function spin(release, success, error) {
         return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.post('/api/user/spin', { id: release.id }).then(success, error || defaultErrorHandler);
@@ -58528,6 +59752,9 @@ var defaultErrorHandler = function defaultErrorHandler(response) {
     },
     updateProfile: function updateProfile(args, success, error) {
         return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.post('/api/user/profile/update', args).then(success, error || defaultErrorHandler);
+    },
+    sync: function sync(success, error) {
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.post('/api/user/sync').then(success, error || defaultErrorHandler);
     }
 });
 
@@ -58567,6 +59794,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_infinite_scroll__ = __webpack_require__("./node_modules/vue-infinite-scroll/vue-infinite-scroll.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_infinite_scroll___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_vue_infinite_scroll__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vee_validate__ = __webpack_require__("./node_modules/vee-validate/dist/vee-validate.esm.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vue_meta__ = __webpack_require__("./node_modules/vue-meta/lib/vue-meta.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vue_meta___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_vue_meta__);
+
 
 
 
@@ -58581,12 +59811,12 @@ __webpack_require__("./node_modules/bootstrap-sass/assets/javascripts/bootstrap.
 
 // https://github.com/pagekit/vue-resource
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_resource__["a" /* default */]);
-
 // https://github.com/ElemeFE/vue-infinite-scroll
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_vue_infinite_scroll___default.a);
-
 // https://github.com/baianat/vee-validate
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_3_vee_validate__["a" /* default */]);
+// https://github.com/declandewet/vue-meta
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_4_vue_meta___default.a);
 
 var token = document.head.querySelector('meta[name="csrf-token"]');
 
@@ -59061,6 +60291,10 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-e0e91dfc\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/components/shelf/User-Shelves.vue")
+}
 var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
 /* script */
 var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/shelf/User-Shelves.vue")
@@ -59069,7 +60303,7 @@ var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/templa
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
 var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
@@ -59308,7 +60542,9 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__("./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__api__ = __webpack_require__("./resources/assets/js/api/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__api_users__ = __webpack_require__("./resources/assets/js/api/users.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__api_collection__ = __webpack_require__("./resources/assets/js/api/collection.js");
+
 
 
 
@@ -59337,7 +60573,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
             var commit = _ref.commit,
                 state = _ref.state;
 
-            __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].spin(release, function (response) {
+            __WEBPACK_IMPORTED_MODULE_2__api_users__["a" /* default */].spin(release, function (response) {
                 release.listen_count++;
                 commit('spin', release);
             });
@@ -59346,7 +60582,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
             var commit = _ref2.commit,
                 state = _ref2.state;
 
-            __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].addToShelf(release, 'on-deck', function (response) {
+            __WEBPACK_IMPORTED_MODULE_3__api_collection__["a" /* default */].addToShelf(release, 'on-deck', function (response) {
                 var onDeck = state.onDeck;
                 onDeck.push(release);
                 commit('onDeck', onDeck);
@@ -59356,7 +60592,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
             var commit = _ref3.commit,
                 state = _ref3.state;
 
-            __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].removeFromShelf(release, 'on-deck', function (response) {
+            __WEBPACK_IMPORTED_MODULE_3__api_collection__["a" /* default */].removeFromShelf(release, 'on-deck', function (response) {
                 var onDeck = state.onDeck.filter(function (r) {
                     return r.id != release.id;
                 });

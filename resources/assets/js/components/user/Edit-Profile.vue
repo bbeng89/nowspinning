@@ -51,7 +51,7 @@
     </div>
 </template>
 <script>
-    import api from '../../api';
+    import users from '../../api/users';
     import { mapState } from 'vuex';
 
     export default {
@@ -74,7 +74,7 @@
         },
         mounted() {
             this.loading = true;
-            api.getProfile(this.user.id, response => {
+            users.getProfile(this.user.id, response => {
                 let profile = response.body;
                 this.profile.turntable = profile.turntable;
                 this.profile.turntable_cartridge = profile.turntable_cartridge;
@@ -91,7 +91,7 @@
         methods: {
             save() {
                 this.saving = true;
-                api.updateProfile(this.profile, response => this.saving = false);
+                users.updateProfile(this.profile, response => this.saving = false);
             }
         },
         computed: {

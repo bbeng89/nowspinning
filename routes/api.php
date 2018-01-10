@@ -13,14 +13,18 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('user', 'UserController@index')->name('user.index');
-Route::get('user/profile/{userid}', 'UserController@getProfile')->name('user.profile');
-Route::post('user/spin', 'UserController@spin')->name('user.spin');
-Route::post('user/shelf/add-release', 'UserController@addToShelf')->name('user.addtoshelf');
-Route::post('user/shelf/remove-release', 'UserController@removeFromShelf')->name('user.removefromshelf');
-Route::post('user/profile/update', 'UserController@updateProfile')->name('user.updateprofile');
+Route::prefix('user')->group(function() {
+    Route::get('/', 'UserController@index')->name('user.index');
+    Route::get('profile/{userid}', 'UserController@getProfile')->name('user.profile');
+    Route::post('profile/update', 'UserController@updateProfile')->name('user.profile.update');
+    Route::post('spin', 'UserController@spin')->name('user.spin');
+    Route::post('sync', 'UserController@sync')->name('user.sync');
+});
 
-Route::get('collection/release/{id}', 'CollectionController@release')->name('collection.release');
-Route::get('collection/{username}/{shelf?}', 'CollectionController@shelf')->name('collection.shelf');
-Route::get('collection/{username}/shelves/counts', 'CollectionController@shelfCounts')->name('collection.shelf.count');
-
+Route::prefix('collection')->group(function() {
+    Route::get('release/{id}', 'CollectionController@release')->name('collection.release');
+    Route::get('{username}/{shelf}', 'CollectionController@shelf')->name('collection.shelf');
+    Route::get('{username}/shelves/counts', 'CollectionController@shelfCounts')->name('collection.shelf.count');
+    Route::post('shelf/add-release', 'CollectionController@addToShelf')->name('collection.shelf.add');
+    Route::post('shelf/remove-release', 'CollectionController@removeFromShelf')->name('user.shelf.remove');
+});

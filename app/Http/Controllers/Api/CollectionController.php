@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\User\AddToShelfRequest;
+use App\Http\Requests\User\RemoveFromShelfRequest;
+use App\Models\User;
 use App\Models\UserRelease;
 use App\Repositories\CollectionRepository;
 use App\Http\Controllers\Controller;
@@ -10,10 +13,19 @@ use Illuminate\Support\Facades\Auth;
 
 class CollectionController extends Controller
 {
+    /**
+     * @var CollectionRepository
+     */
     protected $collection;
+
+    /**
+     * @var User
+     */
+    protected $user;
 
     public function __construct(CollectionRepository $collection)
     {
+        $this->user = Auth::guard('api')->user();
         $this->collection = $collection;
     }
 
@@ -24,13 +36,29 @@ class CollectionController extends Controller
         return $this->collection->getReleasesInShelf($username, $shelf, $search, $sort);
     }
 
+    public function release($id)
+    {
+        return UserRelease::findOrFail($id);
+    }
+
     public function shelfCounts($username)
     {
         return $this->collection->getShelfCounts($username);
     }
 
-    public function release($id)
+    public function addToShelf(AddToShelfRequest $request)
     {
-        return UserRelease::findOrFail($id);
+        $release = $this->collection->findRelease($request->releaseId);
+        $shelf = $this->user->getShelf($request->shelfHandle);
+        $shelf->addRelease($release);
+        return response('Success!', 200);
+    }
+
+    public function removeFromShelf(RemoveFromShelfRequest $request)
+    {
+        $release = $this->collection->findRelease($request->releaseId);
+        $shelf = $this->user->getShelf($request->shelfHandle);
+        $shelf->removeRelease($release);
+        return response('Success!', 200);
     }
 }

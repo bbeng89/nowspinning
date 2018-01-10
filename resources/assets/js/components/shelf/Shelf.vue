@@ -44,10 +44,15 @@
 
 <script>
     import ReleaseListItem from './Release-List-Item.vue';
-    import api from '../../api'
+    import collection from '../../api/collection'
 
     export default {
         components: { 'release-list-item': ReleaseListItem },
+        metaInfo() {
+            return {
+                title: `${this.shelfNameDisplay} Shelf`
+            }
+        },
         data() {
             return {
                 username: '',
@@ -79,7 +84,7 @@
             },
             fetchReleases(clear = false) {
                 this.loading = true;
-                api.getReleases(this.username, this.shelfName, this.currentPage, this.search, this.sort, response => {
+                collection.getReleases(this.username, this.shelfName, this.currentPage, this.search, this.sort, response => {
                     if(clear){
                         this.releases = [];
                     }
@@ -97,6 +102,7 @@
         },
         computed: {
             shelfNameDisplay() {
+                // todo refactor this
                 if(this.shelfName == 'vinyl') return 'Vinyl';
                 else if(this.shelfName == 'cassette') return 'Cassette';
                 else if(this.shelfName == 'cd') return 'Compact Disc';

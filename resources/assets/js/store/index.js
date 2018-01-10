@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import api from '../api';
+import users from '../api/users';
+import collection from '../api/collection';
 
 Vue.use(Vuex);
 
@@ -23,20 +24,20 @@ export default new Vuex.Store({
     },
     actions: {
         spin ({ commit, state }, release) {
-            api.spin(release, response => {
+            users.spin(release, response => {
                 release.listen_count++
                 commit('spin', release)
             })
         },
         onDeck({ commit, state }, release) {
-            api.addToShelf(release, 'on-deck', response => {
+            collection.addToShelf(release, 'on-deck', response => {
                 let onDeck = state.onDeck
                 onDeck.push(release)
                 commit('onDeck', onDeck)
             })
         },
         offDeck({ commit, state }, release) {
-            api.removeFromShelf(release, 'on-deck', response => {
+            collection.removeFromShelf(release, 'on-deck', response => {
                 let onDeck = state.onDeck.filter(r => r.id != release.id)
                 commit('onDeck', onDeck)
             })

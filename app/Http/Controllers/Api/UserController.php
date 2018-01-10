@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\User\AddToShelfRequest;
-use App\Http\Requests\User\RemoveFromShelfRequest;
 use App\Http\Requests\User\SpinRequest;
 use App\Http\Requests\User\UpdateProfileRequest;
+use App\Jobs\SyncUserDiscogsCollection;
 use App\Models\User;
 use App\Repositories\CollectionRepository;
 use App\Repositories\UserRepository;
@@ -42,27 +41,17 @@ class UserController extends Controller
         return User::with('nowSpinning')->findOrFail($this->user->id);
     }
 
+    public function sync()
+    {
+        SyncUserDiscogsCollection::dispatch($this->user);
+        return response("Success!", 200);
+    }
+
     public function spin(SpinRequest $request)
     {
         $release = $this->collection->findRelease($request->id);
         $this->user->spin($release);
         return response("Success!", 200);
-    }
-
-    public function addToShelf(AddToShelfRequest $request)
-    {
-        $release = $this->collection->findRelease($request->releaseId);
-        $shelf = $this->user->getShelf($request->shelfHandle);
-        $shelf->addRelease($release);
-        return response('Success!', 200);
-    }
-
-    public function removeFromShelf(RemoveFromShelfRequest $request)
-    {
-        $release = $this->collection->findRelease($request->releaseId);
-        $shelf = $this->user->getShelf($request->shelfHandle);
-        $shelf->removeRelease($release);
-        return response('Success!', 200);
     }
 
     public function getProfile($userid)

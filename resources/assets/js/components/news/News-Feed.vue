@@ -12,6 +12,9 @@
 
 <script>
     export default {
+        metaInfo: {
+            title: 'Feed'
+        },
         data() {
             return {
                 feed: 'friends'

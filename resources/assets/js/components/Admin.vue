@@ -31,12 +31,17 @@
 </template>
 <script>
     import { mapState } from 'vuex';
-    import api from '../api';
+    import users from '../api/users';
     import store from '../store';
 
     export default {
+        metaInfo: {
+            titleTemplate: (titleChunk) => {
+                return titleChunk ? `${titleChunk} :: NowSpinning Admin` : 'NowSpinning Admin';
+            }
+        },
         beforeRouteEnter(to, from, next){
-            api.getUser(response => {
+            users.getUser(response => {
                 store.commit('user', response.body);
                 next();
             });

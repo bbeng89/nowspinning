@@ -44,7 +44,8 @@
     import FriendFeed from './friends/Friend-Feed.vue';
     import NowSpinning from "./user/Now-Spinning";
     import OnDeck from './shelf/On-Deck.vue';
-    import api from '../api';
+    import users from '../api/users';
+    import collection from '../api/collection';
     import store from '../store';
     import { mapState } from 'vuex';
 
@@ -56,12 +57,17 @@
             NowSpinning,
             OnDeck
         },
+        metaInfo: {
+            titleTemplate: (titleChunk) => {
+                return titleChunk ? `${titleChunk} :: NowSpinning` : 'NowSpinning';
+            }
+        },
         beforeRouteEnter(to, from, next){
-            api.getUser(response => {
+            users.getUser(response => {
                 let user = response.body
                 store.commit('user', user)
                 store.commit('spin', user.now_spinning)
-                api.getReleases(user.username, 'on-deck', 1, null, 'date_added,asc', (response) => {
+                collection.getReleases(user.username, 'on-deck', 1, null, 'date_added,asc', (response) => {
                     store.commit('onDeck', response.body.data)
                     next()
                 })

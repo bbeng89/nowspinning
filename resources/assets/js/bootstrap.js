@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueResource from 'vue-resource'
 import InfiniteScroll from 'vue-infinite-scroll'
 import VeeValidate from 'vee-validate';
+import Meta from 'vue-meta';
 
 window.$ = window.jQuery = require('jquery');
 window._ = require('lodash');
@@ -12,12 +13,12 @@ require('bootstrap-sass');
 
 // https://github.com/pagekit/vue-resource
 Vue.use(VueResource);
-
 // https://github.com/ElemeFE/vue-infinite-scroll
 Vue.use(InfiniteScroll);
-
 // https://github.com/baianat/vee-validate
 Vue.use(VeeValidate);
+// https://github.com/declandewet/vue-meta
+Vue.use(Meta);
 
 let token = document.head.querySelector('meta[name="csrf-token"]');
 
