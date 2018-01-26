@@ -1,32 +1,33 @@
 <template>
     <div id="news-feed">
-        <div class="text-center">
-            <h2>News Feed</h2>
-            <div class="btn-group" role="group" aria-label="...">
-                <button type="button" @click="toggleFeed" class="btn btn-default" :class="{ 'active': feed == 'friends' }"><i class="fa fa-users"></i> Friends</button>
-                <button type="button" @click="toggleFeed" class="btn btn-default" :class="{ 'active': feed == 'global' }"><i class="fa fa-globe"></i> Global</button>
-            </div>
-        </div>
+        <Compose></Compose>
         <hr/>
-        <post v-for="post in posts"
+        <!--<div class="text-center">-->
+            <!--<div class="btn-group" role="group" aria-label="...">-->
+                <!--<button type="button" @click="toggleFeed" class="btn btn-default" :class="{ 'active': feed == 'friends' }"><i class="fa fa-users"></i> Friends</button>-->
+                <!--<button type="button" @click="toggleFeed" class="btn btn-default" :class="{ 'active': feed == 'global' }"><i class="fa fa-globe"></i> Global</button>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<hr/>-->
+        <Post v-for="post in posts"
             :key="post.id"
             :username="post.user.username"
             :avatar="post.user.avatar"
             :content="post.content"
             :date-posted="post.created_at"
-            :spinning-id="releaseId(post.release)"
-            :spinning-title="releaseTitle(post.release)">
-        </post>
+            :spinning="post.release">
+        </Post>
         <h2 class="text-center" v-if="loading"><i class="fa fa-spinner fa-spin"></i></h2>
     </div>
 </template>
 
 <script>
     import Post from './Post.vue';
+    import Compose from './Compose.vue';
     import posts from '../../api/posts';
 
     export default {
-        components: { 'post': Post },
+        components: { Compose, Post },
         metaInfo: {
             title: 'Feed'
         },
@@ -40,6 +41,7 @@
         mounted() {
             this.loading = true;
             this.fetchPosts().then(response => this.loading = false);
+            EventBus.listen('postCreated', data => this.pushPost(data))
         },
         methods: {
             toggleFeed() {
@@ -48,14 +50,15 @@
             fetchPosts() {
                 return posts.getNewsFeed(response => this.posts = response.body.data)
             },
-            releaseId(release) {
-                if(!release) return null;
-                return release.id;
-            },
-            releaseTitle(release) {
-                if(!release) return null;
-                return release.title;
+            pushPost(post) {
+                this.posts.unshift(post);
             }
         }
     }
 </script>
+
+<style>
+    #news-feed {
+        margin-top: 22px;
+    }
+</style>

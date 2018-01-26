@@ -4,10 +4,10 @@
         <p v-if="releases.length == 0" class="text-center">
             <em>You don't have anything on deck!<br/> Browse your shelves and find something to spin.</em>
         </p>
-        <div v-for="release in releases" class="panel">
+        <div v-for="release in releases" class="panel panel-default">
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-sm-4 col-md-6">
+                    <div class="col-md-4">
                         <img class="img-responsive" :src="release.thumbnail">
                         <!-- Split button -->
                         <div class="btn-group on-deck-actions">
@@ -21,7 +21,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="col-sm-8 col-md-6">
+                    <div class="col-md-8">
                         <strong>{{ release.title }}</strong> <br/>
                         {{ release.artists_display }}
                     </div>

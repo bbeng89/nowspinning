@@ -96,12 +96,14 @@ class User extends Authenticatable
      * @param string $content
      * @return Post
      */
-    public function addPost($content)
+    public function addPost($content, $showSpinning = true)
     {
-        return Post::create([
+        $post = Post::create([
             'user_id' => $this->id,
-            'user_release_id' => $this->now_spinning_id,
+            'user_release_id' => $showSpinning ? $this->now_spinning_id : null,
             'content' => $content
         ]);
+        $post->load('user', 'release');
+        return $post;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\Post\CreatePostRequest;
 use App\Models\User;
 use App\Repositories\PostRepository;
 use Illuminate\Http\Request;
@@ -29,5 +30,11 @@ class PostController extends Controller
     public function index()
     {
         return $this->posts->getUserNewsFeed($this->user);
+    }
+
+    public function create(CreatePostRequest $request)
+    {
+        $showSpinning = $request->has('showSpinning') && $request->get('showSpinning') == 'true';
+        return $this->user->addPost($request->get('content'), $showSpinning);
     }
 }

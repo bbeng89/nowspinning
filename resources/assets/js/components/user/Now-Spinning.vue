@@ -1,7 +1,7 @@
 <template>
     <div>
         <h4 class="text-center">Now Spinning</h4>
-        <div class="panel">
+        <div class="panel panel-default">
             <div class="panel-body">
                 <div class="row">
                     <div class="col-sm-4">

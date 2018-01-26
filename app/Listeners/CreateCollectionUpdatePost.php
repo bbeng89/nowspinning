@@ -26,10 +26,9 @@ class CreateCollectionUpdatePost
             $newReleaseCount = $event->getNumberOfReleasesAdded();
 
             $pluralized = $newReleaseCount == 1 ? 'release' : 'releases';
-            $content = "{$user->username} added {$newReleaseCount} new {$pluralized} to their collection.";
-            $content .= "<br/>";
+            $content = "{$user->username} added {$newReleaseCount} new {$pluralized} to their collection: ";
             $content .= $this->getNewReleaseDisplayText($user, $newReleaseCount);
-            $user->addPost($content);
+            $user->addPost($content, false);
         }
     }
 

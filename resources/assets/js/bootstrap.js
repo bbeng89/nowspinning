@@ -3,12 +3,14 @@ import VueResource from 'vue-resource'
 import InfiniteScroll from 'vue-infinite-scroll'
 import VeeValidate from 'vee-validate';
 import Meta from 'vue-meta';
+import EventBus from './helpers/eventbus';
 
 window.$ = window.jQuery = require('jquery');
 window._ = require('lodash');
 window.Vue = require('vue');
 window.axios = require('axios');
 window.moment = require('moment');
+window.EventBus = new EventBus();
 
 require('bootstrap-sass');
 

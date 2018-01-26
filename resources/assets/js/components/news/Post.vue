@@ -5,8 +5,8 @@
                 <img style="height:20px" class="img-circle" :src="avatar">
                 <strong>{{ username }}</strong>
             </div>
-            <div v-if="spinningId" class="pull-right">
-                <small><em>Spinning <a href="#">{{ spinningTitle }}</a></em></small>
+            <div v-if="spinning" class="pull-right">
+                <small><em><a href="#">{{ spinningTitle }}</a></em></small>
             </div>
         </div>
         <div class="panel-body" v-html="content">
@@ -27,10 +27,14 @@
 
 <script>
     export default {
-        props: ['username', 'avatar', 'content', 'datePosted', 'spinningTitle', 'spinningId'],
+        props: ['username', 'avatar', 'content', 'datePosted', 'spinning'],
         computed: {
             dateDisplay() {
                 return moment(this.datePosted).fromNow();
+            },
+            spinningTitle() {
+                if(!this.spinning) return null;
+                return this.spinning.artists_display + ' - ' + this.spinning.title;
             }
         }
     }

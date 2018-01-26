@@ -1,5 +1,5 @@
 <template>
-    <div class="panel release-list-item">
+    <div class="panel panel-default release-list-item">
         <div class="panel-body">
             <div class="row">
                 <div class="col-sm-4">
