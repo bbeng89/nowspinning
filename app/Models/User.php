@@ -10,6 +10,7 @@ use Laravel\Passport\HasApiTokens;
 /**
  * Class User
  * @package App\Models
+ * @property int $id
  * @property int $discogs_id
  * @property string $oauth_token
  * @property string $oauth_token_secret
@@ -17,6 +18,7 @@ use Laravel\Passport\HasApiTokens;
  * @property string $name,
  * @property string $email
  * @property string $avatar
+ * @property int|null $now_spinning_id
  * @property Shelf[] $shelves
  * @property UserRelease[] $releases
  * @property UserRelease $nowspinning
@@ -36,7 +38,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'discogs_id', 'oauth_token', 'oauth_token_secret', 'username', 'name', 'email', 'avatar',
+        'discogs_id', 'oauth_token', 'oauth_token_secret', 'username', 'name',
+        'email', 'avatar', 'now_spinning_id'
     ];
 
     /**
@@ -45,7 +48,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'access_token', 'remember_token',
+        'access_token', 'remember_token', 'oauth_token', 'oauth_token_secret'
     ];
 
     public function shelves()
@@ -56,6 +59,11 @@ class User extends Authenticatable
     public function releases()
     {
         return $this->hasMany(UserRelease::class);
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
     }
 
     public function nowSpinning()
@@ -82,5 +90,18 @@ class User extends Authenticatable
         $release->save();
 
         return $this;
+    }
+
+    /**
+     * @param string $content
+     * @return Post
+     */
+    public function addPost($content)
+    {
+        return Post::create([
+            'user_id' => $this->id,
+            'user_release_id' => $this->now_spinning_id,
+            'content' => $content
+        ]);
     }
 }

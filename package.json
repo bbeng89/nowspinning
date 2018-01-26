@@ -21,6 +21,7 @@
     "dependencies": {
         "animate.css": "^3.5.2",
         "font-awesome": "^4.7.0",
+        "moment": "^2.20.1",
         "vee-validate": "^2.0.0",
         "vue-infinite-scroll": "^2.0.2",
         "vue-meta": "^1.4.0",

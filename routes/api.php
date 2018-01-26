@@ -28,3 +28,7 @@ Route::prefix('collection')->group(function() {
     Route::post('shelf/add-release', 'CollectionController@addToShelf')->name('collection.shelf.add');
     Route::post('shelf/remove-release', 'CollectionController@removeFromShelf')->name('user.shelf.remove');
 });
+
+Route::prefix('posts')->group(function() {
+    Route::get('/', 'PostController@index')->name('posts.index');
+});

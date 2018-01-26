@@ -8,6 +8,7 @@ window.$ = window.jQuery = require('jquery');
 window._ = require('lodash');
 window.Vue = require('vue');
 window.axios = require('axios');
+window.moment = require('moment');
 
 require('bootstrap-sass');
 

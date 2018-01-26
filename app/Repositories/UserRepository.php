@@ -6,7 +6,7 @@ use App\Models\UserProfile;
 class UserRepository
 {
     /**
-     * @param $id
+     * @param int $id
      * @return User
      */
     public function find($id)
@@ -14,6 +14,19 @@ class UserRepository
         return User::findOrFail($id);
     }
 
+    /**
+     * @param string $username
+     * @return User
+     */
+    public function getByUsername($username)
+    {
+        return User::where('username', $username)->firstOrFail();
+    }
+
+    /**
+     * @param int $userid
+     * @return UserProfile
+     */
     public function getProfile($userid)
     {
         $user = $this->find($userid);
@@ -23,7 +36,7 @@ class UserRepository
     /**
      * @param $userId
      * @param $args
-     * @return \App\Models\UserProfile
+     * @return UserProfile
      */
     public function updateProfile($userId, $args)
     {

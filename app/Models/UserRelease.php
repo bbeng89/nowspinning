@@ -42,8 +42,15 @@ class UserRelease extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
     public static function createOrUpdateFromApi(Release $release, $user_id)
     {
+        // TODO - handle items that were removed from the users discogs
+
         $userRelease = self::where('user_id', $user_id)
             ->where('discogs_id', $release->id)
             ->first();

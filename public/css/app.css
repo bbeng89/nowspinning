@@ -14742,6 +14742,10 @@ button.close {
   animation-name: slideOutUp;
 }
 
+a:hover {
+  text-decoration: none;
+}
+
 .logo-text {
   font-family: 'Monoton', cursive;
   text-transform: uppercase;

@@ -19,6 +19,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         \App\Events\UserCreated::class => [
             \App\Listeners\CreateDefaultUserShelves::class
+        ],
+        \App\Events\UserDiscogsCollectionSynced::class => [
+            \App\Listeners\CreateCollectionUpdatePost::class
         ]
     ];
 
