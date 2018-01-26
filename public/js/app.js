@@ -2333,6 +2333,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['username', 'avatar', 'content', 'datePosted', 'spinning'],
@@ -57376,10 +57388,19 @@ var render = function() {
         _c("strong", [_vm._v(_vm._s(_vm.username))])
       ]),
       _vm._v(" "),
+      _vm._m(0, false, false)
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "panel-body" }, [
+      _c("div", { domProps: { innerHTML: _vm._s(_vm.content) } }),
+      _vm._v(" "),
+      _vm.spinning ? _c("hr") : _vm._e(),
+      _vm._v(" "),
       _vm.spinning
-        ? _c("div", { staticClass: "pull-right" }, [
+        ? _c("p", [
             _c("small", [
               _c("em", [
+                _vm._v("Spinning: "),
                 _c("a", { attrs: { href: "#" } }, [
                   _vm._v(_vm._s(_vm.spinningTitle))
                 ])
@@ -57389,14 +57410,9 @@ var render = function() {
         : _vm._e()
     ]),
     _vm._v(" "),
-    _c("div", {
-      staticClass: "panel-body",
-      domProps: { innerHTML: _vm._s(_vm.content) }
-    }),
-    _vm._v(" "),
     _c("div", { staticClass: "panel-footer" }, [
       _c("div", { staticClass: "row" }, [
-        _vm._m(0, false, false),
+        _vm._m(1, false, false),
         _vm._v(" "),
         _c("div", { staticClass: "col-sm-6 text-right" }, [
           _vm._v(
@@ -57408,6 +57424,34 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "pull-right" }, [
+      _c("div", { staticClass: "dropdown" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-default btn-xs dropdown-toggle",
+            attrs: {
+              type: "button",
+              "data-toggle": "dropdown",
+              "aria-haspopup": "true",
+              "aria-expanded": "false"
+            }
+          },
+          [_c("i", { staticClass: "fa fa-ellipsis-h" })]
+        ),
+        _vm._v(" "),
+        _c("ul", { staticClass: "dropdown-menu" }, [
+          _c("li", [_c("a", { attrs: { href: "#" } }, [_vm._v("Edit")])]),
+          _vm._v(" "),
+          _c("li", [_c("a", { attrs: { href: "#" } }, [_vm._v("Delete")])])
+        ])
+      ])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

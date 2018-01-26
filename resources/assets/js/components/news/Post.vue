@@ -5,11 +5,23 @@
                 <img style="height:20px" class="img-circle" :src="avatar">
                 <strong>{{ username }}</strong>
             </div>
-            <div v-if="spinning" class="pull-right">
-                <small><em><a href="#">{{ spinningTitle }}</a></em></small>
+            <div class="pull-right">
+                <!-- Single button -->
+                <div class="dropdown">
+                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-ellipsis-h"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Edit</a></li>
+                        <li><a href="#">Delete</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
-        <div class="panel-body" v-html="content">
+        <div class="panel-body">
+            <div v-html="content"></div>
+            <hr v-if="spinning"/>
+            <p v-if="spinning"><small><em>Spinning: <a href="#">{{ spinningTitle }}</a></em></small></p>
         </div>
         <div class="panel-footer">
             <div class="row">
