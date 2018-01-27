@@ -1,5 +1,6 @@
 <?php namespace App\Repositories;
 
+use App\Models\Shelf;
 use App\Models\User;
 use App\Models\UserRelease;
 

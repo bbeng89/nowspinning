@@ -19,6 +19,16 @@ class CreatePostTable extends Migration
             $table->integer('user_release_id')->unsigned()->nullable();
             $table->text('content');
             $table->timestamps();
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
+
+            $table->foreign('user_release_id')
+                ->references('id')
+                ->on('user_releases')
+                ->onDelete('set null');
         });
     }
 

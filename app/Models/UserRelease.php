@@ -75,7 +75,9 @@ class UserRelease extends Model
 
         $userRelease->save();
 
-        $shelves = Shelf::whereIn('name', $release->formats)->pluck('id');
+        $shelves = Shelf::where('user_id', $user_id)
+            ->whereIn('name', $release->formats)
+            ->pluck('id');
 
         if(!empty($shelves))
         {
