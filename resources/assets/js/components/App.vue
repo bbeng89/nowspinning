@@ -12,12 +12,20 @@
                     <router-link :to="{ name: 'news-feed' }" class="navbar-brand logo-text">NowSpinning</router-link>
                 </div>
                 <div id="navbar" class="collapse navbar-collapse navbar-right">
+                    <p class="navbar-text" v-if="syncing"><i class="fa fa-refresh fa-spin"></i></p>
                     <ul class="nav navbar-nav">
-                        <li><p class="navbar-text">Welcome, {{ user.username }}</p></li>
-                        <li><router-link :to="{ name: 'oauth-settings' }">Admin</router-link></li>
-                        <li><a href="/logout">Logout</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user.username }} <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><router-link :to="{ name: 'edit-profile' }">Edit Profile</router-link></li>
+                                <li><a href="javascript:void(0)" @click="sync" :disabled="syncing">Sync Collection</a></li>
+                                <li><router-link :to="{ name: 'oauth-settings' }">Admin</router-link></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="/logout">Logout</a></li>
+                            </ul>
+                        </li>
                     </ul>
-                </div><!--/.nav-collapse -->
+                </div>
             </div>
         </nav>
         <div class="container-fluid">
@@ -62,6 +70,11 @@
                 return titleChunk ? `${titleChunk} :: NowSpinning` : 'NowSpinning';
             }
         },
+        data() {
+            return {
+                syncing: false
+            }
+        },
         beforeRouteEnter(to, from, next){
             users.getUser(response => {
                 let user = response.body
@@ -72,6 +85,12 @@
                     next()
                 })
             });
+        },
+        methods: {
+            sync() {
+                this.syncing = true;
+                users.sync(response => this.syncing = false);
+            }
         },
         computed: {
             ...mapState([

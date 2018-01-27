@@ -26,7 +26,7 @@ class CreateCollectionUpdatePost
             $newReleaseCount = $event->getNumberOfReleasesAdded();
 
             $pluralized = $newReleaseCount == 1 ? 'release' : 'releases';
-            $content = "{$user->username} added {$newReleaseCount} new {$pluralized} to their collection: ";
+            $content = "I added {$newReleaseCount} new {$pluralized} to my collection: ";
             $content .= $this->getNewReleaseDisplayText($user, $newReleaseCount);
             $user->addPost($content, false);
         }
@@ -37,14 +37,19 @@ class CreateCollectionUpdatePost
         $remainder = $newReleaseCount - self::NEW_RELEASE_DISPLAY_LIMIT;
         $numToTake = $remainder > 0 ? self::NEW_RELEASE_DISPLAY_LIMIT : $newReleaseCount;
         $newReleases = $user->releases()->orderBy('created_at', 'desc')->take($numToTake)->get();
+        $glue = $newReleaseCount == 2 ? ' and ' : ', ';
 
         $text = $newReleases->map(function($release){
             return $release->title . ' by ' . $release->artists_display;
-        })->implode(',');
+        })->implode($glue);
 
         if($remainder > 0)
         {
             $text .= ", and {$remainder} more.";
+        }
+        else
+        {
+            $text .= '.';
         }
 
         return $text;

@@ -6,31 +6,15 @@
             </div>
         </div>
         <div>
-            <router-link class="btn btn-default" :to="{ name: 'shelves', params: { username: user.username }}">My Shelves</router-link>
-            <router-link class="btn btn-default" :to="{ name: 'edit-profile' }">Edit Profile</router-link>
-        </div>
-        <div class="text-center">
-            <button type="button" @click="sync" class="btn btn-default" :disabled="syncing"><i class="fa fa-refresh" :class="{ 'fa-spin': syncing }"></i> Sync Collection</button>
+            <router-link class="btn btn-default" :to="{ name: 'shelves', params: { username: user.username }}">My Profile</router-link>
         </div>
     </div>
 </template>
 
 <script>
     import { mapState } from 'vuex'
-    import users from '../../api/users';
 
     export default {
-        data() {
-            return {
-                syncing: false
-            }
-        },
-        methods: {
-            sync() {
-                this.syncing = true;
-                users.sync(response => this.syncing = false);
-            }
-        },
         computed: {
             ...mapState({
                 user: 'user'

@@ -11,7 +11,7 @@
                             <div class="overlay-content">
                                 <h2>Vinyl</h2>
                                 <p v-if="loading"><i class="fa fa-spinner fa-spin"></i></p>
-                                <p v-else>{{ vinylCount }} Releases</p>
+                                <p v-else>{{ label(vinylCount) }}</p>
                             </div>
                         </div>
                     </div>
@@ -27,7 +27,7 @@
                             <div class="overlay-content">
                                 <h2>Cassettes</h2>
                                 <p v-if="loading"><i class="fa fa-spinner fa-spin"></i></p>
-                                <p v-else>{{ cassetteCount }} Releases</p>
+                                <p v-else>{{ label(cassetteCount) }}</p>
                             </div>
                         </div>
                     </div>
@@ -43,7 +43,7 @@
                             <div class="overlay-content">
                                 <h2>CDs</h2>
                                 <p v-if="loading"><i class="fa fa-spinner fa-spin"></i></p>
-                                <p v-else>{{ cdCount }} Releases</p>
+                                <p v-else>{{ label(cdCount) }}</p>
                             </div>
                         </div>
                     </div>
@@ -77,6 +77,11 @@
                 this.cdCount = response.body.cd
                 this.loading = false
             })
+        },
+        methods: {
+            label(count) {
+                return count + ' ' + (count == 1 ? 'Release' : 'Releases');
+            }
         }
     }
 </script>

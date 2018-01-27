@@ -5,7 +5,7 @@
                 <img style="height:20px" class="img-circle" :src="avatar">
                 <strong>{{ username }}</strong>
             </div>
-            <div class="pull-right">
+            <div v-if="canAdmin" class="pull-right">
                 <!-- Single button -->
                 <div class="dropdown">
                     <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -38,16 +38,24 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex';
+
     export default {
         props: ['username', 'avatar', 'content', 'datePosted', 'spinning'],
         computed: {
             dateDisplay() {
-                return moment(this.datePosted).fromNow();
+                return moment.utc(this.datePosted).fromNow();
             },
             spinningTitle() {
                 if(!this.spinning) return null;
                 return this.spinning.artists_display + ' - ' + this.spinning.title;
-            }
+            },
+            canAdmin() {
+                return this.username == this.user.username;
+            },
+            ...mapState({
+                user: 'user'
+            })
         }
     }
 </script>

@@ -11,7 +11,7 @@
                         <img class="img-responsive" :src="release.thumbnail">
                         <!-- Split button -->
                         <div class="btn-group on-deck-actions">
-                            <button type="button" @click="spinRelease(release)" class="btn btn-xs btn-primary"><i class="fa fa-thumbs-up"></i> <span class="hidden-md">Spin</span></button>
+                            <button type="button" @click="spinRelease(release)" class="btn btn-xs btn-primary">Spin</button>
                             <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="caret"></span>
                                 <span class="sr-only">Toggle Dropdown</span>
