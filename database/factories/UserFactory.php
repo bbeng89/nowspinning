@@ -15,12 +15,16 @@ use Faker\Generator as Faker;
 
 $factory->define(
     \App\Models\User::class, function (Faker $faker) {
-    static $password;
 
     return [
+        'discogs_id' => $faker->randomNumber(7),
+        'oauth_token' => 'dummy_token',
+        'oauth_token_secret' => 'dummy_token_secret',
+        'username' => $faker->userName,
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
-        'password' => $password ?: $password = bcrypt('secret'),
+        'avatar' => 'http://placehold.it/500x500',
         'remember_token' => str_random(10),
+        'now_spinning_id' => null
     ];
 });
