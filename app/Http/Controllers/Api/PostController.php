@@ -27,9 +27,9 @@ class PostController extends Controller
         $this->posts = $posts;
     }
 
-    public function index($feed)
+    public function index(Request $request, $feed)
     {
-        return $this->posts->getUserNewsFeed($feed, $this->user);
+        return $this->posts->getUserNewsFeed($feed, $this->user, $request->get('per_page'));
     }
 
     public function create(CreatePostRequest $request)

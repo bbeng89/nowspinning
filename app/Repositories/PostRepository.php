@@ -5,15 +5,19 @@ use App\Models\Post;
 
 class PostRepository
 {
-    const NEWS_FEED_PAGE_SIZE = 50;
+    protected $feeds = ['global', 'friends'];
 
-    public function getUserNewsFeed($feed, User $user)
+    protected $defaultPerPage = 50;
+
+    public function getUserNewsFeed($feed, User $user, $perPage = null)
     {
+        if(!in_array($feed, $this->feeds)) return [];
+
         if($feed == 'global')
         {
             $query = Post::query();
         }
-        else
+        else if($feed == 'friends')
         {
             //todo - change this logic once friends are implemented
             $query = Post::where('user_id', $user->id);
@@ -22,6 +26,6 @@ class PostRepository
         return $query->with('user')
             ->with('release')
             ->orderBy('created_at', 'desc')
-            ->paginate(self::NEWS_FEED_PAGE_SIZE);
+            ->paginate($perPage ?? $this->defaultPerPage);
     }
 }
