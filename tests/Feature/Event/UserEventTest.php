@@ -4,6 +4,7 @@ namespace Tests\Feature\Event;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
 
 class UserEventTest extends TestCase
 {
@@ -20,5 +21,11 @@ class UserEventTest extends TestCase
             $this->assertNotNull($shelf);
             $this->assertTrue($shelf->name == $name);
         }
+    }
+
+    // note - the actual functionality of this event will be tested in a unit test
+    public function testCollectionUpdatePostEventFired()
+    {
+        // todo
     }
 }
