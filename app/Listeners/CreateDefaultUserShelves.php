@@ -9,14 +9,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 class CreateDefaultUserShelves
 {
-    protected $defaultShelves = [
-        'vinyl' => 'Vinyl',
-        'cassette' => 'Cassette',
-        'cd' => 'CD',
-        'heavy-rotation' => 'Heavy Rotation',
-        'on-deck' => 'On Deck'
-    ];
-
     /**
      * Create the event listener.
      *
@@ -35,8 +27,10 @@ class CreateDefaultUserShelves
      */
     public function handle(UserCreated $event)
     {
+        $shelves = config('constants.default_shelves');
         $user = $event->getUser();
-        foreach($this->defaultShelves as $handle => $name)
+
+        foreach($shelves as $handle => $name)
         {
             Shelf::create([
                 'user_id' => $user->id,
