@@ -68,4 +68,34 @@ class PostApiTest extends TestCase
                 'last_page' => $numPages
             ]);
     }
+
+    public function testCreatingPostWithoutShowingNowSpinning()
+    {
+        $user = factory(\App\Models\User::class)->create();
+        $this->actingAs($user, 'api')
+            ->post('/api/posts/create', ['content' => 'Hello World'])
+            ->assertSuccessful()
+            ->assertJson([
+                'user_id' => $user->id,
+                'content' => 'Hello World',
+                'user_release_id' => null
+            ]);
+    }
+
+    public function testCreatingPostWithShowingNowSpinning()
+    {
+        $release = factory(\App\Models\UserRelease::class)->create();
+        $user = $release->user;
+        $user->now_spinning_id = $release->id;
+        $user->save();
+
+        $this->actingAs($user, 'api')
+            ->post('/api/posts/create', ['content' => 'Hello World', 'showSpinning' => 'true'])
+            ->assertSuccessful()
+            ->assertJson([
+                'user_id' => $user->id,
+                'content' => 'Hello World',
+                'user_release_id' => $release->id
+            ]);
+    }
 }
