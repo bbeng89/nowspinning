@@ -10,6 +10,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UserRepositoryTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function testFindingUsers()
     {
         $user = factory(User::class)->create();
