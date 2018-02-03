@@ -42,6 +42,7 @@
                 </div>
                 <div class="col-md-3">
                     <friend-feed></friend-feed>
+                    <notifications position="bottom right"></notifications>
                 </div>
             </div>
         </div><!-- /.container -->
@@ -89,7 +90,14 @@
         methods: {
             sync() {
                 this.syncing = true;
-                users.sync(response => this.syncing = false);
+                users.sync(response => {
+                    this.syncing = false;
+                    this.$notify({
+                        title: 'Discogs Sync Complete',
+                        text: 'Your collection is now synced with Discogs',
+                        type: 'success'
+                    });
+                });
             }
         },
         computed: {
