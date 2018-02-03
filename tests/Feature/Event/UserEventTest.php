@@ -22,10 +22,4 @@ class UserEventTest extends TestCase
             $this->assertTrue($shelf->name == $name);
         }
     }
-
-    // note - the actual functionality of this event will be tested in a unit test
-    public function testCollectionUpdatePostEventFired()
-    {
-        // todo
-    }
 }
