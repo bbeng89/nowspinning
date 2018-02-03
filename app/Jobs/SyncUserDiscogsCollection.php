@@ -15,7 +15,7 @@ class SyncUserDiscogsCollection
     /**
      * @var User
      */
-    protected $user;
+    public $user;
 
     public function __construct(User $user)
     {
