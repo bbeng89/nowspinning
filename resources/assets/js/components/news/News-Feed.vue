@@ -17,7 +17,8 @@
             :avatar="post.user.avatar"
             :content="post.content"
             :date-posted="post.created_at"
-            :spinning="post.release">
+            :spinning="post.release"
+            :images="post.images">
         </Post>
     </div>
 </template>

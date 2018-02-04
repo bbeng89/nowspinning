@@ -27,4 +27,27 @@ class Post extends Model
     {
         return $this->belongsTo(UserRelease::class, 'user_release_id');
     }
+
+    public function images()
+    {
+        return $this->hasMany(PostImage::class);
+    }
+
+    /**
+     * @param $path
+     * @param $extension
+     * @param $mime_type
+     * @param $size
+     * @return PostImage
+     */
+    public function addImage($path, $extension, $mime_type, $size)
+    {
+        return PostImage::create([
+            'post_id' => $this->id,
+            'path' => $path,
+            'extension' => $extension,
+            'mime_type' => $mime_type,
+            'size' => $size
+        ]);
+    }
 }

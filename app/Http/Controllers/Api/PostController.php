@@ -41,6 +41,9 @@ class PostController extends Controller
 
     public function uploadPostImage(UploadPostImageRequest $request)
     {
-        $path = $request->file('file')->store('public/postimgs');
+        $post = $this->posts->find($request->post_id);
+        $file = $request->file('file');
+        $path = $file->store('public/postimgs');
+        return $post->addImage($path, $file->extension(), $file->getMimeType(), $file->getSize());
     }
 }

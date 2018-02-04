@@ -25,9 +25,11 @@
                 </div>
             </div>
             <vue-dropzone ref="composeVueDropzone" id="dropzone"
-                          :options="dropzoneOptions"
-                          v-on:vdropzone-file-added="imgCount++"
-                          v-on:vdropzone-removed-file="imgCount--">
+                :options="dropzoneOptions"
+                @vdropzone-file-added="imgCount++"
+                @vdropzone-removed-file="imgCount--"
+                @vdropzone-success="fileUploaded"
+                @vdropzone-queue-complete="uploadComplete">
             </vue-dropzone>
         </div>
     </div>
@@ -46,6 +48,8 @@
                 showSpinning: true,
                 loading: false,
                 imgCount: 0,
+                post: null,
+                images: [],
                 dropzoneOptions: {
                     url: '/api/posts/create/image',
                     autoProcessQueue: false,
@@ -69,16 +73,31 @@
                     this.content = '';
                     this.loading = false;
                     let post = response.body;
-                    EventBus.fire('postCreated', post);
-                    this.$refs.composeVueDropzone.setOption('params', { post_id: post.id });
-                    this.$refs.composeVueDropzone.processQueue();
-                    // todo - this doesn't seem to work right
-                    this.$refs.composeVueDropzone.removeAllFiles();
-                    this.toggleImageUploader();
+                    this.post = post;
+                    if(this.imgCount > 0)
+                    {
+                        this.$refs.composeVueDropzone.setOption('params', { post_id: post.id });
+                        this.$refs.composeVueDropzone.processQueue();
+                    }
+                    else {
+                        EventBus.fire('postCreated', this.post);
+                        this.post = null;
+                    }
                 });
+            },
+            fileUploaded(file, response){
+                this.images.push(response);
             },
             toggleImageUploader() {
                 $('#dropzone').slideToggle()
+            },
+            uploadComplete() {
+                this.$refs.composeVueDropzone.removeAllFiles();
+                this.toggleImageUploader();
+                this.post.images = this.images;
+                EventBus.fire('postCreated', this.post);
+                this.post = null;
+                this.images = [];
             }
         }
     }

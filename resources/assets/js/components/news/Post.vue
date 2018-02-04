@@ -19,6 +19,9 @@
             </div>
         </div>
         <div class="panel-body">
+            <slick v-if="hasImages" ref="slick" :options="slickOptions">
+                <img v-for="image in images" :src="image.src" alt="">
+            </slick>
             <div v-html="content"></div>
             <hr v-if="spinning"/>
             <p v-if="spinning"><small><em>Spinning: <a href="#">{{ spinningTitle }}</a></em></small></p>
@@ -39,9 +42,22 @@
 
 <script>
     import { mapState } from 'vuex';
-
+    import Slick from 'vue-slick';
+    import 'slick-carousel/slick/slick.css';
+    import 'slick-carousel/slick/slick-theme.css';
     export default {
-        props: ['username', 'avatar', 'content', 'datePosted', 'spinning'],
+        components: { Slick },
+        props: ['username', 'avatar', 'content', 'datePosted', 'spinning', 'images'],
+        data(){
+            return {
+                slickOptions: {
+                    dots: true,
+                    slidesToShow: 1,
+                    adaptiveHeight:true,
+                    lazyLoad: 'ondemand'
+                }
+            }
+        },
         computed: {
             dateDisplay() {
                 return moment.utc(this.datePosted).fromNow();
@@ -53,9 +69,22 @@
             canAdmin() {
                 return this.username == this.user.username;
             },
+            hasImages() {
+                return this.images && this.images.length > 0;
+            },
             ...mapState({
                 user: 'user'
             })
         }
     }
 </script>
+<style>
+    .slick-next {
+        right: 10px;
+        z-index:99;
+    }
+    .slick-prev {
+        left: 10px;
+        z-index:99;
+    }
+</style>
