@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\Post\CreatePostRequest;
+use App\Http\Requests\UploadPostImageRequest;
 use App\Models\User;
 use App\Repositories\PostRepository;
 use Illuminate\Http\Request;
@@ -36,5 +37,10 @@ class PostController extends Controller
     {
         $showSpinning = $request->has('showSpinning') && $request->get('showSpinning') == 'true';
         return $this->user->addPost($request->get('content'), $showSpinning);
+    }
+
+    public function uploadPostImage(UploadPostImageRequest $request)
+    {
+        $path = $request->file('file')->store('public/postimgs');
     }
 }

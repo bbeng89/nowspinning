@@ -33,4 +33,5 @@ Route::prefix('collection')->group(function() {
 Route::prefix('posts')->group(function() {
     Route::get('/{feed}', 'PostController@index')->name('posts.index')->where(['feed' => 'friends|global']);
     Route::post('create', 'PostController@create')->name('posts.create');
+    Route::post('create/image', 'PostController@uploadPostImage')->name('posts.create.image');
 });
