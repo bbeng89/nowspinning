@@ -19,6 +19,7 @@ Route::prefix('user')->group(function() {
     Route::post('profile/update', 'UserController@updateProfile')->name('user.profile.update');
     Route::post('spin', 'UserController@spin')->name('user.spin');
     Route::post('sync', 'UserController@sync')->name('user.sync');
+    Route::post('first-login/unset', 'UserController@unsetFirstLogin')->name('user.first-login.unset');
 });
 
 Route::prefix('collection')->group(function() {

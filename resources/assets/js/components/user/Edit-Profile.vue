@@ -91,7 +91,14 @@
         methods: {
             save() {
                 this.saving = true;
-                users.updateProfile(this.profile, response => this.saving = false);
+                users.updateProfile(this.profile, response => {
+                    this.saving = false
+                    this.$notify({
+                        title: 'Profile updated!',
+                        text: 'Your profile was successfully updated',
+                        type: 'success'
+                    });
+                });
             }
         },
         computed: {

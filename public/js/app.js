@@ -1798,11 +1798,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         __WEBPACK_IMPORTED_MODULE_4__api_users__["a" /* default */].getUser(function (response) {
             var user = response.body;
             __WEBPACK_IMPORTED_MODULE_6__store__["a" /* default */].commit('user', user);
-            __WEBPACK_IMPORTED_MODULE_6__store__["a" /* default */].commit('spin', user.now_spinning);
-            __WEBPACK_IMPORTED_MODULE_5__api_collection__["a" /* default */].getReleases(user.username, 'on-deck', 1, null, 'date_added,asc', function (response) {
-                __WEBPACK_IMPORTED_MODULE_6__store__["a" /* default */].commit('onDeck', response.body.data);
-                next();
-            });
+            if (user.first_login) {
+                next(function (vm) {
+                    vm.$notify({
+                        title: 'Syncing with Discogs',
+                        text: 'Your collection is currently syncing with Discogs. Please fill out your profile while we build your collection',
+                        duration: 6000
+                    });
+                    __WEBPACK_IMPORTED_MODULE_4__api_users__["a" /* default */].unsetFirstLogin();
+                    vm.sync();
+                    next({ name: 'edit-profile' });
+                });
+            } else {
+                __WEBPACK_IMPORTED_MODULE_6__store__["a" /* default */].commit('spin', user.now_spinning);
+                __WEBPACK_IMPORTED_MODULE_5__api_collection__["a" /* default */].getReleases(user.username, 'on-deck', 1, null, 'date_added,asc', function (response) {
+                    __WEBPACK_IMPORTED_MODULE_6__store__["a" /* default */].commit('onDeck', response.body.data);
+                    next();
+                });
+            }
         });
     },
 
@@ -2890,7 +2903,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
             this.saving = true;
             __WEBPACK_IMPORTED_MODULE_0__api_users__["a" /* default */].updateProfile(this.profile, function (response) {
-                return _this2.saving = false;
+                _this2.saving = false;
+                _this2.$notify({
+                    title: 'Profile updated!',
+                    text: 'Your profile was successfully updated',
+                    type: 'success'
+                });
             });
         }
     },
@@ -57557,7 +57575,7 @@ var render = function() {
                 to: { name: "shelves", params: { username: _vm.user.username } }
               }
             },
-            [_vm._v("My Profile")]
+            [_vm._v("My Collection")]
           )
         ],
         1
@@ -78007,6 +78025,9 @@ var defaultErrorHandler = function defaultErrorHandler(response) {
     },
     sync: function sync(success, error) {
         return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.post('/api/user/sync').then(success, error || defaultErrorHandler);
+    },
+    unsetFirstLogin: function unsetFirstLogin(success, error) {
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.post('/api/user/first-login/unset').then(success, error || defaultErrorHandler);
     }
 });
 

@@ -64,4 +64,11 @@ class UserController extends Controller
         $this->users->updateProfile($this->user->id, $request->all());
         return response('Success!', 200);
     }
+
+    public function unsetFirstLogin()
+    {
+        $this->user->first_login = false;
+        $this->user->save();
+        return response('Success!', 200);
+    }
 }

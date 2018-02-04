@@ -7,7 +7,7 @@ class CollectionRepository extends BaseDiscogsApiRepository
 {
     const ALL_FOLDER = 0;
     const UNCATEGORIZED_FOLDER = 1;
-    const CACHE_MINUTES = 10;
+    const CACHE_MINUTES = 2;
 
     public function getAllReleasesInUserCollection($username)
     {

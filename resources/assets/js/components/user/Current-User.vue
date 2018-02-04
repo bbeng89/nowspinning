@@ -6,7 +6,7 @@
             </div>
         </div>
         <div>
-            <router-link class="btn btn-default" :to="{ name: 'shelves', params: { username: user.username }}">My Profile</router-link>
+            <router-link class="btn btn-default" :to="{ name: 'shelves', params: { username: user.username }}">My Collection</router-link>
         </div>
     </div>
 </template>

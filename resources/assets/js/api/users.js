@@ -21,5 +21,8 @@ export default {
     },
     sync(success, error) {
         return Vue.http.post('/api/user/sync').then(success, error || defaultErrorHandler);
+    },
+    unsetFirstLogin(success, error) {
+        return Vue.http.post('/api/user/first-login/unset').then(success, error || defaultErrorHandler);
     }
 }

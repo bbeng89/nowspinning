@@ -78,13 +78,29 @@
         },
         beforeRouteEnter(to, from, next){
             users.getUser(response => {
-                let user = response.body
-                store.commit('user', user)
-                store.commit('spin', user.now_spinning)
-                collection.getReleases(user.username, 'on-deck', 1, null, 'date_added,asc', (response) => {
-                    store.commit('onDeck', response.body.data)
-                    next()
-                })
+                let user = response.body;
+                store.commit('user', user);
+                if(user.first_login)
+                {
+                    next(vm => {
+                        vm.$notify({
+                            title: 'Syncing with Discogs',
+                            text: 'Your collection is currently syncing with Discogs. Please fill out your profile while we build your collection',
+                            duration: 6000
+                        });
+                        users.unsetFirstLogin();
+                        vm.sync();
+                        next({ name: 'edit-profile' });
+                    });
+                }
+                else
+                {
+                    store.commit('spin', user.now_spinning);
+                    collection.getReleases(user.username, 'on-deck', 1, null, 'date_added,asc', (response) => {
+                        store.commit('onDeck', response.body.data);
+                        next();
+                    })
+                }
             });
         },
         methods: {
