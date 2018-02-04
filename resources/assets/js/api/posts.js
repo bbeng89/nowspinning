@@ -6,8 +6,8 @@ const defaultErrorHandler = (response) => {
 }
 
 export default {
-    getNewsFeed(feed, success, error) {
-        return Vue.http.get('/api/posts/'+feed).then(success, error || defaultErrorHandler);
+    getNewsFeed(feed, page, success, error) {
+        return Vue.http.get('/api/posts/'+feed, { params: { page: page }}).then(success, error || defaultErrorHandler);
     },
     createPost(content, showSpinning, success, error) {
         return Vue.http.post('/api/posts/create', { content: content, showSpinning: showSpinning })

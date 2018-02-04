@@ -10,16 +10,20 @@
             </div>
             <button type="button" @click="fetchPosts" class="btn btn-default btn-xs pull-right"><i class="fa fa-refresh"></i> Refresh</button>
         </div>
+
+        <div v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="20">
+            <Post v-for="post in posts"
+                  :key="post.id"
+                  :username="post.user.username"
+                  :avatar="post.user.avatar"
+                  :content="post.content"
+                  :date-posted="post.created_at"
+                  :spinning="post.release"
+                  :images="post.images">
+            </Post>
+        </div>
+
         <h2 v-if="loading" class="text-center"><i class="fa fa-spinner fa-spin"></i></h2>
-        <Post v-else v-for="post in posts"
-            :key="post.id"
-            :username="post.user.username"
-            :avatar="post.user.avatar"
-            :content="post.content"
-            :date-posted="post.created_at"
-            :spinning="post.release"
-            :images="post.images">
-        </Post>
     </div>
 </template>
 
@@ -37,27 +41,43 @@
             return {
                 feed: 'friends',
                 posts: [],
-                loading: false
+                loading: false,
+                currentPage: 1,
+                lastPage: null,
+                count : 0
             }
         },
         mounted() {
             this.fetchPosts();
-            EventBus.listen('postCreated', data => this.pushPost(data))
+            EventBus.listen('postCreated', data => this.posts.unshift(data))
         },
         methods: {
             toggleFeed() {
                 this.feed = this.feed == 'friends' ? 'global' : 'friends';
                 this.fetchPosts();
             },
-            fetchPosts() {
+            loadMore() {
+                if(this.currentPage == this.lastPage) return;
+                this.currentPage++;
+                this.fetchPosts();
+            },
+            fetchPosts(reset = false) {
                 this.loading = true;
-                return posts.getNewsFeed(this.feed, response => {
-                    this.posts = response.body.data;
+                if(reset){
+                    this.currentPage = 1;
+                    this.posts = [];
+                }
+                return posts.getNewsFeed(this.feed, this.currentPage, response => {
+                    this.count = response.body.total;
+                    this.currentPage = response.body.current_page;
+                    this.lastPage = response.body.last_page;
+
+                    for(let post of response.body.data) {
+                        this.posts.push(post);
+                    }
+
                     this.loading = false;
                 });
-            },
-            pushPost(post) {
-                this.posts.unshift(post);
             }
         }
     }

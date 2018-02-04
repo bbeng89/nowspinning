@@ -53,7 +53,7 @@
                 slickOptions: {
                     dots: true,
                     slidesToShow: 1,
-                    adaptiveHeight:true,
+                    //adaptiveHeight:true,
                     lazyLoad: 'ondemand'
                 }
             }

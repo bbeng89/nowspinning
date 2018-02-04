@@ -2453,10 +2453,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_0__api_posts__["a" /* default */].createPost(this.content, this.showSpinning, function (response) {
                 _this.content = '';
                 _this.loading = false;
-                var post = response.body;
-                _this.post = post;
+                _this.post = response.body;
                 if (_this.imgCount > 0) {
-                    _this.$refs.composeVueDropzone.setOption('params', { post_id: post.id });
+                    _this.$refs.composeVueDropzone.setOption('params', { post_id: _this.post.id });
                     _this.$refs.composeVueDropzone.processQueue();
                 } else {
                     EventBus.fire('postCreated', _this.post);
@@ -2518,6 +2517,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -2532,7 +2535,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             feed: 'friends',
             posts: [],
-            loading: false
+            loading: false,
+            currentPage: 1,
+            lastPage: null,
+            count: 0
         };
     },
     mounted: function mounted() {
@@ -2540,7 +2546,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         this.fetchPosts();
         EventBus.listen('postCreated', function (data) {
-            return _this.pushPost(data);
+            return _this.posts.unshift(data);
         });
     },
 
@@ -2549,17 +2555,53 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.feed = this.feed == 'friends' ? 'global' : 'friends';
             this.fetchPosts();
         },
+        loadMore: function loadMore() {
+            if (this.currentPage == this.lastPage) return;
+            this.currentPage++;
+            this.fetchPosts();
+        },
         fetchPosts: function fetchPosts() {
             var _this2 = this;
 
+            var reset = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
             this.loading = true;
-            return __WEBPACK_IMPORTED_MODULE_2__api_posts__["a" /* default */].getNewsFeed(this.feed, function (response) {
-                _this2.posts = response.body.data;
+            if (reset) {
+                this.currentPage = 1;
+                this.posts = [];
+            }
+            return __WEBPACK_IMPORTED_MODULE_2__api_posts__["a" /* default */].getNewsFeed(this.feed, this.currentPage, function (response) {
+                _this2.count = response.body.total;
+                _this2.currentPage = response.body.current_page;
+                _this2.lastPage = response.body.last_page;
+
+                var _iteratorNormalCompletion = true;
+                var _didIteratorError = false;
+                var _iteratorError = undefined;
+
+                try {
+                    for (var _iterator = response.body.data[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                        var post = _step.value;
+
+                        _this2.posts.push(post);
+                    }
+                } catch (err) {
+                    _didIteratorError = true;
+                    _iteratorError = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion && _iterator.return) {
+                            _iterator.return();
+                        }
+                    } finally {
+                        if (_didIteratorError) {
+                            throw _iteratorError;
+                        }
+                    }
+                }
+
                 _this2.loading = false;
             });
-        },
-        pushPost: function pushPost(post) {
-            this.posts.unshift(post);
         }
     }
 });
@@ -2635,7 +2677,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             slickOptions: {
                 dots: true,
                 slidesToShow: 1,
-                adaptiveHeight: true,
+                //adaptiveHeight:true,
                 lazyLoad: 'ondemand'
             }
         };
@@ -65993,25 +66035,44 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "infinite-scroll",
+              rawName: "v-infinite-scroll",
+              value: _vm.loadMore,
+              expression: "loadMore"
+            }
+          ],
+          attrs: {
+            "infinite-scroll-disabled": "loading",
+            "infinite-scroll-distance": "20"
+          }
+        },
+        _vm._l(_vm.posts, function(post) {
+          return _c("Post", {
+            key: post.id,
+            attrs: {
+              username: post.user.username,
+              avatar: post.user.avatar,
+              content: post.content,
+              "date-posted": post.created_at,
+              spinning: post.release,
+              images: post.images
+            }
+          })
+        })
+      ),
+      _vm._v(" "),
       _vm.loading
         ? _c("h2", { staticClass: "text-center" }, [
             _c("i", { staticClass: "fa fa-spinner fa-spin" })
           ])
-        : _vm._l(_vm.posts, function(post) {
-            return _c("Post", {
-              key: post.id,
-              attrs: {
-                username: post.user.username,
-                avatar: post.user.avatar,
-                content: post.content,
-                "date-posted": post.created_at,
-                spinning: post.release,
-                images: post.images
-              }
-            })
-          })
+        : _vm._e()
     ],
-    2
+    1
   )
 }
 var staticRenderFns = []
@@ -85626,8 +85687,8 @@ var defaultErrorHandler = function defaultErrorHandler(response) {
 };
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-    getNewsFeed: function getNewsFeed(feed, success, error) {
-        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/posts/' + feed).then(success, error || defaultErrorHandler);
+    getNewsFeed: function getNewsFeed(feed, page, success, error) {
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/posts/' + feed, { params: { page: page } }).then(success, error || defaultErrorHandler);
     },
     createPost: function createPost(content, showSpinning, success, error) {
         return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.post('/api/posts/create', { content: content, showSpinning: showSpinning }).then(success, error || defaultErrorHandler);

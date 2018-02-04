@@ -72,11 +72,10 @@
                 posts.createPost(this.content, this.showSpinning, response => {
                     this.content = '';
                     this.loading = false;
-                    let post = response.body;
-                    this.post = post;
+                    this.post = response.body;
                     if(this.imgCount > 0)
                     {
-                        this.$refs.composeVueDropzone.setOption('params', { post_id: post.id });
+                        this.$refs.composeVueDropzone.setOption('params', { post_id: this.post.id });
                         this.$refs.composeVueDropzone.processQueue();
                     }
                     else {
