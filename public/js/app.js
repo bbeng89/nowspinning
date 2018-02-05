@@ -2552,7 +2552,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
         toggleFeed: function toggleFeed() {
             this.feed = this.feed == 'friends' ? 'global' : 'friends';
-            this.fetchPosts();
+            this.fetchPosts(true);
         },
         loadMore: function loadMore() {
             if (this.currentPage == this.lastPage) return;
@@ -66246,7 +66246,11 @@ var render = function() {
           {
             staticClass: "btn btn-default btn-xs pull-right",
             attrs: { type: "button" },
-            on: { click: _vm.fetchPosts }
+            on: {
+              click: function($event) {
+                _vm.fetchPosts(true)
+              }
+            }
           },
           [_c("i", { staticClass: "fa fa-refresh" }), _vm._v(" Refresh")]
         )

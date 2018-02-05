@@ -8,7 +8,7 @@
                 <button type="button" @click="toggleFeed" class="btn btn-default btn-xs" :class="{ 'active': feed == 'friends' }"><i class="fa fa-users"></i> Friends</button>
                 <button type="button" @click="toggleFeed" class="btn btn-default btn-xs" :class="{ 'active': feed == 'global' }"><i class="fa fa-globe"></i> Global</button>
             </div>
-            <button type="button" @click="fetchPosts" class="btn btn-default btn-xs pull-right"><i class="fa fa-refresh"></i> Refresh</button>
+            <button type="button" @click="fetchPosts(true)" class="btn btn-default btn-xs pull-right"><i class="fa fa-refresh"></i> Refresh</button>
         </div>
 
         <div v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="20">
@@ -54,7 +54,7 @@
         methods: {
             toggleFeed() {
                 this.feed = this.feed == 'friends' ? 'global' : 'friends';
-                this.fetchPosts();
+                this.fetchPosts(true);
             },
             loadMore() {
                 if(this.currentPage == this.lastPage) return;
