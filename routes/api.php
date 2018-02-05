@@ -17,6 +17,7 @@ Route::prefix('user')->group(function() {
     Route::get('/', 'UserController@index')->name('user.index');
     Route::get('profile/{userid}', 'UserController@getProfile')->name('user.profile');
     Route::post('profile/update', 'UserController@updateProfile')->name('user.profile.update');
+    Route::post('profile/add-image', 'UserController@uploadProfileImage')->name('user.profile.addimage');
     Route::post('spin', 'UserController@spin')->name('user.spin');
     Route::post('sync', 'UserController@sync')->name('user.sync');
     Route::post('first-login/unset', 'UserController@unsetFirstLogin')->name('user.first-login.unset');

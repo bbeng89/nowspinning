@@ -30,7 +30,9 @@ class UserRepository
     public function getProfile($userid)
     {
         $user = $this->find($userid);
-        return $user->profile;
+        $profile = $user->profile;
+        $profile->loadMissing('images');
+        return $profile;
     }
 
     /**

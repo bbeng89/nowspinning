@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UploadPostImageRequest extends FormRequest
+class UploadProfileImageRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,6 @@ class UploadPostImageRequest extends FormRequest
     public function rules()
     {
         return [
-            'post_id' => 'required|exists:posts,id',
             'file' => 'required|image'
         ];
     }

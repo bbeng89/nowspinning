@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\Post\CreatePostRequest;
-use App\Http\Requests\UploadPostImageRequest;
+use App\Http\Requests\Post\UploadPostImageRequest;
 use App\Models\User;
 use App\Repositories\PostRepository;
 use Illuminate\Http\Request;

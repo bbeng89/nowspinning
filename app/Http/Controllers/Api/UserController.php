@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\User\SpinRequest;
 use App\Http\Requests\User\UpdateProfileRequest;
+use App\Http\Requests\User\UploadProfileImageRequest;
 use App\Jobs\SyncUserDiscogsCollection;
 use App\Models\User;
 use App\Repositories\CollectionRepository;
@@ -63,6 +64,14 @@ class UserController extends Controller
     {
         $this->users->updateProfile($this->user->id, $request->all());
         return response('Success!', 200);
+    }
+
+    public function uploadProfileImage(UploadProfileImageRequest $request)
+    {
+        $profile = $this->user->profile;
+        $file = $request->file('file');
+        $path = $file->store('public/profileimgs');
+        return $profile->addImage($path, $file->extension(), $file->getMimeType(), $file->getSize());
     }
 
     public function unsetFirstLogin()

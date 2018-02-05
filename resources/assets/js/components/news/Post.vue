@@ -42,9 +42,11 @@
 
 <script>
     import { mapState } from 'vuex';
+    // https://github.com/staskjs/vue-slick
     import Slick from 'vue-slick';
     import 'slick-carousel/slick/slick.css';
     import 'slick-carousel/slick/slick-theme.css';
+
     export default {
         components: { Slick },
         props: ['username', 'avatar', 'content', 'datePosted', 'spinning', 'images'],

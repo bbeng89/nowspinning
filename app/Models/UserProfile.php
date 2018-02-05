@@ -19,11 +19,34 @@ class UserProfile extends Model
 {
     protected $fillable = [
         'user_id', 'turntable', 'turntable_cartridge', 'cd_player', 'tape_deck', 'amp_receiver',
-        'speakers', 'preamp', 'other'
+        'speakers', 'preamp', 'subwoofer', 'other'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function images()
+    {
+        return $this->hasMany(UserProfileImage::class);
+    }
+
+    /**
+     * @param $path
+     * @param $extension
+     * @param $mime_type
+     * @param $size
+     * @return UserProfileImage
+     */
+    public function addImage($path, $extension, $mime_type, $size)
+    {
+        return UserProfileImage::create([
+            'user_profile_id' => $this->id,
+            'path' => $path,
+            'extension' => $extension,
+            'mime_type' => $mime_type,
+            'size' => $size
+        ]);
     }
 }

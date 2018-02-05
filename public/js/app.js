@@ -2666,6 +2666,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 
 
+// https://github.com/staskjs/vue-slick
+
 
 
 
@@ -3074,6 +3076,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
 
 
 
@@ -3092,6 +3095,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api_users__ = __webpack_require__("./resources/assets/js/api/users.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue2_dropzone__ = __webpack_require__("./node_modules/vue2-dropzone/dist/vue2Dropzone.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue2_dropzone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_vue2_dropzone__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue2_dropzone_dist_vue2Dropzone_css__ = __webpack_require__("./node_modules/vue2-dropzone/dist/vue2Dropzone.css");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue2_dropzone_dist_vue2Dropzone_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_vue2_dropzone_dist_vue2Dropzone_css__);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 //
@@ -3146,13 +3153,50 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    components: { vueDropzone: __WEBPACK_IMPORTED_MODULE_2_vue2_dropzone___default.a },
     data: function data() {
         return {
+            loading: false,
+            saving: false,
             profile: {
                 turntable: '',
                 turntable_cartridge: '',
@@ -3164,8 +3208,18 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 subwoofer: '',
                 other: ''
             },
-            loading: false,
-            saving: false
+            dropzoneOptions: {
+                url: '/api/user/profile/add-image',
+                autoProcessQueue: false,
+                thumbnailWidth: 150,
+                thumbnailHeight: 150,
+                addRemoveLinks: true,
+                acceptedFiles: '.jpg,.jpeg,.png,.bmp,.gif',
+                headers: {
+                    'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content,
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }
         };
     },
     mounted: function mounted() {
@@ -3173,16 +3227,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
         this.loading = true;
         __WEBPACK_IMPORTED_MODULE_0__api_users__["a" /* default */].getProfile(this.user.id, function (response) {
-            var profile = response.body;
-            _this.profile.turntable = profile.turntable;
-            _this.profile.turntable_cartridge = profile.turntable_cartridge;
-            _this.profile.cd_player = profile.cd_player;
-            _this.profile.tape_deck = profile.tape_deck;
-            _this.profile.amp_receiver = profile.amp_receiver;
-            _this.profile.preamp = profile.preamp;
-            _this.profile.speakers = profile.speakers;
-            _this.profile.subwoofer = profile.subwoofer;
-            _this.profile.other = profile.other;
+            _this.profile = response.body;
             _this.loading = false;
         });
     },
@@ -3193,12 +3238,19 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
             this.saving = true;
             __WEBPACK_IMPORTED_MODULE_0__api_users__["a" /* default */].updateProfile(this.profile, function (response) {
-                _this2.saving = false;
-                _this2.$notify({
-                    title: 'Profile updated!',
-                    text: 'Your profile was successfully updated',
-                    type: 'success'
-                });
+                if (_this2.$refs.profileVueDropzone.getQueuedFiles().length > 0) {
+                    _this2.$refs.profileVueDropzone.processQueue();
+                } else {
+                    _this2.saveComplete();
+                }
+            });
+        },
+        saveComplete: function saveComplete() {
+            this.saving = false;
+            this.$notify({
+                title: 'Profile updated!',
+                text: 'Your profile was successfully updated',
+                type: 'success'
             });
         }
     },
@@ -65040,6 +65092,15 @@ var render = function() {
             "router-link",
             {
               staticClass: "btn btn-default",
+              attrs: { to: { name: "news-feed" } }
+            },
+            [_vm._v("News Feed")]
+          ),
+          _vm._v(" "),
+          _c(
+            "router-link",
+            {
+              staticClass: "btn btn-default",
               attrs: {
                 to: { name: "shelves", params: { username: _vm.user.username } }
               }
@@ -65327,254 +65388,297 @@ var render = function() {
           [
             _c("legend", [_vm._v("My Setup")]),
             _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c(
-                "label",
-                { staticClass: "control-label", attrs: { for: "turntable" } },
-                [_vm._v("Turntable")]
-              ),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.profile.turntable,
-                    expression: "profile.turntable"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text", id: "turntable" },
-                domProps: { value: _vm.profile.turntable },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-lg-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "control-label",
+                      attrs: { for: "turntable" }
+                    },
+                    [_vm._v("Turntable")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.profile.turntable,
+                        expression: "profile.turntable"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", id: "turntable" },
+                    domProps: { value: _vm.profile.turntable },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.profile, "turntable", $event.target.value)
+                      }
                     }
-                    _vm.$set(_vm.profile, "turntable", $event.target.value)
-                  }
-                }
-              })
+                  })
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-lg-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "control-label",
+                      attrs: { for: "turntable_cartridge" }
+                    },
+                    [_vm._v("Turntable Cartridge")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.profile.turntable_cartridge,
+                        expression: "profile.turntable_cartridge"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", id: "turntable_cartridge" },
+                    domProps: { value: _vm.profile.turntable_cartridge },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.profile,
+                          "turntable_cartridge",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  })
+                ])
+              ])
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c(
-                "label",
-                {
-                  staticClass: "control-label",
-                  attrs: { for: "turntable_cartridge" }
-                },
-                [_vm._v("Turntable Cartridge")]
-              ),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.profile.turntable_cartridge,
-                    expression: "profile.turntable_cartridge"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text", id: "turntable_cartridge" },
-                domProps: { value: _vm.profile.turntable_cartridge },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-lg-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "control-label",
+                      attrs: { for: "cd_player" }
+                    },
+                    [_vm._v("CD Player")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.profile.cd_player,
+                        expression: "profile.cd_player"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", id: "cd_player" },
+                    domProps: { value: _vm.profile.cd_player },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.profile, "cd_player", $event.target.value)
+                      }
                     }
-                    _vm.$set(
-                      _vm.profile,
-                      "turntable_cartridge",
-                      $event.target.value
-                    )
-                  }
-                }
-              })
+                  })
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-lg-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "control-label",
+                      attrs: { for: "tape_deck" }
+                    },
+                    [_vm._v("Tape Deck")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.profile.tape_deck,
+                        expression: "profile.tape_deck"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", id: "tape_deck" },
+                    domProps: { value: _vm.profile.tape_deck },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.profile, "tape_deck", $event.target.value)
+                      }
+                    }
+                  })
+                ])
+              ])
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c(
-                "label",
-                { staticClass: "control-label", attrs: { for: "cd_player" } },
-                [_vm._v("CD Player")]
-              ),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.profile.cd_player,
-                    expression: "profile.cd_player"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text", id: "cd_player" },
-                domProps: { value: _vm.profile.cd_player },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-lg-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "control-label",
+                      attrs: { for: "amp_receiver" }
+                    },
+                    [_vm._v("Amp/Receiver")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.profile.amp_receiver,
+                        expression: "profile.amp_receiver"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", id: "amp_receiver" },
+                    domProps: { value: _vm.profile.amp_receiver },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.profile,
+                          "amp_receiver",
+                          $event.target.value
+                        )
+                      }
                     }
-                    _vm.$set(_vm.profile, "cd_player", $event.target.value)
-                  }
-                }
-              })
+                  })
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-lg-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c(
+                    "label",
+                    { staticClass: "control-label", attrs: { for: "preamp" } },
+                    [_vm._v("Preamp")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.profile.preamp,
+                        expression: "profile.preamp"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", id: "preamp" },
+                    domProps: { value: _vm.profile.preamp },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.profile, "preamp", $event.target.value)
+                      }
+                    }
+                  })
+                ])
+              ])
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c(
-                "label",
-                { staticClass: "control-label", attrs: { for: "tape_deck" } },
-                [_vm._v("Tape Deck")]
-              ),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.profile.tape_deck,
-                    expression: "profile.tape_deck"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text", id: "tape_deck" },
-                domProps: { value: _vm.profile.tape_deck },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-lg-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "control-label",
+                      attrs: { for: "speakers" }
+                    },
+                    [_vm._v("Speakers")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.profile.speakers,
+                        expression: "profile.speakers"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", id: "speakers" },
+                    domProps: { value: _vm.profile.speakers },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.profile, "speakers", $event.target.value)
+                      }
                     }
-                    _vm.$set(_vm.profile, "tape_deck", $event.target.value)
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c(
-                "label",
-                {
-                  staticClass: "control-label",
-                  attrs: { for: "amp_receiver" }
-                },
-                [_vm._v("Amp/Receiver")]
-              ),
+                  })
+                ])
+              ]),
               _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.profile.amp_receiver,
-                    expression: "profile.amp_receiver"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text", id: "amp_receiver" },
-                domProps: { value: _vm.profile.amp_receiver },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
+              _c("div", { staticClass: "col-lg-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "control-label",
+                      attrs: { for: "subwoofer" }
+                    },
+                    [_vm._v("Subwoofer")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.profile.subwoofer,
+                        expression: "profile.subwoofer"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", id: "subwoofer" },
+                    domProps: { value: _vm.profile.subwoofer },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.profile, "subwoofer", $event.target.value)
+                      }
                     }
-                    _vm.$set(_vm.profile, "amp_receiver", $event.target.value)
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c(
-                "label",
-                { staticClass: "control-label", attrs: { for: "preamp" } },
-                [_vm._v("Preamp")]
-              ),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.profile.preamp,
-                    expression: "profile.preamp"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text", id: "preamp" },
-                domProps: { value: _vm.profile.preamp },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.profile, "preamp", $event.target.value)
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c(
-                "label",
-                { staticClass: "control-label", attrs: { for: "speakers" } },
-                [_vm._v("Speakers")]
-              ),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.profile.speakers,
-                    expression: "profile.speakers"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text", id: "speakers" },
-                domProps: { value: _vm.profile.speakers },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.profile, "speakers", $event.target.value)
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c(
-                "label",
-                { staticClass: "control-label", attrs: { for: "subwoofer" } },
-                [_vm._v("Subwoofer")]
-              ),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.profile.subwoofer,
-                    expression: "profile.subwoofer"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text", id: "subwoofer" },
-                domProps: { value: _vm.profile.subwoofer },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.profile, "subwoofer", $event.target.value)
-                  }
-                }
-              })
+                  })
+                ])
+              ])
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
@@ -65606,6 +65710,23 @@ var render = function() {
                 }
               })
             ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "form-group" },
+              [
+                _c("label", { staticClass: "control-label" }, [
+                  _vm._v("Upload images of your setup")
+                ]),
+                _vm._v(" "),
+                _c("vue-dropzone", {
+                  ref: "profileVueDropzone",
+                  attrs: { id: "dropzone", options: _vm.dropzoneOptions },
+                  on: { "vdropzone-queue-complete": _vm.saveComplete }
+                })
+              ],
+              1
+            ),
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
               _c(
