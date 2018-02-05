@@ -66,9 +66,18 @@
                 <label for="other" class="control-label">Notes/Other</label>
                 <textarea id="other" v-model="profile.other" rows="5" class="form-control"></textarea>
             </div>
+            <div v-if="profile.images.length > 0">
+                <label class="control-label">Current Images</label>
+                <div class="row">
+                    <div v-for="image in profile.images" class="col-md-3">
+                        <profile-image :image="image"></profile-image>
+                    </div>
+                </div>
+            </div>
+
             <div class="form-group">
-                <label class="control-label">Upload images of your setup</label>
-                <vue-dropzone ref="profileVueDropzone" id="dropzone"
+                <label class="control-label">{{ uploadText }}</label>
+                <vue-dropzone ref="profileVueDropzone" id="profileDropzone"
                     :options="dropzoneOptions"
                     @vdropzone-queue-complete="saveComplete">
                 </vue-dropzone>
@@ -84,17 +93,22 @@
 </template>
 <script>
     import users from '../../api/users';
+    import ProfileImage from './Profile-Image';
     import { mapState } from 'vuex';
     import vue2Dropzone from 'vue2-dropzone'
     import 'vue2-dropzone/dist/vue2Dropzone.css'
 
     export default {
-        components: { vueDropzone: vue2Dropzone },
+        components: {
+            vueDropzone: vue2Dropzone,
+            profileImage: ProfileImage
+        },
         data() {
             return {
                 loading: false,
                 saving: false,
                 profile: {
+                    images: [],
                     turntable: '',
                     turntable_cartridge: '',
                     cd_player: '',
@@ -148,6 +162,11 @@
             }
         },
         computed: {
+            uploadText(){
+                return this.profile.images.length == 0
+                    ? 'Add images of your setup'
+                    : 'Upload additional images of your setup';
+            },
             ...mapState({
                 user: 'user'
             })
