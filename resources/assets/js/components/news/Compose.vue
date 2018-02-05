@@ -64,8 +64,6 @@
                 }
             }
         },
-        mounted(){
-        },
         methods: {
             createPost() {
                 this.loading = true;

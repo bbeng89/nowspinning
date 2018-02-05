@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\User\DeleteProfileImageRequest;
 use App\Http\Requests\User\SpinRequest;
 use App\Http\Requests\User\UpdateProfileRequest;
 use App\Http\Requests\User\UploadProfileImageRequest;
 use App\Jobs\SyncUserDiscogsCollection;
 use App\Models\User;
+use App\Models\UserProfileImage;
 use App\Repositories\CollectionRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
@@ -72,6 +74,12 @@ class UserController extends Controller
         $file = $request->file('file');
         $path = $file->store('public/profileimgs');
         return $profile->addImage($path, $file->extension(), $file->getMimeType(), $file->getSize());
+    }
+
+    public function deleteProfileImage(DeleteProfileImageRequest $request)
+    {
+        UserProfileImage::destroy($request->id);
+        return response('Success!', 200);
     }
 
     public function unsetFirstLogin()

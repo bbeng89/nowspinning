@@ -49,4 +49,13 @@ class UserProfile extends Model
             'size' => $size
         ]);
     }
+
+    /**
+     * @param $id
+     */
+    public function deleteImage($id)
+    {
+        $img = UserProfileImage::findOrFail($id);
+        $img->delete();
+    }
 }

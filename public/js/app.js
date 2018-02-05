@@ -2443,7 +2443,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         };
     },
-    mounted: function mounted() {},
 
     methods: {
         createPost: function createPost() {
@@ -3196,6 +3195,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
 
 
 
@@ -3263,10 +3264,19 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         },
         saveComplete: function saveComplete() {
             this.saving = false;
+            this.$refs.profileVueDropzone.removeAllFiles();
             this.$notify({
                 title: 'Profile updated!',
                 text: 'Your profile was successfully updated',
                 type: 'success'
+            });
+        },
+        fileUploaded: function fileUploaded(file, response) {
+            this.profile.images.push(response);
+        },
+        removeImage: function removeImage(image) {
+            this.profile.images = this.profile.images.filter(function (img) {
+                return img.id != image.id;
             });
         }
     },
@@ -3324,6 +3334,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api_users__ = __webpack_require__("./resources/assets/js/api/users.js");
 //
 //
 //
@@ -3333,8 +3344,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['image']
+    props: ['image'],
+    methods: {
+        deleteImage: function deleteImage() {
+            var _this = this;
+
+            if (confirm('Are you sure you want to delete this image?')) {
+                __WEBPACK_IMPORTED_MODULE_0__api_users__["a" /* default */].removeImage(this.image.id, function (response) {
+                    _this.$emit('profile-image-deleted', _this.image);
+                });
+            }
+        }
+    }
 });
 
 /***/ }),
@@ -65764,7 +65788,12 @@ var render = function() {
                       return _c(
                         "div",
                         { staticClass: "col-md-3" },
-                        [_c("profile-image", { attrs: { image: image } })],
+                        [
+                          _c("profile-image", {
+                            attrs: { image: image },
+                            on: { "profile-image-deleted": _vm.removeImage }
+                          })
+                        ],
                         1
                       )
                     })
@@ -65786,7 +65815,10 @@ var render = function() {
                     id: "profileDropzone",
                     options: _vm.dropzoneOptions
                   },
-                  on: { "vdropzone-queue-complete": _vm.saveComplete }
+                  on: {
+                    "vdropzone-queue-complete": _vm.saveComplete,
+                    "vdropzone-success": _vm.fileUploaded
+                  }
                 })
               ],
               1
@@ -66882,26 +66914,20 @@ var render = function() {
   return _c("div", { staticClass: "thumbnail" }, [
     _c("img", { attrs: { src: _vm.image.src } }),
     _vm._v(" "),
-    _vm._m(0, false, false)
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "caption" }, [
+    _c("div", { staticClass: "caption" }, [
       _c(
         "button",
         {
           staticClass: "btn btn-danger btn-sm btn-block",
-          attrs: { type: "button" }
+          attrs: { type: "button" },
+          on: { click: _vm.deleteImage }
         },
         [_vm._v("Delete")]
       )
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -85955,6 +85981,9 @@ var defaultErrorHandler = function defaultErrorHandler(response) {
     },
     unsetFirstLogin: function unsetFirstLogin(success, error) {
         return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.post('/api/user/first-login/unset').then(success, error || defaultErrorHandler);
+    },
+    removeImage: function removeImage(id, success, error) {
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.post('/api/user/profile/remove-image', { id: id }).then(success, error || defaultErrorHandler);
     }
 });
 

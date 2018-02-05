@@ -70,7 +70,8 @@
                 <label class="control-label">Current Images</label>
                 <div class="row">
                     <div v-for="image in profile.images" class="col-md-3">
-                        <profile-image :image="image"></profile-image>
+                        <profile-image :image="image" @profile-image-deleted="removeImage">
+                        </profile-image>
                     </div>
                 </div>
             </div>
@@ -79,7 +80,8 @@
                 <label class="control-label">{{ uploadText }}</label>
                 <vue-dropzone ref="profileVueDropzone" id="profileDropzone"
                     :options="dropzoneOptions"
-                    @vdropzone-queue-complete="saveComplete">
+                    @vdropzone-queue-complete="saveComplete"
+                    @vdropzone-success="fileUploaded">
                 </vue-dropzone>
             </div>
 
@@ -154,11 +156,18 @@
             },
             saveComplete(){
                 this.saving = false;
+                this.$refs.profileVueDropzone.removeAllFiles();
                 this.$notify({
                     title: 'Profile updated!',
                     text: 'Your profile was successfully updated',
                     type: 'success'
                 });
+            },
+            fileUploaded(file, response){
+                this.profile.images.push(response);
+            },
+            removeImage(image) {
+                this.profile.images = this.profile.images.filter(img => img.id != image.id);
             }
         },
         computed: {

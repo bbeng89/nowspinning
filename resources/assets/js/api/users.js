@@ -24,5 +24,8 @@ export default {
     },
     unsetFirstLogin(success, error) {
         return Vue.http.post('/api/user/first-login/unset').then(success, error || defaultErrorHandler);
+    },
+    removeImage(id, success, error) {
+        return Vue.http.post('/api/user/profile/remove-image', { id: id }).then(success, error || defaultErrorHandler);
     }
 }
