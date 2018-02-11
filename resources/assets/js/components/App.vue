@@ -33,7 +33,7 @@
                 <div class="col-md-3">
                     <current-user></current-user>
                     <hr/>
-                    <now-spinning v-if="$store.state.nowSpinning"></now-spinning>
+                    <now-spinning :user="user" :release="nowSpinning"></now-spinning>
                     <hr/>
                     <on-deck></on-deck>
                 </div>
@@ -118,7 +118,8 @@
         },
         computed: {
             ...mapState([
-                'user'
+                'user',
+                'nowSpinning'
             ])
         }
     }

@@ -41,7 +41,12 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        return User::with('nowSpinning')->findOrFail($this->user->id);
+        return $this->users->find($this->user->id);
+    }
+
+    public function find($username)
+    {
+        return $this->users->getByUsername($username);
     }
 
     public function sync()
@@ -87,5 +92,15 @@ class UserController extends Controller
         $this->user->first_login = false;
         $this->user->save();
         return response('Success!', 200);
+    }
+
+    public function search(Request $request)
+    {
+        if(!$request->has('query'))
+        {
+            abort(404, "Query not provided");
+        }
+
+        return $this->users->search($request->get('query'));
     }
 }

@@ -20,11 +20,6 @@
     import { mapState } from 'vuex'
 
     export default {
-        computed: {
-            ...mapState({
-                user: 'user',
-                release: 'nowSpinning'
-            })
-        }
+        props: ['user', 'release']
     }
 </script>

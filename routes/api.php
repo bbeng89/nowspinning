@@ -22,6 +22,8 @@ Route::prefix('user')->group(function() {
     Route::post('spin', 'UserController@spin')->name('user.spin');
     Route::post('sync', 'UserController@sync')->name('user.sync');
     Route::post('first-login/unset', 'UserController@unsetFirstLogin')->name('user.first-login.unset');
+    Route::get('search', 'UserController@search')->name('user.search');
+    Route::get('{username}', 'UserController@find')->name('user.find');
 });
 
 Route::prefix('collection')->group(function() {

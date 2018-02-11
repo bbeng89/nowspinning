@@ -10,11 +10,14 @@ export default {
     getUser(success, error) {
         return Vue.http.get('/api/user').then(success, error || defaultErrorHandler);
     },
+    getUserByUsername(username, success, error) {
+        return Vue.http.get(`/api/user/${username}`).then(success, error || defaultErrorHandler);
+    },
     spin(release, success, error) {
         return Vue.http.post('/api/user/spin', { id: release.id }).then(success, error || defaultErrorHandler);
     },
     getProfile(userid, success, error) {
-        return Vue.http.get('/api/user/profile/' + userid).then(success, error || defaultErrorHandler);
+        return Vue.http.get(`/api/user/profile/${userid}`).then(success, error || defaultErrorHandler);
     },
     updateProfile(args, success, error) {
         return Vue.http.post('/api/user/profile/update', args).then(success, error || defaultErrorHandler);
@@ -27,5 +30,8 @@ export default {
     },
     removeImage(id, success, error) {
         return Vue.http.post('/api/user/profile/remove-image', { id: id }).then(success, error || defaultErrorHandler);
+    },
+    search(query, success, error) {
+        return Vue.http.get('/api/user/search', { params: { query: query }}).then(success, error || defaultErrorHandler);
     }
 }

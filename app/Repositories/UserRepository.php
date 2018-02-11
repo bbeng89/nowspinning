@@ -11,7 +11,8 @@ class UserRepository
      */
     public function find($id)
     {
-        return User::findOrFail($id);
+        return User::with(['nowSpinning', 'profile', 'profile.images'])
+            ->findOrFail($id);
     }
 
     /**
@@ -20,7 +21,9 @@ class UserRepository
      */
     public function getByUsername($username)
     {
-        return User::where('username', $username)->firstOrFail();
+        return User::with(['nowSpinning', 'profile', 'profile.images'])
+            ->where('username', trim(strtolower($username)))
+            ->firstOrFail();
     }
 
     /**
@@ -55,5 +58,11 @@ class UserRepository
             'other' => $args['other'] ?? null
         ]);
         return $profile;
+    }
+
+    public function search($query, $pageSize = 20)
+    {
+        return User::where('username', 'LIKE', "%{$query}%")
+            ->paginate($pageSize);
     }
 }

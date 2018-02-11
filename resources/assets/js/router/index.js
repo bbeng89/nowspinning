@@ -5,6 +5,7 @@ import Admin from '../components/Admin';
 import NewsFeed from '../components/news/News-Feed';
 import UserShelves from '../components/shelf/User-Shelves';
 import Shelf from '../components/shelf/Shelf';
+import Profile from '../components/user/Profile';
 import EditProfile from '../components/user/Edit-Profile';
 import OauthSettings from '../components/admin/oauth/Oauth-Settings';
 
@@ -16,6 +17,7 @@ export default new VueRouter({
         {
             path: '/app', component: App, children: [
                 { path: '/', component: NewsFeed, name: 'news-feed' },
+                { path: ':username', component: Profile, name: 'user-profile', props: true },
                 { path: ':username/shelves', component: UserShelves, name: 'shelves' },
                 { path: ':username/shelves/:shelf', component: Shelf, name: 'shelf' },
                 { path: 'profile/edit', component: EditProfile, name: 'edit-profile' }
