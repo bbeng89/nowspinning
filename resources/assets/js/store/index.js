@@ -9,7 +9,8 @@ export default new Vuex.Store({
     state: {
         user: null,
         nowSpinning: null,
-        onDeck: []
+        onDeck: [],
+        friends: []
     },
     mutations: {
         user(state, user) {
@@ -20,6 +21,16 @@ export default new Vuex.Store({
         },
         onDeck (state, releases) {
             state.onDeck = releases
+        },
+        friends(state, friends) {
+            state.friends = friends;
+        },
+        addFriend(state, friend) {
+            state.friends.push(friend);
+        },
+        removeFriend(state, friend) {
+            let index = state.friends.map(friend => friend.id).indexOf(friend.id);
+            state.friends.splice(index, 1);
         }
     },
     actions: {

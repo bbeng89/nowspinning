@@ -6,7 +6,8 @@
                     <img :src="user.avatar">
                     <div class="caption">
                         <p><strong>{{ user.username }}</strong></p>
-                        <button type="button" class="btn btn-default btn-block" :disabled="followDisabled"><i class="fa fa-user-plus"></i> Follow</button>
+                        <button v-if="!following" @click="follow" type="button" class="btn btn-default btn-block" :disabled="followDisabled"><i class="fa fa-user-plus"></i> Follow</button>
+                        <button v-else @click="unfollow" type="button" class="btn btn-default btn-block" :disabled="followDisabled"><i class="fa fa-user-times"></i> Unfollow</button>
                     </div>
                 </div>
 
@@ -22,7 +23,7 @@
 <script>
     import NowSpinning from './Now-Spinning';
     import users from '../../api/users';
-    import { mapState } from 'vuex';
+    import { mapState, mapMutations } from 'vuex';
 
     export default {
         components: {'now-spinning': NowSpinning },
@@ -44,12 +45,29 @@
         methods: {
             fetchUser() {
                 return users.getUserByUsername(this.uname, response => this.user = response.body);
-            }
+            },
+            // todo - the bottom two method should probably be vuex actions
+            follow() {
+                users.follow(this.uname, response => this.addFriend(this.user));
+            },
+            unfollow() {
+                users.unfollow(this.uname, response => this.removeFriend(this.user));
+            },
+            ...mapMutations([
+                'addFriend',
+                'removeFriend'
+            ])
         },
         computed: {
-            ...mapState({currentUser: 'user'}),
+            ...mapState({
+                currentUser: 'user',
+                friends: 'friends'
+            }),
             followDisabled() {
                 return this.user.username == this.currentUser.username;
+            },
+            following() {
+                return this.friends.find(friend => friend.id == this.user.id) != null;
             }
         }
     }

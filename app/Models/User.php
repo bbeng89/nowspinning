@@ -66,6 +66,11 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
+    public function friends()
+    {
+        return $this->belongsToMany(User::class, 'friends', 'friend_id', 'user_id');
+    }
+
     public function nowSpinning()
     {
         return $this->hasOne(UserRelease::class, 'id', 'now_spinning_id');
@@ -105,5 +110,15 @@ class User extends Authenticatable
         ]);
         $post->load('user', 'release');
         return $post;
+    }
+
+    public function follow(User $friend)
+    {
+        $this->friends()->attach($friend->id);
+    }
+
+    public function unfollow(User $friend)
+    {
+        $this->friends()->detach($friend->id);
     }
 }

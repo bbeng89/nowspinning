@@ -10,12 +10,23 @@
                       :items="searchResults">
         </autocomplete>
 
+        <div v-if="friends.length > 0" class="list-group">
+            <router-link class="list-group-item"
+                         :to="{ name: 'user-profile', params: { username: friend.username }}"
+                         v-for="friend in friends"
+                         :key="friend.id">
+                <h4 class="list-group-item-heading"><img style="height:20px" class="img-circle" :src="friend.avatar"> {{ friend.username }}</h4>
+                <small v-if="friend.now_spinning" class="list-group-item-text"><i class="fa fa-volume-up"></i> {{ friend.now_spinning.title }} by {{ friend.now_spinning.artists_display }}</small>
+            </router-link>
+        </div>
+
     </div>
 </template>
 
 <script>
     import Autocomplete from '../global/Autocomplete';
     import users from '../../api/users';
+    import { mapState } from 'vuex';
 
     export default {
         components: {
@@ -46,6 +57,9 @@
             clearSearchResults() {
                 this.searchResults.splice(0, this.searchResults.length);
             }
+        },
+        computed: {
+            ...mapState(['friends'])
         }
     }
 </script>

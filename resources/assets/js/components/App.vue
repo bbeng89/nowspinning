@@ -80,8 +80,7 @@
             users.getUser(response => {
                 let user = response.body;
                 store.commit('user', user);
-                if(user.first_login)
-                {
+                if(user.first_login) {
                     next(vm => {
                         vm.$notify({
                             title: 'Syncing with Discogs',
@@ -93,13 +92,13 @@
                         next({ name: 'edit-profile' });
                     });
                 }
-                else
-                {
+                else {
                     store.commit('spin', user.now_spinning);
                     collection.getReleases(user.username, 'on-deck', 1, null, 'date_added,asc', (response) => {
                         store.commit('onDeck', response.body.data);
                         next();
-                    })
+                    });
+                    users.friends(user.username, response => store.commit('friends', response.body));
                 }
             });
         },

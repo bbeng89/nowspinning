@@ -33,5 +33,14 @@ export default {
     },
     search(query, success, error) {
         return Vue.http.get('/api/user/search', { params: { query: query }}).then(success, error || defaultErrorHandler);
+    },
+    follow(username, success, error) {
+        return Vue.http.post('/api/user/follow', { username: username }).then(success, error || defaultErrorHandler);
+    },
+    unfollow(username, success, error) {
+        return Vue.http.post('/api/user/unfollow', { username: username }).then(success, error || defaultErrorHandler);
+    },
+    friends(username, success, error) {
+        return Vue.http.get(`/api/user/${username}/friends`).then(success, error || defaultErrorHandler);
     }
 }

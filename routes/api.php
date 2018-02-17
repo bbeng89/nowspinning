@@ -16,14 +16,18 @@ use Illuminate\Http\Request;
 Route::prefix('user')->group(function() {
     Route::get('/', 'UserController@index')->name('user.index');
     Route::get('profile/{userid}', 'UserController@getProfile')->name('user.profile');
+    Route::get('search', 'UserController@search')->name('user.search');
+    Route::get('{username}', 'UserController@find')->name('user.find');
+    Route::get('{username}/friends', 'UserController@friends')->name('user.friends');
+
     Route::post('profile/update', 'UserController@updateProfile')->name('user.profile.update');
     Route::post('profile/add-image', 'UserController@uploadProfileImage')->name('user.profile.addimage');
     Route::post('profile/remove-image', 'UserController@deleteProfileImage')->name('user.profile.removeimage');
+    Route::post('first-login/unset', 'UserController@unsetFirstLogin')->name('user.first-login.unset');
     Route::post('spin', 'UserController@spin')->name('user.spin');
     Route::post('sync', 'UserController@sync')->name('user.sync');
-    Route::post('first-login/unset', 'UserController@unsetFirstLogin')->name('user.first-login.unset');
-    Route::get('search', 'UserController@search')->name('user.search');
-    Route::get('{username}', 'UserController@find')->name('user.find');
+    Route::post('follow', 'UserController@follow')->name('user.follow');
+    Route::post('unfollow', 'UserController@unfollow')->name('user.unfollow');
 });
 
 Route::prefix('collection')->group(function() {

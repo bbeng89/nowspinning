@@ -1851,7 +1851,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         });
     },
 
-    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapState */])(['user']))
+    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["d" /* mapState */])(['user']))
 });
 
 /***/ }),
@@ -1976,6 +1976,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     __WEBPACK_IMPORTED_MODULE_6__store__["a" /* default */].commit('onDeck', response.body.data);
                     next();
                 });
+                __WEBPACK_IMPORTED_MODULE_4__api_users__["a" /* default */].friends(user.username, function (response) {
+                    return __WEBPACK_IMPORTED_MODULE_6__store__["a" /* default */].commit('friends', response.body);
+                });
             }
         });
     },
@@ -1995,7 +1998,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             });
         }
     },
-    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_7_vuex__["c" /* mapState */])(['user', 'nowSpinning']))
+    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_7_vuex__["d" /* mapState */])(['user', 'nowSpinning']))
 });
 
 /***/ }),
@@ -2359,6 +2362,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__global_Autocomplete__ = __webpack_require__("./resources/assets/js/components/global/Autocomplete.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__global_Autocomplete___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__global_Autocomplete__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__api_users__ = __webpack_require__("./resources/assets/js/api/users.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex__ = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 //
 //
 //
@@ -2374,6 +2380,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -2431,7 +2448,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         clearSearchResults: function clearSearchResults() {
             this.searchResults.splice(0, this.searchResults.length);
         }
-    }
+    },
+    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["d" /* mapState */])(['friends']))
 });
 
 /***/ }),
@@ -2817,7 +2835,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         hasImages: function hasImages() {
             return this.images && this.images.length > 0;
         }
-    }, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapState */])({
+    }, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["d" /* mapState */])({
         user: 'user'
     }))
 });
@@ -2868,7 +2886,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapState */])({
+    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["d" /* mapState */])({
         releases: 'onDeck'
     })),
     methods: _extends({
@@ -2923,7 +2941,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             this.spin(release);
             $(this.$refs.spinIcon).addClass('animated').addClass('flash');
         }
-    }, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapState */])(['user']), Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['spin', 'onDeck']))
+    }, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["d" /* mapState */])(['user']), Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['spin', 'onDeck']))
 });
 
 /***/ }),
@@ -3199,7 +3217,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapState */])({
+    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["d" /* mapState */])({
         user: 'user'
     }))
 });
@@ -3403,7 +3421,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         uploadText: function uploadText() {
             return this.profile.images.length == 0 ? 'Add images of your setup' : 'Upload additional images of your setup';
         }
-    }, Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["c" /* mapState */])({
+    }, Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["d" /* mapState */])({
         user: 'user'
     }))
 });
@@ -3509,6 +3527,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
 
 
 
@@ -3534,18 +3553,44 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         });
     },
 
-    methods: {
+    methods: _extends({
         fetchUser: function fetchUser() {
             var _this = this;
 
             return __WEBPACK_IMPORTED_MODULE_1__api_users__["a" /* default */].getUserByUsername(this.uname, function (response) {
                 return _this.user = response.body;
             });
+        },
+
+        // todo - the bottom two method should probably be vuex actions
+        follow: function follow() {
+            var _this2 = this;
+
+            __WEBPACK_IMPORTED_MODULE_1__api_users__["a" /* default */].follow(this.uname, function (response) {
+                return _this2.addFriend(_this2.user);
+            });
+        },
+        unfollow: function unfollow() {
+            var _this3 = this;
+
+            __WEBPACK_IMPORTED_MODULE_1__api_users__["a" /* default */].unfollow(this.uname, function (response) {
+                return _this3.removeFriend(_this3.user);
+            });
         }
-    },
-    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["c" /* mapState */])({ currentUser: 'user' }), {
+    }, Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["c" /* mapMutations */])(['addFriend', 'removeFriend'])),
+    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["d" /* mapState */])({
+        currentUser: 'user',
+        friends: 'friends'
+    }), {
         followDisabled: function followDisabled() {
             return this.user.username == this.currentUser.username;
+        },
+        following: function following() {
+            var _this4 = this;
+
+            return this.friends.find(function (friend) {
+                return friend.id == _this4.user.id;
+            }) != null;
         }
     })
 });
@@ -66245,17 +66290,31 @@ var render = function() {
               _c("div", { staticClass: "caption" }, [
                 _c("p", [_c("strong", [_vm._v(_vm._s(_vm.user.username))])]),
                 _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-default btn-block",
-                    attrs: { type: "button", disabled: _vm.followDisabled }
-                  },
-                  [
-                    _c("i", { staticClass: "fa fa-user-plus" }),
-                    _vm._v(" Follow")
-                  ]
-                )
+                !_vm.following
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-default btn-block",
+                        attrs: { type: "button", disabled: _vm.followDisabled },
+                        on: { click: _vm.follow }
+                      },
+                      [
+                        _c("i", { staticClass: "fa fa-user-plus" }),
+                        _vm._v(" Follow")
+                      ]
+                    )
+                  : _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-default btn-block",
+                        attrs: { type: "button", disabled: _vm.followDisabled },
+                        on: { click: _vm.unfollow }
+                      },
+                      [
+                        _c("i", { staticClass: "fa fa-user-times" }),
+                        _vm._v(" Unfollow")
+                      ]
+                    )
               ])
             ])
           ]),
@@ -66965,7 +67024,51 @@ var render = function() {
           items: _vm.searchResults
         },
         on: { search: _vm.searchUsers, "result-clicked": _vm.userSearchClicked }
-      })
+      }),
+      _vm._v(" "),
+      _vm.friends.length > 0
+        ? _c(
+            "div",
+            { staticClass: "list-group" },
+            _vm._l(_vm.friends, function(friend) {
+              return _c(
+                "router-link",
+                {
+                  key: friend.id,
+                  staticClass: "list-group-item",
+                  attrs: {
+                    to: {
+                      name: "user-profile",
+                      params: { username: friend.username }
+                    }
+                  }
+                },
+                [
+                  _c("h4", { staticClass: "list-group-item-heading" }, [
+                    _c("img", {
+                      staticClass: "img-circle",
+                      staticStyle: { height: "20px" },
+                      attrs: { src: friend.avatar }
+                    }),
+                    _vm._v(" " + _vm._s(friend.username))
+                  ]),
+                  _vm._v(" "),
+                  friend.now_spinning
+                    ? _c("small", { staticClass: "list-group-item-text" }, [
+                        _c("i", { staticClass: "fa fa-volume-up" }),
+                        _vm._v(
+                          " " +
+                            _vm._s(friend.now_spinning.title) +
+                            " by " +
+                            _vm._s(friend.now_spinning.artists_display)
+                        )
+                      ])
+                    : _vm._e()
+                ]
+              )
+            })
+          )
+        : _vm._e()
     ],
     1
   )
@@ -85264,8 +85367,8 @@ if(false) {
 "use strict";
 /* unused harmony export Store */
 /* unused harmony export install */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return mapState; });
-/* unused harmony export mapMutations */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return mapState; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return mapMutations; });
 /* unused harmony export mapGetters */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return mapActions; });
 /* unused harmony export createNamespacedHelpers */
@@ -86359,6 +86462,15 @@ var defaultErrorHandler = function defaultErrorHandler(response) {
     },
     search: function search(query, success, error) {
         return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/user/search', { params: { query: query } }).then(success, error || defaultErrorHandler);
+    },
+    follow: function follow(username, success, error) {
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.post('/api/user/follow', { username: username }).then(success, error || defaultErrorHandler);
+    },
+    unfollow: function unfollow(username, success, error) {
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.post('/api/user/unfollow', { username: username }).then(success, error || defaultErrorHandler);
+    },
+    friends: function friends(username, success, error) {
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.get('/api/user/' + username + '/friends').then(success, error || defaultErrorHandler);
     }
 });
 
@@ -87478,7 +87590,8 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
     state: {
         user: null,
         nowSpinning: null,
-        onDeck: []
+        onDeck: [],
+        friends: []
     },
     mutations: {
         user: function user(state, _user) {
@@ -87489,6 +87602,18 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
         },
         onDeck: function onDeck(state, releases) {
             state.onDeck = releases;
+        },
+        friends: function friends(state, _friends) {
+            state.friends = _friends;
+        },
+        addFriend: function addFriend(state, friend) {
+            state.friends.push(friend);
+        },
+        removeFriend: function removeFriend(state, friend) {
+            var index = state.friends.map(function (friend) {
+                return friend.id;
+            }).indexOf(friend.id);
+            state.friends.splice(index, 1);
         }
     },
     actions: {

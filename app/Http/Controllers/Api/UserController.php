@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\User\DeleteProfileImageRequest;
+use App\Http\Requests\User\FollowRequest;
 use App\Http\Requests\User\SpinRequest;
 use App\Http\Requests\User\UpdateProfileRequest;
 use App\Http\Requests\User\UploadProfileImageRequest;
@@ -62,6 +63,20 @@ class UserController extends Controller
         return response("Success!", 200);
     }
 
+    public function follow(FollowRequest $request)
+    {
+        $newFriend = $this->users->getByUsername($request->username);
+        $this->user->follow($newFriend);
+        return response("Success!", 200);
+    }
+
+    public function unfollow(FollowRequest $request)
+    {
+        $oldFriend = $this->users->getByUsername($request->username);
+        $this->user->unfollow($oldFriend);
+        return response("Success :(", 200);
+    }
+
     public function getProfile($userid)
     {
         return $this->users->getProfile($userid);
@@ -102,5 +117,11 @@ class UserController extends Controller
         }
 
         return $this->users->search($request->get('query'));
+    }
+
+    public function friends($username)
+    {
+        $user = $this->users->getByUsername($username);
+        return $user->friends()->with('nowSpinning')->get();
     }
 }
