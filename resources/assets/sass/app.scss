@@ -14,6 +14,14 @@
 
 @import "~animate.css/animate";
 
+#col-left, #col-right {
+  @media (min-width: $screen-lg-min) {
+    position: fixed;
+    overflow:scroll;
+    height:90%;
+  }
+}
+
 a:hover {
   text-decoration: none;
 }
@@ -27,4 +35,15 @@ a:hover {
 .btn:focus,.btn:active {
   outline: none !important;
   box-shadow: none;
+}
+
+.autocomplete {
+  position: relative;
+  z-index: 9999;
+
+  .autocomplete-results {
+    width:100%;
+    position: absolute;
+    top: 36px;
+  }
 }

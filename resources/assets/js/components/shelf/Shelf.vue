@@ -48,6 +48,7 @@
 
     export default {
         components: { 'release-list-item': ReleaseListItem },
+        props: ['username', 'shelf', 'query'],
         metaInfo() {
             return {
                 title: `${this.shelfNameDisplay} Shelf`
@@ -55,24 +56,28 @@
         },
         data() {
             return {
-                username: '',
-                shelfName: '',
                 releases: [],
                 loading: true,
                 sort: 'date_added,desc',
-                search: '',
+                search: this.query,
                 currentPage: 1,
                 lastPage: null,
                 count : 0
             }
         },
         mounted() {
-            this.username = this.$route.params.username;
-            this.shelfName = this.$route.params.shelf;
             this.fetchReleases();
         },
         watch: {
             sort() {
+                this.fetchReleases(true);
+            },
+            '$route.query.query'(newQuery, oldQuery) {
+                this.search = newQuery;
+                this.fetchReleases(true);
+            },
+            '$route.params.shelf'(newShelf, oldShelf) {
+                this.shelf = newShelf;
                 this.fetchReleases(true);
             }
         },
@@ -84,7 +89,7 @@
             },
             fetchReleases(clear = false) {
                 this.loading = true;
-                collection.getReleases(this.username, this.shelfName, this.currentPage, this.search, this.sort, response => {
+                collection.getReleases(this.username, this.shelf, this.currentPage, this.search, this.sort, null, response => {
                     if(clear){
                         this.releases = [];
                     }
@@ -103,10 +108,11 @@
         computed: {
             shelfNameDisplay() {
                 // todo refactor this
-                if(this.shelfName == 'vinyl') return 'Vinyl';
-                else if(this.shelfName == 'cassette') return 'Cassette';
-                else if(this.shelfName == 'cd') return 'Compact Disc';
-                return this.shelfName;
+                if(this.shelf == 'vinyl') return 'Vinyl';
+                else if(this.shelf == 'cassette') return 'Cassette';
+                else if(this.shelf == 'cd') return 'Compact Disc';
+                else if(this.shelf == 'all') return 'All';
+                return this.shelf;
             }
         }
     }

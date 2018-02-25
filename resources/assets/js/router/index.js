@@ -19,7 +19,12 @@ export default new VueRouter({
                 { path: '/', component: NewsFeed, name: 'news-feed' },
                 { path: ':username', component: Profile, name: 'user-profile', props: true },
                 { path: ':username/shelves', component: UserShelves, name: 'shelves' },
-                { path: ':username/shelves/:shelf', component: Shelf, name: 'shelf' },
+                { path: ':username/shelves/:shelf', component: Shelf, name: 'shelf',
+                    props: (route) => ({
+                        username: route.params.username,
+                        shelf: route.params.shelf,
+                        query: route.query.query
+                    })},
                 { path: 'profile/edit', component: EditProfile, name: 'edit-profile' }
             ]
         },

@@ -23,7 +23,10 @@
                     </div>
                     <div class="col-md-8">
                         <strong>{{ release.title }}</strong> <br/>
-                        {{ release.artists_display }}
+                        {{ release.artists_display }} <br/>
+                        <span v-for="format in formats(release)" class="label label-default" style="margin-right: 5px">
+                            {{ format }}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -44,11 +47,16 @@
                 this.offDeck(release)
                 this.spin(release)
             },
+            formats(release) {
+                return release.shelves
+                    .filter(shelf => shelf.handle != 'on-deck')
+                    .map(shelf => shelf.name);
+            },
             ...mapActions([
                 'offDeck',
                 'spin'
             ])
-        }
+        },
     }
 </script>
 

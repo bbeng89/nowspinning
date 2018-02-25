@@ -33,7 +33,8 @@ class CollectionController extends Controller
     {
         $search = $request->get('search', null);
         $sort = $request->get('sort', null);
-        return $this->collection->getReleasesInShelf($username, $shelf, $search, $sort);
+        $pageSize = $request->get('page_size', null);
+        return $this->collection->getReleasesInShelf($username, $shelf, $search, $sort, $pageSize);
     }
 
     public function release($id)

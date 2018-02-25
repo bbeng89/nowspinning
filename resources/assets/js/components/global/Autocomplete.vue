@@ -1,11 +1,11 @@
 <template>
     <div class="form-group autocomplete">
         <input v-model="query" type="text" class="form-control" :placeholder="placeholder">
-        <ul v-if="results.length > 0" class="list-group autocomplete-results">
+        <div v-if="results.length > 0" class="list-group autocomplete-results">
             <a v-for="result in results" class="list-group-item"
                href="javascript:void(0)"
                @click="resultClicked(result)">{{ result.text }}</a>
-        </ul>
+        </div>
     </div>
 </template>
 <script>

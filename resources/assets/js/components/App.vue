@@ -12,6 +12,7 @@
                     <router-link :to="{ name: 'news-feed' }" class="navbar-brand logo-text">NowSpinning</router-link>
                 </div>
                 <div id="navbar" class="collapse navbar-collapse navbar-right">
+                    <main-search class="navbar-form navbar-left"></main-search>
                     <p class="navbar-text" v-if="syncing"><i class="fa fa-refresh fa-spin"></i></p>
                     <ul class="nav navbar-nav">
                         <li class="dropdown">
@@ -30,17 +31,17 @@
         </nav>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-3">
+                <div id="col-left" class="col-lg-3">
                     <current-user></current-user>
                     <hr/>
                     <now-spinning :user="user" :release="nowSpinning"></now-spinning>
                     <hr/>
                     <on-deck></on-deck>
                 </div>
-                <div class="col-md-6">
+                <div id="col-middle" class="col-lg-6 col-lg-offset-3">
                     <router-view></router-view>
                 </div>
-                <div class="col-md-3">
+                <div id="col-right" class="col-lg-3 col-lg-offset-9">
                     <friend-feed></friend-feed>
                     <notifications position="bottom right"></notifications>
                 </div>
@@ -53,6 +54,7 @@
     import FriendFeed from './friends/Friend-Feed.vue';
     import NowSpinning from "./user/Now-Spinning";
     import OnDeck from './shelf/On-Deck.vue';
+    import MainSearch from './global/Main-Search';
     import users from '../api/users';
     import collection from '../api/collection';
     import store from '../store';
@@ -64,7 +66,8 @@
             CurrentUser,
             FriendFeed,
             NowSpinning,
-            OnDeck
+            OnDeck,
+            MainSearch
         },
         metaInfo: {
             titleTemplate: (titleChunk) => {
@@ -94,7 +97,7 @@
                 }
                 else {
                     store.commit('spin', user.now_spinning);
-                    collection.getReleases(user.username, 'on-deck', 1, null, 'date_added,asc', (response) => {
+                    collection.getReleases(user.username, 'on-deck', 1, null, 'date_added,asc', null, (response) => {
                         store.commit('onDeck', response.body.data);
                         next();
                     });

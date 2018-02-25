@@ -11,7 +11,7 @@ class UserRepository
      */
     public function find($id)
     {
-        return User::with(['nowSpinning', 'profile', 'profile.images'])
+        return User::with(['nowSpinning', 'nowSpinning.shelves', 'profile', 'profile.images'])
             ->findOrFail($id);
     }
 

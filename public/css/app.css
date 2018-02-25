@@ -14742,6 +14742,15 @@ button.close {
   animation-name: slideOutUp;
 }
 
+@media (min-width: 1200px) {
+  #col-left,
+  #col-right {
+    position: fixed;
+    overflow: scroll;
+    height: 90%;
+  }
+}
+
 a:hover {
   text-decoration: none;
 }
@@ -14756,5 +14765,16 @@ a:hover {
   outline: none !important;
   -webkit-box-shadow: none;
           box-shadow: none;
+}
+
+.autocomplete {
+  position: relative;
+  z-index: 9999;
+}
+
+.autocomplete .autocomplete-results {
+  width: 100%;
+  position: absolute;
+  top: 36px;
 }
 

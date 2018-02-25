@@ -9,7 +9,8 @@
                     </div>
                     <div class="col-sm-8">
                         <strong>{{ release.title }}</strong> <br/>
-                        {{ release.artists_display }}
+                        {{ release.artists_display }} <br/>
+                        <span v-for="format in formats" class="label label-default" style="margin-right:5px;">{{ format }}</span>
                     </div>
                 </div>
             </div>
@@ -20,6 +21,11 @@
     import { mapState } from 'vuex'
 
     export default {
-        props: ['user', 'release']
+        props: ['user', 'release'],
+        computed: {
+            formats() {
+                return this.release.shelves.map(shelf => shelf.name);
+            }
+        }
     }
 </script>
