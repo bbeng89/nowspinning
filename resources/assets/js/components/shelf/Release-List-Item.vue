@@ -52,7 +52,7 @@
                 return this.release.shelves.map(shelf => shelf.name);
             },
             isSpinning() {
-                return this.nowSpinning.id == this.release.id;
+                return this.nowSpinning && this.nowSpinning.id == this.release.id;
             },
             isOnDeck() {
                 return this.onDeck.find(r => r.id == this.release.id) != null;

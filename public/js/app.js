@@ -3068,7 +3068,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             });
         },
         isSpinning: function isSpinning() {
-            return this.nowSpinning.id == this.release.id;
+            return this.nowSpinning && this.nowSpinning.id == this.release.id;
         },
         isOnDeck: function isOnDeck() {
             var _this = this;
@@ -3522,7 +3522,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
         this.loading = true;
         __WEBPACK_IMPORTED_MODULE_0__api_users__["a" /* default */].getProfile(this.user.id, function (response) {
-            _this.profile = response.body;
+            if (response.body) {
+                _this.profile = response.body;
+            }
             _this.loading = false;
         });
     },
@@ -67612,46 +67614,48 @@ var render = function() {
   return _c("div", [
     _c("h4", { staticClass: "text-center" }, [_vm._v("Now Spinning")]),
     _vm._v(" "),
-    _c("div", { staticClass: "panel panel-default" }, [
-      _c("div", { staticClass: "panel-body" }, [
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-sm-4" }, [
-            _c("img", {
-              staticClass: "img-responsive",
-              attrs: { src: _vm.release.thumbnail }
-            })
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "col-sm-8" },
-            [
-              _c("strong", [_vm._v(_vm._s(_vm.release.title))]),
+    _vm.release
+      ? _c("div", { staticClass: "panel panel-default" }, [
+          _c("div", { staticClass: "panel-body" }, [
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-sm-4" }, [
+                _c("img", {
+                  staticClass: "img-responsive",
+                  attrs: { src: _vm.release.thumbnail }
+                })
+              ]),
               _vm._v(" "),
-              _c("br"),
-              _vm._v(
-                "\n                    " +
-                  _vm._s(_vm.release.artists_display) +
-                  " "
-              ),
-              _c("br"),
-              _vm._v(" "),
-              _vm._l(_vm.formats, function(format) {
-                return _c(
-                  "span",
-                  {
-                    staticClass: "label label-default",
-                    staticStyle: { "margin-right": "5px" }
-                  },
-                  [_vm._v(_vm._s(format))]
-                )
-              })
-            ],
-            2
-          )
+              _c(
+                "div",
+                { staticClass: "col-sm-8" },
+                [
+                  _c("strong", [_vm._v(_vm._s(_vm.release.title))]),
+                  _vm._v(" "),
+                  _c("br"),
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(_vm.release.artists_display) +
+                      " "
+                  ),
+                  _c("br"),
+                  _vm._v(" "),
+                  _vm._l(_vm.formats, function(format) {
+                    return _c(
+                      "span",
+                      {
+                        staticClass: "label label-default",
+                        staticStyle: { "margin-right": "5px" }
+                      },
+                      [_vm._v(_vm._s(format))]
+                    )
+                  })
+                ],
+                2
+              )
+            ])
+          ])
         ])
-      ])
-    ])
+      : _vm._e()
   ])
 }
 var staticRenderFns = []

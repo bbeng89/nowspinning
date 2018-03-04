@@ -24,13 +24,19 @@ class PostRepositoryTest extends TestCase
 
     public function testFriendNewsFeed()
     {
-        $numPosts = 5;
-        factory(\App\Models\Post::class, $numPosts)->create();
-        $user = User::first();
-        $repo = $this->app->make(PostRepository::class);
+        $user = factory(\App\Models\User::class)->create();
+        $friend = factory(\App\Models\User::class)->create();
+        $nonFriend = factory(\App\Models\User::class)->create();
+        $user->friends()->attach($friend->id);
 
-        $feed = $repo->getUserNewsFeed('friends', $user, $numPosts);
-        $this->assertCount(1, $feed);
+        $selfPost = factory(\App\Models\Post::class)->create(['user_id' => $user->id]);
+        $friendPost = factory(\App\Models\Post::class)->create(['user_id' => $friend->id]);
+        $nonFriendPost = factory(\App\Models\Post::class)->create(['user_id' => $nonFriend->id]);
+
+        $repo = $this->app->make(PostRepository::class);
+        $feed = $repo->getUserNewsFeed('friends', $user);
+
+        $this->assertCount(2, $feed);
     }
 
     public function testInvalidFeed()

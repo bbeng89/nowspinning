@@ -138,7 +138,9 @@
         mounted() {
             this.loading = true;
             users.getProfile(this.user.id, response => {
-                this.profile = response.body;
+                if(response.body) {
+                    this.profile = response.body;
+                }
                 this.loading = false;
             });
         },

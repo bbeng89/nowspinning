@@ -34,7 +34,10 @@ class UserRepository
     {
         $user = $this->find($userid);
         $profile = $user->profile;
-        $profile->loadMissing('images');
+        if($profile)
+        {
+            $profile->loadMissing('images');
+        }
         return $profile;
     }
 

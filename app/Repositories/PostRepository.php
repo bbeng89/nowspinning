@@ -33,8 +33,10 @@ class PostRepository
 
         if($feed == 'friends')
         {
-            //todo - change this logic once friends are implemented
-            $query->where('user_id', $user->id);
+            // todo - this probably wouldn't be a good way of achieving this if someone has thousands of friends
+            $friendIds = $user->friends()->pluck('user_id');
+            $friendIds[] = $user->id;
+            $query->whereIn('user_id', $friendIds);
         }
 
         return $query->with('user')
