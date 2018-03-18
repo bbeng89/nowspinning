@@ -14,12 +14,14 @@
         <div v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="20">
             <Post v-for="post in posts"
                   :key="post.id"
+                  :id="post.id"
                   :username="post.user.username"
                   :avatar="post.user.avatar"
                   :content="post.content"
                   :date-posted="post.created_at"
                   :spinning="post.release"
-                  :images="post.images">
+                  :images="post.images"
+                  @deleted="removePost">
             </Post>
         </div>
 
@@ -78,6 +80,9 @@
 
                     this.loading = false;
                 });
+            },
+            removePost(id) {
+                this.posts.splice(this.posts.map(post => post.id).indexOf(id), 1);
             }
         }
     }

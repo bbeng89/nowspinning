@@ -12,5 +12,8 @@ export default {
     createPost(content, showSpinning, success, error) {
         return Vue.http.post('/api/posts/create', { content: content, showSpinning: showSpinning })
             .then(success, error || defaultErrorHandler);
+    },
+    deletePost(id, success, error) {
+        return Vue.http.delete(`/api/posts/delete/${id}`).then(success, error || defaultErrorHandler);
     }
 }

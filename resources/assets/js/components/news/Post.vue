@@ -13,7 +13,7 @@
                     </button>
                     <ul class="dropdown-menu">
                         <li><a href="#">Edit</a></li>
-                        <li><a href="#">Delete</a></li>
+                        <li><a href="javascript:void(0)" @click="deletePost">Delete</a></li>
                     </ul>
                 </div>
             </div>
@@ -46,10 +46,11 @@
     import Slick from 'vue-slick';
     import 'slick-carousel/slick/slick.css';
     import 'slick-carousel/slick/slick-theme.css';
+    import posts from '../../api/posts';
 
     export default {
         components: { Slick },
-        props: ['username', 'avatar', 'content', 'datePosted', 'spinning', 'images'],
+        props: ['id', 'username', 'avatar', 'content', 'datePosted', 'spinning', 'images'],
         data(){
             return {
                 slickOptions: {
@@ -57,6 +58,13 @@
                     slidesToShow: 1,
                     //adaptiveHeight:true,
                     lazyLoad: 'ondemand'
+                }
+            }
+        },
+        methods: {
+            deletePost() {
+                if(confirm('Are you sure you want to delete this post?')) {
+                    posts.deletePost(this.id, response => this.$emit('deleted', this.id));
                 }
             }
         },

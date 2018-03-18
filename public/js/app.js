@@ -2758,6 +2758,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -2839,6 +2841,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 _this2.loading = false;
             });
+        },
+        removePost: function removePost(id) {
+            this.posts.splice(this.posts.map(function (post) {
+                return post.id;
+            }).indexOf(id), 1);
         }
     }
 });
@@ -2857,6 +2864,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_slick_carousel_slick_slick_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_slick_carousel_slick_slick_css__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_slick_carousel_slick_slick_theme_css__ = __webpack_require__("./node_modules/slick-carousel/slick/slick-theme.css");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_slick_carousel_slick_slick_theme_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_slick_carousel_slick_slick_theme_css__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__api_posts__ = __webpack_require__("./resources/assets/js/api/posts.js");
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 //
@@ -2908,9 +2916,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: { Slick: __WEBPACK_IMPORTED_MODULE_1_vue_slick___default.a },
-    props: ['username', 'avatar', 'content', 'datePosted', 'spinning', 'images'],
+    props: ['id', 'username', 'avatar', 'content', 'datePosted', 'spinning', 'images'],
     data: function data() {
         return {
             slickOptions: {
@@ -2922,6 +2931,17 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         };
     },
 
+    methods: {
+        deletePost: function deletePost() {
+            var _this = this;
+
+            if (confirm('Are you sure you want to delete this post?')) {
+                __WEBPACK_IMPORTED_MODULE_4__api_posts__["a" /* default */].deletePost(this.id, function (response) {
+                    return _this.$emit('deleted', _this.id);
+                });
+            }
+        }
+    },
     computed: _extends({
         dateDisplay: function dateDisplay() {
             return moment.utc(this.datePosted).fromNow();
@@ -65495,7 +65515,26 @@ var render = function() {
       ]),
       _vm._v(" "),
       _vm.canAdmin
-        ? _c("div", { staticClass: "pull-right" }, [_vm._m(0, false, false)])
+        ? _c("div", { staticClass: "pull-right" }, [
+            _c("div", { staticClass: "dropdown" }, [
+              _vm._m(0, false, false),
+              _vm._v(" "),
+              _c("ul", { staticClass: "dropdown-menu" }, [
+                _vm._m(1, false, false),
+                _vm._v(" "),
+                _c("li", [
+                  _c(
+                    "a",
+                    {
+                      attrs: { href: "javascript:void(0)" },
+                      on: { click: _vm.deletePost }
+                    },
+                    [_vm._v("Delete")]
+                  )
+                ])
+              ])
+            ])
+          ])
         : _vm._e()
     ]),
     _vm._v(" "),
@@ -65535,7 +65574,7 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "panel-footer" }, [
       _c("div", { staticClass: "row" }, [
-        _vm._m(1, false, false),
+        _vm._m(2, false, false),
         _vm._v(" "),
         _c("div", { staticClass: "col-sm-6 text-right" }, [
           _vm._v(
@@ -65551,27 +65590,25 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "dropdown" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-default btn-xs dropdown-toggle",
-          attrs: {
-            type: "button",
-            "data-toggle": "dropdown",
-            "aria-haspopup": "true",
-            "aria-expanded": "false"
-          }
-        },
-        [_c("i", { staticClass: "fa fa-ellipsis-h" })]
-      ),
-      _vm._v(" "),
-      _c("ul", { staticClass: "dropdown-menu" }, [
-        _c("li", [_c("a", { attrs: { href: "#" } }, [_vm._v("Edit")])]),
-        _vm._v(" "),
-        _c("li", [_c("a", { attrs: { href: "#" } }, [_vm._v("Delete")])])
-      ])
-    ])
+    return _c(
+      "button",
+      {
+        staticClass: "btn btn-default btn-xs dropdown-toggle",
+        attrs: {
+          type: "button",
+          "data-toggle": "dropdown",
+          "aria-haspopup": "true",
+          "aria-expanded": "false"
+        }
+      },
+      [_c("i", { staticClass: "fa fa-ellipsis-h" })]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", [_c("a", { attrs: { href: "#" } }, [_vm._v("Edit")])])
   },
   function() {
     var _vm = this
@@ -66869,13 +66906,15 @@ var render = function() {
           return _c("Post", {
             key: post.id,
             attrs: {
+              id: post.id,
               username: post.user.username,
               avatar: post.user.avatar,
               content: post.content,
               "date-posted": post.created_at,
               spinning: post.release,
               images: post.images
-            }
+            },
+            on: { deleted: _vm.removePost }
           })
         })
       ),
@@ -86862,6 +86901,9 @@ var defaultErrorHandler = function defaultErrorHandler(response) {
     },
     createPost: function createPost(content, showSpinning, success, error) {
         return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.post('/api/posts/create', { content: content, showSpinning: showSpinning }).then(success, error || defaultErrorHandler);
+    },
+    deletePost: function deletePost(id, success, error) {
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.delete("/api/posts/delete/" + id).then(success, error || defaultErrorHandler);
     }
 });
 

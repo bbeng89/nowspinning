@@ -46,4 +46,11 @@ class PostController extends Controller
         $path = $file->store('public/postimgs');
         return $post->addImage($path, $file->extension(), $file->getMimeType(), $file->getSize());
     }
+
+    public function delete($id)
+    {
+        $post = $this->posts->find($id);
+        $post->delete();
+        return response("Success!", 200);
+    }
 }
