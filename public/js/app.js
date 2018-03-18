@@ -3039,8 +3039,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     })),
     methods: _extends({
         spinRelease: function spinRelease(release) {
-            this.offDeck(release);
-            this.spin(release);
+            var _this = this;
+
+            this.offDeck(release).then(function () {
+                return _this.spin(release);
+            });
         },
         formats: function formats(release) {
             return release.shelves.filter(function (shelf) {
@@ -88254,16 +88257,15 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
             var commit = _ref.commit,
                 state = _ref.state;
 
-            __WEBPACK_IMPORTED_MODULE_2__api_users__["a" /* default */].spin(release, function (response) {
-                release.listen_count++;
-                commit('spin', release);
+            return __WEBPACK_IMPORTED_MODULE_2__api_users__["a" /* default */].spin(release, function (response) {
+                commit('spin', response.body);
             });
         },
         onDeck: function onDeck(_ref2, release) {
             var commit = _ref2.commit,
                 state = _ref2.state;
 
-            __WEBPACK_IMPORTED_MODULE_3__api_collection__["a" /* default */].addToShelf(release, 'on-deck', function (response) {
+            return __WEBPACK_IMPORTED_MODULE_3__api_collection__["a" /* default */].addToShelf(release, 'on-deck', function (response) {
                 var onDeck = state.onDeck;
                 onDeck.push(release);
                 commit('onDeck', onDeck);
@@ -88273,7 +88275,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
             var commit = _ref3.commit,
                 state = _ref3.state;
 
-            __WEBPACK_IMPORTED_MODULE_3__api_collection__["a" /* default */].removeFromShelf(release, 'on-deck', function (response) {
+            return __WEBPACK_IMPORTED_MODULE_3__api_collection__["a" /* default */].removeFromShelf(release, 'on-deck', function (response) {
                 var onDeck = state.onDeck.filter(function (r) {
                     return r.id != release.id;
                 });

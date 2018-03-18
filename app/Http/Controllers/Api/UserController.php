@@ -59,8 +59,7 @@ class UserController extends Controller
     public function spin(SpinRequest $request)
     {
         $release = $this->collection->findRelease($request->id);
-        $this->user->spin($release);
-        return response("Success!", 200);
+        return $this->user->spin($release);
     }
 
     public function follow(FollowRequest $request)

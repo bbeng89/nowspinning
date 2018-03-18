@@ -44,8 +44,7 @@
         },
         methods: {
             spinRelease(release) {
-                this.offDeck(release)
-                this.spin(release)
+                this.offDeck(release).then(() => this.spin(release));
             },
             formats(release) {
                 return release.shelves

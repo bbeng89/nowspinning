@@ -14,13 +14,13 @@ export default new Vuex.Store({
     },
     mutations: {
         user(state, user) {
-            state.user = user
+            state.user = user;
         },
         spin (state, release) {
-            state.nowSpinning = release
+            state.nowSpinning = release;
         },
         onDeck (state, releases) {
-            state.onDeck = releases
+            state.onDeck = releases;
         },
         friends(state, friends) {
             state.friends = friends;
@@ -35,22 +35,21 @@ export default new Vuex.Store({
     },
     actions: {
         spin ({ commit, state }, release) {
-            users.spin(release, response => {
-                release.listen_count++
-                commit('spin', release)
+            return users.spin(release, response => {
+                commit('spin', response.body);
             })
         },
         onDeck({ commit, state }, release) {
-            collection.addToShelf(release, 'on-deck', response => {
-                let onDeck = state.onDeck
-                onDeck.push(release)
-                commit('onDeck', onDeck)
+            return collection.addToShelf(release, 'on-deck', response => {
+                let onDeck = state.onDeck;
+                onDeck.push(release);
+                commit('onDeck', onDeck);
             })
         },
         offDeck({ commit, state }, release) {
-            collection.removeFromShelf(release, 'on-deck', response => {
-                let onDeck = state.onDeck.filter(r => r.id != release.id)
-                commit('onDeck', onDeck)
+            return collection.removeFromShelf(release, 'on-deck', response => {
+                let onDeck = state.onDeck.filter(r => r.id != release.id);
+                commit('onDeck', onDeck);
             })
         }
     }

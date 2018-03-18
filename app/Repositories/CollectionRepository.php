@@ -10,7 +10,7 @@ class CollectionRepository
 
     public function findRelease($id)
     {
-        return UserRelease::findOrFail($id);
+        return UserRelease::with('shelves')->findOrFail($id);
     }
 
     public function getReleasesInShelf($username, $shelf_handle, $search = null, $sort = null, $pageSize = null)

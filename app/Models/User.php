@@ -94,7 +94,7 @@ class User extends Authenticatable
         $release->listen_count++;
         $release->save();
 
-        return $this;
+        return $release;
     }
 
     /**
