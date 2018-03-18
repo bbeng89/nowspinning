@@ -32,7 +32,7 @@
             </div>
             <div v-else v-html="postContent"></div>
             <hr v-if="spinning"/>
-            <p v-if="spinning"><small><em>Spinning: <a href="#">{{ spinningTitle }}</a></em></small></p>
+            <p v-if="spinning"><small><em><i class="fa fa-volume-up"></i> <a href="#">{{ spinningTitle }}</a></em></small></p>
         </div>
         <div class="panel-footer">
             <div class="row">

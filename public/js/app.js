@@ -65674,7 +65674,8 @@ var render = function() {
         ? _c("p", [
             _c("small", [
               _c("em", [
-                _vm._v("Spinning: "),
+                _c("i", { staticClass: "fa fa-volume-up" }),
+                _vm._v(" "),
                 _c("a", { attrs: { href: "#" } }, [
                   _vm._v(_vm._s(_vm.spinningTitle))
                 ])
