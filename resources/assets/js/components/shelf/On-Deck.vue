@@ -9,26 +9,33 @@
                 <div class="row">
                     <div class="col-md-4">
                         <img class="img-responsive" :src="release.thumbnail">
-                        <!-- Split button -->
-                        <div class="btn-group on-deck-actions">
-                            <button type="button" @click="spinRelease(release)" class="btn btn-xs btn-primary">Spin</button>
-                            <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a href="javascript:void(0)" @click="offDeck(release)">Remove</a></li>
-                            </ul>
-                        </div>
+
                     </div>
                     <div class="col-md-8">
                         <strong>{{ release.title }}</strong> <br/>
-                        {{ release.artists_display }} <br/>
-                        <span v-for="format in formats(release)" class="label label-default" style="margin-right: 5px">
-                            {{ format }}
-                        </span>
-                        <span class="text-muted">Listens: {{ release.listen_count }}</span>
+                        {{ release.artists_display }}
                     </div>
+                </div>
+            </div>
+            <div class="panel-footer clearfix">
+                <div class="pull-left">
+                    <!-- Split button -->
+                    <div class="btn-group on-deck-actions">
+                        <button type="button" @click="spinRelease(release)" class="btn btn-xs btn-primary"><i class="fa fa-volume-up"></i> Spin</button>
+                        <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="javascript:void(0)" @click="offDeck(release)">Remove</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="pull-right">
+                    <span v-for="format in formats(release)" class="label label-default" style="margin-right: 5px">
+                    {{ format }}
+                </span>
+                    <span class="label label-success"><i class="fa fa-headphones"></i> {{ release.listen_count }}</span>
                 </div>
             </div>
         </div>
@@ -59,9 +66,3 @@
         },
     }
 </script>
-
-<style>
-    .on-deck-actions{
-        margin-top: 10px
-    }
-</style>

@@ -3035,6 +3035,13 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3070,6 +3077,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+//
+//
+//
 //
 //
 //
@@ -3629,6 +3639,13 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -6209,21 +6226,6 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 // module
 exports.push([module.i, "/* Slider */\n.slick-slider\n{\n    position: relative;\n\n    display: block;\n    box-sizing: border-box;\n\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n\n    -webkit-touch-callout: none;\n    -khtml-user-select: none;\n    -ms-touch-action: pan-y;\n        touch-action: pan-y;\n    -webkit-tap-highlight-color: transparent;\n}\n\n.slick-list\n{\n    position: relative;\n\n    display: block;\n    overflow: hidden;\n\n    margin: 0;\n    padding: 0;\n}\n.slick-list:focus\n{\n    outline: none;\n}\n.slick-list.dragging\n{\n    cursor: pointer;\n    cursor: hand;\n}\n\n.slick-slider .slick-track,\n.slick-slider .slick-list\n{\n    -webkit-transform: translate3d(0, 0, 0);\n       -moz-transform: translate3d(0, 0, 0);\n        -ms-transform: translate3d(0, 0, 0);\n         -o-transform: translate3d(0, 0, 0);\n            transform: translate3d(0, 0, 0);\n}\n\n.slick-track\n{\n    position: relative;\n    top: 0;\n    left: 0;\n\n    display: block;\n    margin-left: auto;\n    margin-right: auto;\n}\n.slick-track:before,\n.slick-track:after\n{\n    display: table;\n\n    content: '';\n}\n.slick-track:after\n{\n    clear: both;\n}\n.slick-loading .slick-track\n{\n    visibility: hidden;\n}\n\n.slick-slide\n{\n    display: none;\n    float: left;\n\n    height: 100%;\n    min-height: 1px;\n}\n[dir='rtl'] .slick-slide\n{\n    float: right;\n}\n.slick-slide img\n{\n    display: block;\n}\n.slick-slide.slick-loading img\n{\n    display: none;\n}\n.slick-slide.dragging img\n{\n    pointer-events: none;\n}\n.slick-initialized .slick-slide\n{\n    display: block;\n}\n.slick-loading .slick-slide\n{\n    visibility: hidden;\n}\n.slick-vertical .slick-slide\n{\n    display: block;\n\n    height: auto;\n\n    border: 1px solid transparent;\n}\n.slick-arrow.slick-hidden {\n    display: none;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-043c212a\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/components/shelf/On-Deck.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "\n.on-deck-actions{\n    margin-top: 10px\n}\n", ""]);
 
 // exports
 
@@ -65404,82 +65406,86 @@ var render = function() {
                 _c("img", {
                   staticClass: "img-responsive",
                   attrs: { src: release.thumbnail }
-                }),
-                _vm._v(" "),
-                _c("div", { staticClass: "btn-group on-deck-actions" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-xs btn-primary",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          _vm.spinRelease(release)
-                        }
-                      }
-                    },
-                    [_vm._v("Spin")]
-                  ),
-                  _vm._v(" "),
-                  _vm._m(1, true, false),
-                  _vm._v(" "),
-                  _c("ul", { staticClass: "dropdown-menu" }, [
-                    _c("li", [
-                      _c(
-                        "a",
-                        {
-                          attrs: { href: "javascript:void(0)" },
-                          on: {
-                            click: function($event) {
-                              _vm.offDeck(release)
-                            }
-                          }
-                        },
-                        [_vm._v("Remove")]
-                      )
-                    ])
-                  ])
-                ])
+                })
               ]),
               _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "col-md-8" },
-                [
-                  _c("strong", [_vm._v(_vm._s(release.title))]),
-                  _vm._v(" "),
-                  _c("br"),
-                  _vm._v(
-                    "\n                    " +
-                      _vm._s(release.artists_display) +
-                      " "
-                  ),
-                  _c("br"),
-                  _vm._v(" "),
-                  _vm._l(_vm.formats(release), function(format) {
-                    return _c(
-                      "span",
-                      {
-                        staticClass: "label label-default",
-                        staticStyle: { "margin-right": "5px" }
-                      },
-                      [
-                        _vm._v(
-                          "\n                        " +
-                            _vm._s(format) +
-                            "\n                    "
-                        )
-                      ]
-                    )
-                  }),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "text-muted" }, [
-                    _vm._v("Listens: " + _vm._s(release.listen_count))
-                  ])
-                ],
-                2
-              )
+              _c("div", { staticClass: "col-md-8" }, [
+                _c("strong", [_vm._v(_vm._s(release.title))]),
+                _vm._v(" "),
+                _c("br"),
+                _vm._v(
+                  "\n                    " +
+                    _vm._s(release.artists_display) +
+                    "\n                "
+                )
+              ])
             ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "panel-footer clearfix" }, [
+            _c("div", { staticClass: "pull-left" }, [
+              _c("div", { staticClass: "btn-group on-deck-actions" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-xs btn-primary",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        _vm.spinRelease(release)
+                      }
+                    }
+                  },
+                  [_c("i", { staticClass: "fa fa-volume-up" }), _vm._v(" Spin")]
+                ),
+                _vm._v(" "),
+                _vm._m(1, true, false),
+                _vm._v(" "),
+                _c("ul", { staticClass: "dropdown-menu" }, [
+                  _c("li", [
+                    _c(
+                      "a",
+                      {
+                        attrs: { href: "javascript:void(0)" },
+                        on: {
+                          click: function($event) {
+                            _vm.offDeck(release)
+                          }
+                        }
+                      },
+                      [_vm._v("Remove")]
+                    )
+                  ])
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "pull-right" },
+              [
+                _vm._l(_vm.formats(release), function(format) {
+                  return _c(
+                    "span",
+                    {
+                      staticClass: "label label-default",
+                      staticStyle: { "margin-right": "5px" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                " + _vm._s(format) + "\n            "
+                      )
+                    ]
+                  )
+                }),
+                _vm._v(" "),
+                _c("span", { staticClass: "label label-success" }, [
+                  _c("i", { staticClass: "fa fa-headphones" }),
+                  _vm._v(" " + _vm._s(release.listen_count))
+                ])
+              ],
+              2
+            )
           ])
         ])
       })
@@ -65873,27 +65879,6 @@ var render = function() {
           ),
           _c("hr"),
           _vm._v(" "),
-          _c(
-            "p",
-            [
-              _vm._l(_vm.formats, function(format) {
-                return _c(
-                  "span",
-                  {
-                    staticClass: "label label-default",
-                    staticStyle: { "margin-right": "5px" }
-                  },
-                  [_vm._v(_vm._s(format))]
-                )
-              }),
-              _vm._v(" "),
-              _c("span", { staticClass: "text-muted" }, [
-                _vm._v("Listens: " + _vm._s(_vm.release.listen_count))
-              ])
-            ],
-            2
-          ),
-          _vm._v(" "),
           _vm.enableActions
             ? _c("div", [
                 _c(
@@ -65939,6 +65924,31 @@ var render = function() {
             : _vm._e()
         ])
       ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "panel-footer clearfix" }, [
+      _c(
+        "div",
+        { staticClass: "pull-right" },
+        [
+          _vm._l(_vm.formats, function(format) {
+            return _c(
+              "span",
+              {
+                staticClass: "label label-default",
+                staticStyle: { "margin-right": "5px" }
+              },
+              [_vm._v(_vm._s(format))]
+            )
+          }),
+          _vm._v(" "),
+          _c("span", { staticClass: "label label-success" }, [
+            _c("i", { staticClass: "fa fa-headphones" }),
+            _vm._v(" " + _vm._s(_vm.release.listen_count))
+          ])
+        ],
+        2
+      )
     ])
   ])
 }
@@ -67751,8 +67761,6 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("h4", { staticClass: "text-center" }, [_vm._v("Now Spinning")]),
-    _vm._v(" "),
     _vm.release
       ? _c("div", { staticClass: "panel panel-default" }, [
           _c("div", { staticClass: "panel-body" }, [
@@ -67764,44 +67772,60 @@ var render = function() {
                 })
               ]),
               _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "col-sm-8" },
-                [
-                  _c("strong", [_vm._v(_vm._s(_vm.release.title))]),
-                  _vm._v(" "),
-                  _c("br"),
-                  _vm._v(
-                    "\n                    " +
-                      _vm._s(_vm.release.artists_display) +
-                      " "
-                  ),
-                  _c("br"),
-                  _vm._v(" "),
-                  _vm._l(_vm.formats, function(format) {
-                    return _c(
-                      "span",
-                      {
-                        staticClass: "label label-default",
-                        staticStyle: { "margin-right": "5px" }
-                      },
-                      [_vm._v(_vm._s(format))]
-                    )
-                  }),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "text-muted" }, [
-                    _vm._v("Listens: " + _vm._s(_vm.release.listen_count))
-                  ])
-                ],
-                2
-              )
+              _c("div", { staticClass: "col-sm-8" }, [
+                _c("strong", [_vm._v(_vm._s(_vm.release.title))]),
+                _vm._v(" "),
+                _c("br"),
+                _vm._v(
+                  "\n                    " +
+                    _vm._s(_vm.release.artists_display) +
+                    "\n                "
+                )
+              ])
             ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "panel-footer clearfix" }, [
+            _vm._m(0, false, false),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "pull-right" },
+              [
+                _vm._l(_vm.formats, function(format) {
+                  return _c(
+                    "span",
+                    {
+                      staticClass: "label label-default",
+                      staticStyle: { "margin-right": "5px" }
+                    },
+                    [_vm._v(_vm._s(format))]
+                  )
+                }),
+                _vm._v(" "),
+                _c("span", { staticClass: "label label-success" }, [
+                  _c("i", { staticClass: "fa fa-headphones" }),
+                  _vm._v(" " + _vm._s(_vm.release.listen_count))
+                ])
+              ],
+              2
+            )
           ])
         ])
       : _vm._e()
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "pull-left" }, [
+      _c("i", { staticClass: "fa fa-volume-up" }),
+      _vm._v(" Now Spinning\n            ")
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -74652,33 +74676,6 @@ if (false) {(function () {
 
 module.exports = Component.exports
 
-
-/***/ }),
-
-/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-043c212a\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/components/shelf/On-Deck.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-043c212a\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/components/shelf/On-Deck.vue");
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("aea64f68", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-043c212a\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./On-Deck.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-043c212a\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./On-Deck.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
 
 /***/ }),
 
@@ -87664,10 +87661,6 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-043c212a\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/components/shelf/On-Deck.vue")
-}
 var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
 /* script */
 var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/shelf/On-Deck.vue")
@@ -87676,7 +87669,7 @@ var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/templa
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = injectStyle
+var __vue_styles__ = null
 /* scopeId */
 var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */

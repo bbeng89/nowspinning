@@ -10,15 +10,18 @@
                     <br/>
                     {{ release.artists_display }}
                     <hr/>
-                    <p>
-                        <span v-for="format in formats" class="label label-default" style="margin-right:5px">{{ format }}</span>
-                        <span class="text-muted">Listens: {{ release.listen_count }}</span>
-                    </p>
+
                     <div v-if="enableActions">
                         <button class="btn btn-default" type="button" :disabled="isOnDeck" @click="putReleaseOnDeck()"><i class="fa fa-plus-circle" ref="onDeckIcon"></i> On Deck</button>
                         <button class="btn btn-primary" type="button" :disabled="isSpinning" @click="spinRelease()"><i class="fa fa-thumbs-o-up" ref="spinIcon"></i> Spin Now</button>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="panel-footer clearfix">
+            <div class="pull-right">
+                <span v-for="format in formats" class="label label-default" style="margin-right:5px">{{ format }}</span>
+                <span class="label label-success"><i class="fa fa-headphones"></i> {{ release.listen_count }}</span>
             </div>
         </div>
     </div>

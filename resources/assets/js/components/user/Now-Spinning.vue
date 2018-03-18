@@ -1,6 +1,5 @@
 <template>
     <div>
-        <h4 class="text-center">Now Spinning</h4>
         <div v-if="release" class="panel panel-default">
             <div class="panel-body">
                 <div class="row">
@@ -9,11 +8,19 @@
                     </div>
                     <div class="col-sm-8">
                         <strong>{{ release.title }}</strong> <br/>
-                        {{ release.artists_display }} <br/>
-                        <span v-for="format in formats" class="label label-default" style="margin-right:5px;">{{ format }}</span>
-                        <span class="text-muted">Listens: {{ release.listen_count }}</span>
+                        {{ release.artists_display }}
                     </div>
                 </div>
+            </div>
+            <div class="panel-footer clearfix">
+                <div class="pull-left">
+                    <i class="fa fa-volume-up"></i> Now Spinning
+                </div>
+                <div class="pull-right">
+                    <span v-for="format in formats" class="label label-default" style="margin-right:5px;">{{ format }}</span>
+                    <span class="label label-success"><i class="fa fa-headphones"></i> {{ release.listen_count }}</span>
+                </div>
+
             </div>
         </div>
     </div>
