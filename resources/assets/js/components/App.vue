@@ -19,7 +19,7 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user.username }} <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><router-link :to="{ name: 'edit-profile' }">Edit Profile</router-link></li>
-                                <li><a href="javascript:void(0)" @click="sync" :disabled="syncing">Sync Collection</a></li>
+                                <li><a href="javascript:void(0)" @click="sync">{{ syncing ? 'Syncing...' : 'Sync Collection'}}</a></li>
                                 <li><router-link :to="{ name: 'oauth-settings' }">Admin</router-link></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="/logout">Logout</a></li>
@@ -107,6 +107,8 @@
         },
         methods: {
             sync() {
+                if(this.syncing) return;
+
                 this.syncing = true;
                 users.sync(response => {
                     this.syncing = false;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\Post\CreatePostRequest;
+use App\Http\Requests\Post\UpdatePostRequest;
 use App\Http\Requests\Post\UploadPostImageRequest;
 use App\Models\User;
 use App\Repositories\PostRepository;
@@ -37,6 +38,12 @@ class PostController extends Controller
     {
         $showSpinning = $request->has('showSpinning') && $request->get('showSpinning') == 'true';
         return $this->user->addPost($request->get('content'), $showSpinning);
+    }
+
+    public function update(UpdatePostRequest $request, $id)
+    {
+        $post = $this->posts->find($id);
+        return $post->updateContent($request->get('content'));
     }
 
     public function uploadPostImage(UploadPostImageRequest $request)

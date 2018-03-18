@@ -15,5 +15,8 @@ export default {
     },
     deletePost(id, success, error) {
         return Vue.http.delete(`/api/posts/delete/${id}`).then(success, error || defaultErrorHandler);
+    },
+    updatePost(id, content, success, error) {
+        return Vue.http.patch(`/api/posts/${id}`, { content }).then(success, error || defaultErrorHandler);
     }
 }

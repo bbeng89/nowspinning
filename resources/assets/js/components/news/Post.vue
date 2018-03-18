@@ -12,17 +12,25 @@
                         <i class="fa fa-ellipsis-h"></i>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Edit</a></li>
+                        <li><a href="javascript:void(0)" @click="toggleEditMode">{{ editing ? 'Cancel Edit' : 'Edit' }}</a></li>
                         <li><a href="javascript:void(0)" @click="deletePost">Delete</a></li>
                     </ul>
                 </div>
             </div>
         </div>
         <div class="panel-body">
-            <slick v-if="hasImages" ref="slick" :options="slickOptions">
-                <img v-for="image in images" :src="image.src" alt="">
-            </slick>
-            <div v-html="content"></div>
+            <div style="margin-bottom: 15px">
+                <slick v-if="hasImages" ref="slick" :options="slickOptions">
+                    <img v-for="image in images" :src="image.src" alt="">
+                </slick>
+            </div>
+            <div v-if="editing">
+                <textarea class="form-control" name="content" v-model="postContent" v-validate="'required'">{{ postContent }}</textarea>
+                <br/>
+                <button type="button" @click="toggleEditMode" class="btn btn-xs btn-default">Cancel</button>
+                <button type="button" @click="updatePost" :disabled="errors.has('content')" class="btn btn-xs btn-primary">Save</button>
+            </div>
+            <div v-else v-html="postContent"></div>
             <hr v-if="spinning"/>
             <p v-if="spinning"><small><em>Spinning: <a href="#">{{ spinningTitle }}</a></em></small></p>
         </div>
@@ -53,6 +61,8 @@
         props: ['id', 'username', 'avatar', 'content', 'datePosted', 'spinning', 'images'],
         data(){
             return {
+                editing: false,
+                postContent: this.content || '',
                 slickOptions: {
                     dots: true,
                     slidesToShow: 1,
@@ -64,8 +74,20 @@
         methods: {
             deletePost() {
                 if(confirm('Are you sure you want to delete this post?')) {
-                    posts.deletePost(this.id, response => this.$emit('deleted', this.id));
+                    posts.deletePost(this.id, response => {
+                        this.$emit('deleted', this.id);
+                        this.$notify('Your post was successfully deleted.');
+                    });
                 }
+            },
+            toggleEditMode() {
+                this.editing = !this.editing;
+            },
+            updatePost() {
+                posts.updatePost(this.id, this.postContent, response => {
+                    this.editing = false;
+                    this.$notify('Your post was successfully updated');
+                });
             }
         },
         computed: {

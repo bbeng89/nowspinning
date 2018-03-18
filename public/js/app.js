@@ -1991,6 +1991,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         sync: function sync() {
             var _this = this;
 
+            if (this.syncing) return;
+
             this.syncing = true;
             __WEBPACK_IMPORTED_MODULE_5__api_users__["a" /* default */].sync(function (response) {
                 _this.syncing = false;
@@ -2909,6 +2911,14 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 // https://github.com/staskjs/vue-slick
@@ -2922,6 +2932,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     props: ['id', 'username', 'avatar', 'content', 'datePosted', 'spinning', 'images'],
     data: function data() {
         return {
+            editing: false,
+            postContent: this.content || '',
             slickOptions: {
                 dots: true,
                 slidesToShow: 1,
@@ -2937,9 +2949,21 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
             if (confirm('Are you sure you want to delete this post?')) {
                 __WEBPACK_IMPORTED_MODULE_4__api_posts__["a" /* default */].deletePost(this.id, function (response) {
-                    return _this.$emit('deleted', _this.id);
+                    _this.$emit('deleted', _this.id);
+                    _this.$notify('Your post was successfully deleted.');
                 });
             }
+        },
+        toggleEditMode: function toggleEditMode() {
+            this.editing = !this.editing;
+        },
+        updatePost: function updatePost() {
+            var _this2 = this;
+
+            __WEBPACK_IMPORTED_MODULE_4__api_posts__["a" /* default */].updatePost(this.id, this.postContent, function (response) {
+                _this2.editing = false;
+                _this2.$notify('Your post was successfully updated');
+            });
         }
     },
     computed: _extends({
@@ -65520,7 +65544,16 @@ var render = function() {
               _vm._m(0, false, false),
               _vm._v(" "),
               _c("ul", { staticClass: "dropdown-menu" }, [
-                _vm._m(1, false, false),
+                _c("li", [
+                  _c(
+                    "a",
+                    {
+                      attrs: { href: "javascript:void(0)" },
+                      on: { click: _vm.toggleEditMode }
+                    },
+                    [_vm._v(_vm._s(_vm.editing ? "Cancel Edit" : "Edit"))]
+                  )
+                ]),
                 _vm._v(" "),
                 _c("li", [
                   _c(
@@ -65538,43 +65571,101 @@ var render = function() {
         : _vm._e()
     ]),
     _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "panel-body" },
-      [
-        _vm.hasImages
-          ? _c(
-              "slick",
-              { ref: "slick", attrs: { options: _vm.slickOptions } },
-              _vm._l(_vm.images, function(image) {
-                return _c("img", { attrs: { src: image.src, alt: "" } })
-              })
+    _c("div", { staticClass: "panel-body" }, [
+      _c(
+        "div",
+        { staticStyle: { "margin-bottom": "15px" } },
+        [
+          _vm.hasImages
+            ? _c(
+                "slick",
+                { ref: "slick", attrs: { options: _vm.slickOptions } },
+                _vm._l(_vm.images, function(image) {
+                  return _c("img", { attrs: { src: image.src, alt: "" } })
+                })
+              )
+            : _vm._e()
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _vm.editing
+        ? _c("div", [
+            _c(
+              "textarea",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.postContent,
+                    expression: "postContent"
+                  },
+                  {
+                    name: "validate",
+                    rawName: "v-validate",
+                    value: "required",
+                    expression: "'required'"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { name: "content" },
+                domProps: { value: _vm.postContent },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.postContent = $event.target.value
+                  }
+                }
+              },
+              [_vm._v(_vm._s(_vm.postContent))]
+            ),
+            _vm._v(" "),
+            _c("br"),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-xs btn-default",
+                attrs: { type: "button" },
+                on: { click: _vm.toggleEditMode }
+              },
+              [_vm._v("Cancel")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-xs btn-primary",
+                attrs: { type: "button", disabled: _vm.errors.has("content") },
+                on: { click: _vm.updatePost }
+              },
+              [_vm._v("Save")]
             )
-          : _vm._e(),
-        _vm._v(" "),
-        _c("div", { domProps: { innerHTML: _vm._s(_vm.content) } }),
-        _vm._v(" "),
-        _vm.spinning ? _c("hr") : _vm._e(),
-        _vm._v(" "),
-        _vm.spinning
-          ? _c("p", [
-              _c("small", [
-                _c("em", [
-                  _vm._v("Spinning: "),
-                  _c("a", { attrs: { href: "#" } }, [
-                    _vm._v(_vm._s(_vm.spinningTitle))
-                  ])
+          ])
+        : _c("div", { domProps: { innerHTML: _vm._s(_vm.postContent) } }),
+      _vm._v(" "),
+      _vm.spinning ? _c("hr") : _vm._e(),
+      _vm._v(" "),
+      _vm.spinning
+        ? _c("p", [
+            _c("small", [
+              _c("em", [
+                _vm._v("Spinning: "),
+                _c("a", { attrs: { href: "#" } }, [
+                  _vm._v(_vm._s(_vm.spinningTitle))
                 ])
               ])
             ])
-          : _vm._e()
-      ],
-      1
-    ),
+          ])
+        : _vm._e()
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "panel-footer" }, [
       _c("div", { staticClass: "row" }, [
-        _vm._m(2, false, false),
+        _vm._m(1, false, false),
         _vm._v(" "),
         _c("div", { staticClass: "col-sm-6 text-right" }, [
           _vm._v(
@@ -65603,12 +65694,6 @@ var staticRenderFns = [
       },
       [_c("i", { staticClass: "fa fa-ellipsis-h" })]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", [_c("a", { attrs: { href: "#" } }, [_vm._v("Edit")])])
   },
   function() {
     var _vm = this
@@ -67475,13 +67560,14 @@ var render = function() {
                     _c(
                       "a",
                       {
-                        attrs: {
-                          href: "javascript:void(0)",
-                          disabled: _vm.syncing
-                        },
+                        attrs: { href: "javascript:void(0)" },
                         on: { click: _vm.sync }
                       },
-                      [_vm._v("Sync Collection")]
+                      [
+                        _vm._v(
+                          _vm._s(_vm.syncing ? "Syncing..." : "Sync Collection")
+                        )
+                      ]
                     )
                   ]),
                   _vm._v(" "),
@@ -86904,6 +86990,9 @@ var defaultErrorHandler = function defaultErrorHandler(response) {
     },
     deletePost: function deletePost(id, success, error) {
         return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.delete("/api/posts/delete/" + id).then(success, error || defaultErrorHandler);
+    },
+    updatePost: function updatePost(id, content, success, error) {
+        return __WEBPACK_IMPORTED_MODULE_0_vue___default.a.http.patch("/api/posts/" + id, { content: content }).then(success, error || defaultErrorHandler);
     }
 });
 

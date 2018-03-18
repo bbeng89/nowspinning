@@ -50,4 +50,11 @@ class Post extends Model
             'size' => $size
         ]);
     }
+
+    public function updateContent($newContent)
+    {
+        $this->content = $newContent;
+        $this->save();
+        return $this;
+    }
 }
