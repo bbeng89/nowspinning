@@ -11,8 +11,8 @@
                     {{ release.artists_display }}
                     <hr/>
                     <p>
-                        <span v-for="format in formats" class="label label-default" style="margin-right:5px">{{ format }}</span> |
-                        Listens: {{ release.listen_count }}
+                        <span v-for="format in formats" class="label label-default" style="margin-right:5px">{{ format }}</span>
+                        <span class="text-muted">Listens: {{ release.listen_count }}</span>
                     </p>
                     <div v-if="enableActions">
                         <button class="btn btn-default" type="button" :disabled="isOnDeck" @click="putReleaseOnDeck()"><i class="fa fa-plus-circle" ref="onDeckIcon"></i> On Deck</button>

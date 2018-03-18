@@ -27,6 +27,7 @@
                         <span v-for="format in formats(release)" class="label label-default" style="margin-right: 5px">
                             {{ format }}
                         </span>
+                        <span class="text-muted">Listens: {{ release.listen_count }}</span>
                     </div>
                 </div>
             </div>

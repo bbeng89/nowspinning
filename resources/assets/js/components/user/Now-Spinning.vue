@@ -11,6 +11,7 @@
                         <strong>{{ release.title }}</strong> <br/>
                         {{ release.artists_display }} <br/>
                         <span v-for="format in formats" class="label label-default" style="margin-right:5px;">{{ format }}</span>
+                        <span class="text-muted">Listens: {{ release.listen_count }}</span>
                     </div>
                 </div>
             </div>

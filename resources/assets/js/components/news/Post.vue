@@ -12,7 +12,7 @@
                         <i class="fa fa-ellipsis-h"></i>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a href="javascript:void(0)" @click="toggleEditMode">{{ editing ? 'Cancel Edit' : 'Edit' }}</a></li>
+                        <li v-if="!editing"><a href="javascript:void(0)" @click="toggleEditMode">Edit</a></li>
                         <li><a href="javascript:void(0)" @click="deletePost">Delete</a></li>
                     </ul>
                 </div>
@@ -27,7 +27,7 @@
             <div v-if="editing">
                 <textarea class="form-control" name="content" v-model="postContent" v-validate="'required'">{{ postContent }}</textarea>
                 <br/>
-                <button type="button" @click="toggleEditMode" class="btn btn-xs btn-default">Cancel</button>
+                <button type="button" @click="cancelEdit" class="btn btn-xs btn-default">Cancel</button>
                 <button type="button" @click="updatePost" :disabled="errors.has('content')" class="btn btn-xs btn-primary">Save</button>
             </div>
             <div v-else v-html="postContent"></div>
@@ -82,6 +82,10 @@
             },
             toggleEditMode() {
                 this.editing = !this.editing;
+            },
+            cancelEdit() {
+                this.toggleEditMode();
+                this.postContent = this.content;
             },
             updatePost() {
                 posts.updatePost(this.id, this.postContent, response => {

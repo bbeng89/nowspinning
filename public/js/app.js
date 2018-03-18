@@ -2957,6 +2957,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         toggleEditMode: function toggleEditMode() {
             this.editing = !this.editing;
         },
+        cancelEdit: function cancelEdit() {
+            this.toggleEditMode();
+            this.postContent = this.content;
+        },
         updatePost: function updatePost() {
             var _this2 = this;
 
@@ -2995,6 +2999,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+//
 //
 //
 //
@@ -3624,6 +3629,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
+//
 //
 //
 //
@@ -65465,7 +65471,11 @@ var render = function() {
                         )
                       ]
                     )
-                  })
+                  }),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "text-muted" }, [
+                    _vm._v("Listens: " + _vm._s(release.listen_count))
+                  ])
                 ],
                 2
               )
@@ -65547,16 +65557,18 @@ var render = function() {
               _vm._m(0, false, false),
               _vm._v(" "),
               _c("ul", { staticClass: "dropdown-menu" }, [
-                _c("li", [
-                  _c(
-                    "a",
-                    {
-                      attrs: { href: "javascript:void(0)" },
-                      on: { click: _vm.toggleEditMode }
-                    },
-                    [_vm._v(_vm._s(_vm.editing ? "Cancel Edit" : "Edit"))]
-                  )
-                ]),
+                !_vm.editing
+                  ? _c("li", [
+                      _c(
+                        "a",
+                        {
+                          attrs: { href: "javascript:void(0)" },
+                          on: { click: _vm.toggleEditMode }
+                        },
+                        [_vm._v("Edit")]
+                      )
+                    ])
+                  : _vm._e(),
                 _vm._v(" "),
                 _c("li", [
                   _c(
@@ -65633,7 +65645,7 @@ var render = function() {
               {
                 staticClass: "btn btn-xs btn-default",
                 attrs: { type: "button" },
-                on: { click: _vm.toggleEditMode }
+                on: { click: _vm.cancelEdit }
               },
               [_vm._v("Cancel")]
             ),
@@ -65874,11 +65886,10 @@ var render = function() {
                   [_vm._v(_vm._s(format))]
                 )
               }),
-              _vm._v(
-                " |\n                    Listens: " +
-                  _vm._s(_vm.release.listen_count) +
-                  "\n                "
-              )
+              _vm._v(" "),
+              _c("span", { staticClass: "text-muted" }, [
+                _vm._v("Listens: " + _vm._s(_vm.release.listen_count))
+              ])
             ],
             2
           ),
@@ -67776,7 +67787,11 @@ var render = function() {
                       },
                       [_vm._v(_vm._s(format))]
                     )
-                  })
+                  }),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "text-muted" }, [
+                    _vm._v("Listens: " + _vm._s(_vm.release.listen_count))
+                  ])
                 ],
                 2
               )
