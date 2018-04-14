@@ -1932,6 +1932,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -3402,10 +3406,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-//
-//
-//
-//
 //
 //
 //
@@ -6255,7 +6255,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n#current-user .btn-default {\n    margin-top:20px;\n}\n.user-avatar {\n    margin-top: 22px;\n}\n", ""]);
+exports.push([module.i, "\n.user-avatar {\n    margin-top: 22px;\n}\n", ""]);
 
 // exports
 
@@ -65789,33 +65789,7 @@ var render = function() {
             attrs: { src: _vm.user.avatar }
           })
         ])
-      ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        [
-          _c(
-            "router-link",
-            {
-              staticClass: "btn btn-default",
-              attrs: { to: { name: "news-feed" } }
-            },
-            [_vm._v("News Feed")]
-          ),
-          _vm._v(" "),
-          _c(
-            "router-link",
-            {
-              staticClass: "btn btn-default",
-              attrs: {
-                to: { name: "shelves", params: { username: _vm.user.username } }
-              }
-            },
-            [_vm._v("My Collection")]
-          )
-        ],
-        1
-      )
+      ])
     ]
   )
 }
@@ -67528,7 +67502,38 @@ var render = function() {
                 attrs: { to: { name: "news-feed" } }
               },
               [_vm._v("NowSpinning")]
-            )
+            ),
+            _vm._v(" "),
+            _c("ul", { staticClass: "nav navbar-nav" }, [
+              _c(
+                "li",
+                [
+                  _c("router-link", { attrs: { to: { name: "news-feed" } } }, [
+                    _vm._v("News Feed")
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "li",
+                [
+                  _c(
+                    "router-link",
+                    {
+                      attrs: {
+                        to: {
+                          name: "shelves",
+                          params: { username: _vm.user.username }
+                        }
+                      }
+                    },
+                    [_vm._v("My Collection")]
+                  )
+                ],
+                1
+              )
+            ])
           ],
           1
         ),
@@ -67627,12 +67632,12 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c(
           "div",
-          { staticClass: "col-lg-3", attrs: { id: "col-left" } },
+          {
+            staticClass: "col-lg-3",
+            staticStyle: { "padding-top": "22px" },
+            attrs: { id: "col-left" }
+          },
           [
-            _c("current-user"),
-            _vm._v(" "),
-            _c("hr"),
-            _vm._v(" "),
             _c("now-spinning", {
               attrs: { user: _vm.user, release: _vm.nowSpinning }
             }),
@@ -67661,6 +67666,10 @@ var render = function() {
             attrs: { id: "col-right" }
           },
           [
+            _c("current-user"),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
             _c("friend-feed"),
             _vm._v(" "),
             _c("notifications", { attrs: { position: "bottom right" } })

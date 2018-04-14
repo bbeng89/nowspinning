@@ -10,6 +10,10 @@
                         <span class="icon-bar"></span>
                     </button>
                     <router-link :to="{ name: 'news-feed' }" class="navbar-brand logo-text">NowSpinning</router-link>
+                    <ul class="nav navbar-nav">
+                        <li><router-link :to="{ name: 'news-feed' }">News Feed</router-link></li>
+                        <li><router-link :to="{ name: 'shelves', params: { username: user.username }}">My Collection</router-link></li>
+                    </ul>
                 </div>
                 <div id="navbar" class="collapse navbar-collapse navbar-right">
                     <main-search class="navbar-form navbar-left"></main-search>
@@ -31,9 +35,7 @@
         </nav>
         <div class="container-fluid">
             <div class="row">
-                <div id="col-left" class="col-lg-3">
-                    <current-user></current-user>
-                    <hr/>
+                <div id="col-left" class="col-lg-3" style="padding-top: 22px;">
                     <now-spinning :user="user" :release="nowSpinning"></now-spinning>
                     <hr/>
                     <on-deck></on-deck>
@@ -42,6 +44,8 @@
                     <router-view></router-view>
                 </div>
                 <div id="col-right" class="col-lg-3 col-lg-offset-9">
+                    <current-user></current-user>
+                    <hr/>
                     <friend-feed></friend-feed>
                     <notifications position="bottom right"></notifications>
                 </div>
